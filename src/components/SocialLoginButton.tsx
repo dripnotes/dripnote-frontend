@@ -11,7 +11,7 @@ const buttonVariants = cva(
   {
     variants: {
       provider: {
-        google: 'border-[#DADCE0] bg-[#FFFFFF] text-[#1F1F1F] hover:bg-[#F8F9FA]',
+        google: 'border-[#DADCE0] bg-[#FFFFFF] text-[#1F1F1F] hover:bg-[#F8F9FA] font-roboto',
         kakao: 'border-transparent bg-[#FEE500] text-[#000000]/85 hover:bg-[#FEE500]/80',
         naver: 'border-transparent bg-[#03C75A] text-[#FFFFFF] hover:bg-[#03C75A]/80',
       },
