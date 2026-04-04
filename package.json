@@ -4,10 +4,10 @@
   "private": true,
   "description": "Coffee Recommendation and Shop Service Monorepo",
   "scripts": {
-    "dev": "pnpm --filter web dev",
+    "dev": "pnpm --filter @coffee-service/web dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json,mjs}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json,mjs,css,yaml,yml}\"",
     "prepare": "husky"
   },
   "devDependencies": {

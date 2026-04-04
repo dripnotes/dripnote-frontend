@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@coffee-service/web",
   "version": "1.0.0",
   "description": "Coffee Service Web App",
   "private": true,
@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "clean": "git clean -xdf node_modules"
@@ -48,7 +48,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "next lint --fix --file",
       "prettier --write"
     ]
   }
