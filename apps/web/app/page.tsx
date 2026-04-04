@@ -1,3 +1,4 @@
+import { Button } from '@coffee-service/ui-library';
 import Image from 'next/image';
 
 export default function Home() {
@@ -12,11 +13,17 @@ export default function Home() {
           height={38}
           priority
         />
+        <div className="flex flex-col items-center gap-4">
+          <Button variant="default" size="lg">
+            UI 라이브러리 테스트 버튼
+          </Button>
+          <Button variant="outline">아웃라인 버튼</Button>
+        </div>
         <ol className="list-inside list-decimal text-center font-mono text-sm/6 sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{' '}
             <code className="rounded bg-black/[.05] px-1 py-0.5 font-mono font-semibold dark:bg-white/[.06]">
-              src/app/page.tsx
+              app/page.tsx
             </code>
             .
           </li>

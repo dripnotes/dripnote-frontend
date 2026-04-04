@@ -22,6 +22,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@coffee-service/ui-library':
+        specifier: workspace:*
+        version: link:../../packages/ui-library
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.72.0(react@19.2.3))
@@ -121,14 +124,30 @@ importers:
   packages/ui-library:
     dependencies:
       class-variance-authority:
-        specifier: ^0.7.0
+        specifier: ^0.7.1
         version: 0.7.1
       clsx:
-        specifier: ^2.1.0
+        specifier: ^2.1.1
         version: 2.1.1
+      react:
+        specifier: ^19.0.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.3(react@19.2.3)
       tailwind-merge:
-        specifier: ^2.0.0
-        version: 2.6.1
+        specifier: ^3.5.0
+        version: 3.5.0
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.9
+        version: 19.2.9
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.9)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
 packages:
   '@alloc/quick-lru@5.2.0':
@@ -3403,12 +3422,6 @@ packages:
       }
     engines: { node: '>= 0.4' }
 
-  tailwind-merge@2.6.1:
-    resolution:
-      {
-        integrity: sha512-Oo6tHdpZsGpkKG88HJ8RR1rg/RdnEkQEfMoEk2x1XRI3F1AxeU+ijRXpiVUF4UbLfcxxRGw6TbUINKYdWVsQTQ==,
-      }
-
   tailwind-merge@3.5.0:
     resolution:
       {
@@ -5656,8 +5669,6 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
-
-  tailwind-merge@2.6.1: {}
 
   tailwind-merge@3.5.0: {}
 
