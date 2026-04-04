@@ -1,0 +1,10 @@
+{
+  "name": "@coffee-service/ui-library",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "tailwind-merge": "^2.0.0",
+    "clsx": "^2.1.0"
+  }
+}

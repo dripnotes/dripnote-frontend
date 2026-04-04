@@ -1,0 +1,5 @@
+{
+  "name": "@coffee-service/config-typescript",
+  "version": "1.0.0",
+  "main": "tsconfig.json"
+}
