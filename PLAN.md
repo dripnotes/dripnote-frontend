@@ -1,16 +1,16 @@
-# 구현 계획 (Implementation Plan) - UI 라이브러리 개선
+# 구현 계획 (Implementation Plan) - AI 리포트 대응 (pnpm 스크립트 최적화)
 
-## 작업 개요
+## 1. 리포트 분석 완료
 
-- `@coffee-service/ui-library`와 `@coffee-service/web` 간의 의존성 불일치를 해결하고 워크스페이스 연결을 활성화합니다.
-- 라이브러리의 `package.json` 메타데이터를 보강하여 개발 경험을 개선합니다.
+- **대상**: 프로젝트 루트 `package.json`
+- **조치**: `pnpm -r run build` 및 `pnpm -r run lint`에 `--if-present` 옵션 추가.
+- **이유**: `packages/` 하위의 설정 패키지들처럼 해당 스크립트가 없는 패키지에서 에러가 발생하는 것을 방지하기 위함.
 
-## 상세 단계
+## 2. 작업 단계
 
-1. **의존성 정렬**: `ui-library`의 `tailwind-merge` 버전을 `^3.5.0`으로 올림.
-2. **패키지 정의 하네스**: `ui-library/package.json`에 `types` 및 `exports` 필드 추가.
-3. **워크스페이스 연결**: `apps/web/package.json`에 `ui-library`를 `workspace:*`로 등록.
+- `package.json`의 8~9번 라인 수정.
+- 빌드/린트 테스트를 통해 안정성 검증.
 
-## 승인 대기
+---
 
-- 위 계획이 타당하다면 승인해 주세요. 승인 후 작업을 시작하겠습니다.
+위 계획대로 진행할까요? 승인해주시면 즉시 반영하고 한국어로 설명을 드리겠습니다.
