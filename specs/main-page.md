@@ -44,9 +44,33 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 - 초기 단계이므로 복잡한 요소는 제외하고 기초적인 카피라이트 텍스트 정도만 **간단하게 구현**합니다.
 
+### 2.7 추가 기능 및 라이브러리 (Enhanced UI)
+
+- **애니메이션 및 전환 효과**: `framer-motion`을 사용하여 페이지 스크롤 및 요소 등장 시 동적인 느낌 제공.
+- **캐러셀**: `embla-carousel-react`를 사용하여 터치 친화적이고 매끄러운 스와이프 경험 제공.
+- **지도 최적화**: `react-kakao-maps-sdk` 컴포넌트를 사용하여 카카오 지도 렌더링 선언적 구성 및 최적화. (네이버 지도 API의 기본 유료화 정책으로 인해 초기 비용 통제가 필요하여 무료 사용량이 넉넉한 카카오 지도로 교체함)
+- **상단 GNB 이펙트**: 최상단에서는 투명한 배경을 유지하다가, 페이지 스크롤 시 반투명/배경색이 나타나는 방식 채택.
+
+## 3. 아키텍처 및 컴포넌트 계층 (Architecture)
+
+### 3.1 컴포넌트 트리
+
+메인 페이지(`app/page.tsx`) 내부는 다음 계층으로 구성됩니다:
+
+- `RootLayout` (전역, Header/Footer 포함)
+  - `page.tsx` (메인 엔트리)
+    - `HeroSection` (Client Component - 캐러셀 및 모션)
+    - `FlavorNotes` (Client Component - 향미 태그)
+    - `RecommendedBeans` (Client Component - 추천 원두)
+    - `NavermapsProvider` -> `RoasteryMapSection` (지도 데이터 래핑)
+
+### 3.2 데이터 흐름 (Data Flow)
+
+현재는 서버사이드 렌더링 혹은 백엔드 API 연동 이전 단계이므로 로컬의 `mockMainData`(`lib/api/main.ts`)를 조회하여 하위 컴포넌트에 Props로 주입합니다.
+
 ---
 
-## 3. 핵심 동작 요구사항
+## 4. 핵심 동작 요구사항
 
 - **SPA 라우팅 연동**: 로그인 페이지, 원두 정보 페이지 등 내부 라우팅 요소 완비.
 - **지도 라이브러리 연동**: 네이버 지도 최적화.
