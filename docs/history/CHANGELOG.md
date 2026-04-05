@@ -12,7 +12,7 @@
   - `HeroSection.tsx`: `embla-carousel-react`와 `framer-motion`을 결합한 동적 환영 메시지 및 슬라이더 구현.
   - `FlavorNotes.tsx`: 좌우 터치 스와이프 가능한 향미 태그 영역 구성. (Tailwind CSS v4 `bg-linear-to-*` 문법 적용)
   - `RecommendedBeans.tsx`: CSS Grid 기반으로 작성된 추천 원두 카드 및 Hover 인터랙션 추가.
-  - `RoasteryMapSection.tsx`: `react-naver-maps`를 활용하여 Client ID 기반의 사용자 주변 로스터리 지도 렌더링.
+  - `RoasteryMapSection.tsx`: `react-kakao-maps-sdk`를 활용하여 API Key 기반의 사용자 주변 로스터리 지도 렌더링.
   - Mock Data 적용: 현재 백엔드 API 부재로 인해 `lib/api/main.ts` 를 통해 더미 데이터를 Props로 하향 전달하는 레이아웃 뼈대 생성.
 - **Shared Components**:
   - `Header.tsx`: Glassmorphism 형태의 스크롤 감지 헤더 (framer-motion 활용).
@@ -29,4 +29,4 @@
 ### Architecture / Technical Decisions (설계 결정)
 
 - 패키지 의존성: UI의 미적 퀄리티(Premium feel)를 위해 기본 Next.js+Tailwind 구성 위에 기능성 라이브러리를 추가했습니다 (`framer-motion`, `embla-carousel-react`, `lucide-react`).
-- 지도 라이브러리: 단순히 script 태그를 넣기보다 React 컴포넌트 생명주기와 통합하기 용이하도록 선언적 wrapper인 `react-naver-maps`를 채택.
+- 지도 라이브러리: 단순히 script 태그를 넣기보다 React 컴포넌트 생명주기와 통합하기 용이하도록 선언적 wrapper인 `react-kakao-maps-sdk`를 채택.
