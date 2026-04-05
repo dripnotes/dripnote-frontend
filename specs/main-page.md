@@ -38,7 +38,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 ### 2.5 주변 로스터리 (Location-based Roastery)
 
 - 현재 사용자의 위치 기반으로 주변의 로스터리 카페 위치정보를 제공하는 섹션.
-- **지도 뷰 (우측)**: **네이버 지도(Naver Map)** API를 사용하여 지도 화면 및 카페들의 위치 마커를 렌더링.
+- 지도 뷰 (우측): **카카오 지도(Kakao Maps)** API를 사용하여 지도 화면 및 카페들의 위치 마커를 렌더링. (현재 Client 컴포넌트 내에서 SDK인 `react-kakao-maps-sdk`의 `useKakaoLoader` 훅을 활용해 렌더링 중)
 
 ### 2.6 푸터 (Footer)
 
@@ -62,7 +62,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
     - `HeroSection` (Client Component - 캐러셀 및 모션)
     - `FlavorNotes` (Client Component - 향미 태그)
     - `RecommendedBeans` (Client Component - 추천 원두)
-    - `NavermapsProvider` -> `RoasteryMapSection` (지도 데이터 래핑)
+    - RoasteryMapSection (useKakaoLoader를 이용한 비동기 스크립트 렌더링)
 
 ### 3.2 데이터 흐름 (Data Flow)
 
@@ -73,7 +73,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 ## 4. 핵심 동작 요구사항
 
 - **SPA 라우팅 연동**: 로그인 페이지, 원두 정보 페이지 등 내부 라우팅 요소 완비.
-- **지도 라이브러리 연동**: 네이버 지도 최적화.
+- 지도 라이브러리 연동: 카카오 지도(Kakao Maps) 기능 최적화.
 
 ---
 
