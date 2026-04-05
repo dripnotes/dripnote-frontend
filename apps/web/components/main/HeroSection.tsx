@@ -43,6 +43,11 @@ export default function HeroSection() {
     onSelect();
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
+
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   // Next/prev button functions optional since we can swipe, but we can do auto scroll
