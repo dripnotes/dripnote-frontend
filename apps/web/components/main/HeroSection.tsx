@@ -69,13 +69,13 @@ export default function HeroSection() {
       {/* Carousel */}
       <div className="h-full w-full" ref={emblaRef}>
         <div className="flex h-full w-full touch-pan-y">
-          {SLIDES.map((slide) => (
+          {SLIDES.map((slide, index) => (
             <div key={slide.id} className="relative h-full w-full flex-none transform-gpu">
               <Image
                 src={slide.imageUrl}
                 alt={slide.alt}
                 fill
-                priority
+                priority={index === 0}
                 className="object-cover opacity-60"
                 sizes="100vw"
               />
