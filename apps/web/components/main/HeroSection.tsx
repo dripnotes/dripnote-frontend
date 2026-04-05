@@ -53,6 +53,11 @@ export default function HeroSection() {
   // Next/prev button functions optional since we can swipe, but we can do auto scroll
   useEffect(() => {
     if (!emblaApi) return;
+
+    // Respect user's reduced motion preference (A11y)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
     const autoplay = setInterval(() => {
       emblaApi.scrollNext();
     }, 5000);
