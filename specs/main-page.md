@@ -77,7 +77,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 ---
 
-## 4. API 연동 명세
+## 5. API 연동 명세
 
 ### 상황
 
