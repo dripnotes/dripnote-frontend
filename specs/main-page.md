@@ -66,7 +66,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 ### 3.2 데이터 흐름 (Data Flow)
 
-현재는 서버사이드 렌더링 혹은 백엔드 API 연동 이전 단계이므로 로컬의 `mockMainData`(`lib/api/main.ts`)를 조회하여 하위 컴포넌트에 Props로 주입합니다.
+현재는 서버사이드 렌더링 혹은 백엔드 API 연동 이전 단계이므로 로컬의 `mockMainData`(`apps/web/lib/api/main.ts`)를 조회하여 하위 컴포넌트에 Props로 주입합니다.
 
 ---
 
@@ -113,11 +113,11 @@ HTTP/1.1 400
 
 ### Response Body
 
-| Name         | Type   | Description                                                                                                                                                                                                                                                                   | null 여부 | 형식 |
-| ------------ | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| - statusCode | String | 커스텀한 응답 코드                                                                                                                                                                                                                                                            | x         |      |
-| - message    | String | 성공 : 빈 문자열<br>실패 : 실패한 이유                                                                                                                                                                                                                                        | x         |      |
-| - data       | Object | `tastings` (array) : 향미 목록<br>`tasting_name` (string) : 향미 이름<br>`tasting_link` (string) : 향미 정렬 링크<br>`beans` (array) : 추천 원두 목록<br>`bean_name` (string) : 추천 원두 이름<br>`bean_tasting` (array) : 원두 향미 목록<br>`bean_link` (string) : 원두 링크 | x         |      |
+| Name         | Type   | Description                                                                                                                                                                                                                                                                                                                           | null 여부 | 형식 |
+| ------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| - statusCode | String | 커스텀한 응답 코드                                                                                                                                                                                                                                                                                                                    | x         |      |
+| - message    | String | 성공 : 빈 문자열<br>실패 : 실패한 이유                                                                                                                                                                                                                                                                                                | x         |      |
+| - data       | Object | `tastings` (array) : 향미 목록<br>`tasting_name` (string) : 향미 이름<br>`tasting_link` (string) : 향미 정렬 링크<br>`beans` (array) : 추천 원두 목록<br>`bean_name` (string) : 추천 원두 이름<br>`bean_image_link` (string) : 추천 원두 썸네일 이미지<br>`bean_tasting` (array) : 원두 향미 목록<br>`bean_link` (string) : 원두 링크 | x         |      |
 
 ### Success JSON
 
