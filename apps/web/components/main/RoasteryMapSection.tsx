@@ -21,7 +21,7 @@ export default function RoasteryMapSection() {
             transition={{ duration: 0.6 }}
             className="flex flex-col"
           >
-            <div className="bg-primary/10 text-primary mb-6 inline-flex w-fit items-center rounded-full bg-orange-50 px-3 py-1 text-sm font-semibold text-orange-600">
+            <div className="mb-6 inline-flex w-fit items-center rounded-full bg-orange-50 px-3 py-1 text-sm font-semibold text-orange-600">
               <MapPin className="mr-2 h-4 w-4" />
               Location-based
             </div>
