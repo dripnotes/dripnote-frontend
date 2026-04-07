@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Playfair_Display, Outfit, Inter } from 'next/font/google';
 
-import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/Header';
 import TanstackQueryLayout from '@/layouts/TanstackQueryLayout';
 
 import './globals.css';
@@ -14,6 +12,21 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+const playfair = Playfair_Display({
+  variable: '--font-playfair',
+  subsets: ['latin'],
+});
+
+const outfit = Outfit({
+  variable: '--font-outfit',
+  subsets: ['latin'],
+});
+
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
 });
 
@@ -29,14 +42,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <TanstackQueryLayout>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </TanstackQueryLayout>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${outfit.variable} ${inter.variable} font-inter antialiased`}
+      >
+        <TanstackQueryLayout>{children}</TanstackQueryLayout>
       </body>
     </html>
   );
