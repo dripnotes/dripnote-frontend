@@ -1,16 +1,26 @@
-# 구현 계획 (Implementation Plan) - AI 리포트 대응 (.gitignore 최적화)
+# 구현 계획 (Implementation Plan) - [Infrastructure] 에이전트 규칙 준수 및 로그인 페이지 개발
 
-## 1. 리포트 분석 및 검증 완료
+## 1. 개요 및 배경 (Context)
 
-- **대상**: `.gitignore`
-- **조치**: `.pnp`, `.pnp.*` 등 레거시 Yarn PnP 패턴 제거.
-- **검증**: `pnpm` 환경에서 불필요한 Yarn 전용 설정을 제거하여 프로젝트 환경을 순수하게 유지합니다.
+- **목표**: 에이전트의 규칙 준수 인프라를 구축하고, `specs/login-page.md`에 정의된 프리미엄 로그인 UI를 구현합니다.
+- **배경**: 이전 작업에서 누락된 프로세스(PLAN.md, Rule 14, 21)를 보강 완료했으며, 이제 실질적인 기능 구현 단계로 진입합니다.
 
-## 2. 작업 단계
+## 2. 작업 단계 (Tasks)
 
-- `.gitignore` 내 Yarn 관련 패턴(PnP, Legacy Logs) 삭제.
-- `git status`로 잔여물 확인.
+### Phase 1: Infrastructure (Completed ✅)
+
+- [x] `specs/login-page.md` 스펙 보완 (Rule 21 적용)
+- [x] `README.md` 에이전트 지침 및 스킬 가이드 추가
+- [x] `.agents/workflows/session-init.md` 워크플로우 생성
+- [x] `.agents/rules/skill-guidelines.md` (Agent Skills 사양) 구축
+- [x] 기존 스킬 리팩토링 (`setup-monorepo`)
+
+### Phase 2: Login Page Implementation (Next 🚀)
+
+- [ ] `@coffee-service/ui-library` 내 소셜 로그인 버튼 컴포넌트 구현
+- [ ] `apps/web/app/login/page.tsx` 레이아웃 및 배경 시스템 구축
+- [ ] MSW 또는 고정 토큰을 활용한 인증 흐름 하네스 구축
 
 ---
 
-위 계획대로 진행할까요? 승인해주시면 즉시 반영하고 한국어 설명과 커밋을 진행하겠습니다.
+인프라 준비가 완료되었습니다. `Phase 2`의 로그인 페이지 구현 작업을 시작할까요? 승인이 떨어지면 `task.md`를 업데이트하고 작업을 수행하겠습니다.
