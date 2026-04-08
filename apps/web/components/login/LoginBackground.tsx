@@ -12,11 +12,15 @@ import React from 'react';
 const LoginBackground = () => {
   return (
     <div className="bg-primary-surface absolute inset-0 z-[-1] h-screen w-full overflow-hidden">
-      {/* Background Image with Motion (Linear Fluidity) */}
+      {/* Background Image with Ken Burns Effect (Premium Lab Mood) */}
       <motion.div
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1.0, opacity: 1 }}
-        transition={{ duration: 1.2, ease: 'linear' }}
+        initial={{ scale: 1.2, opacity: 0 }}
+        animate={{ scale: 1.05, opacity: 1 }}
+        transition={{
+          duration: 20,
+          ease: 'linear',
+          opacity: { duration: 1.2 },
+        }}
         className="relative h-full w-full"
       >
         <Image
@@ -27,8 +31,8 @@ const LoginBackground = () => {
           priority
         />
 
-        {/* Overlay - 블랙/브라운 그라데이션 */}
-        <div className="to-primary-surface/90 absolute inset-0 bg-linear-to-b from-black/60 via-black/40" />
+        {/* Overlay - Espresso Dark & Linear depth */}
+        <div className="absolute inset-0 bg-linear-to-b from-[#1A1614]/80 via-[#1A1614]/40 to-[#1A1614]/95" />
       </motion.div>
     </div>
   );

@@ -33,8 +33,6 @@ const SocialLoginSection = () => {
   return (
     <motion.div
       variants={containerVariants}
-      initial="hidden"
-      animate="show"
       className="w-full max-w-sm px-6"
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
