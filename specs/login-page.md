@@ -78,6 +78,7 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
     - `SocialButton` (Google)
     - `SocialButton` (Naver)
     - `SocialButton` (Kakao)
+  - `LoginCallbackPage` (app/login/callback/page.tsx - **NEW**)
 
 ---
 
@@ -105,8 +106,9 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 
 소셜 인증이 성공하면 서버는 프론트엔드의 메인 페이지로 다음과 같이 리다이렉트합니다.
 
-- **Redirect URL**: `http://localhost:3000/main?token={JWT}`
+- **Redirect URL**: `http://localhost:3000/login/callback?token={JWT}` (Harness 전용 콜백 경로 활용)
 - **프론트엔드 처리**:
-  1. 쿼리 파라미터(`token`)에서 **JWT**를 추출합니다.
-  2. 추출된 JWT를 브라우저의 보안 스토리지(Cookie 또는 LocalStorage)에 저장합니다.
-  3. 토큰 저장 완료 후 메인 페이지를 정상적으로 렌더링합니다.
+  1. `LoginCallbackPage`에서 URL 쿼리 파라미터(`token`)를 가로채 추출합니다.
+  2. `authUtils`를 사용하여 추출된 JWT를 브라우저의 전용 스토리지(`LocalStorage`)에 안전하게 저장합니다.
+  3. 토큰 저장 완료 후 메인 랜딩 페이지('/')로 자동 라우팅을 수행합니다.
+  4. 메인 페이지의 GNB(Header)는 저장된 토큰 유무를 실시간으로 감지하여 유저 아이콘을 로그아웃 아이콘으로 동적으로 전환합니다.
