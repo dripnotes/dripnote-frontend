@@ -30,6 +30,15 @@ const SocialLoginSection = () => {
     },
   };
 
+  const handleSocialLogin = (platform: string) => {
+    // 실제 서버가 준비되면 아래 URL로 리다이렉트합니다.
+    // const serverUrl = `http://localhost:8080/oauth2/authorization/${platform}`;
+
+    // [Harness] 개발용 Mock 리다이렉션 로직 (Phase 2.4)
+    const mockToken = `mock_jwt_token_${platform}_${Date.now()}`;
+    window.location.href = `/login/callback?token=${mockToken}`;
+  };
+
   return (
     <motion.div
       variants={containerVariants}
@@ -42,7 +51,12 @@ const SocialLoginSection = () => {
         className="w-full shrink-0"
         style={{ marginBottom: '20px' }}
       >
-        <Button variant="google" size="xl" className="w-full gap-3">
+        <Button
+          variant="google"
+          size="xl"
+          className="w-full gap-3"
+          onClick={() => handleSocialLogin('google')}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
             <path
               fill="#EA4335"
@@ -71,7 +85,12 @@ const SocialLoginSection = () => {
         className="w-full shrink-0"
         style={{ marginBottom: '20px' }}
       >
-        <Button variant="kakao" size="xl" className="w-full gap-3">
+        <Button
+          variant="kakao"
+          size="xl"
+          className="w-full gap-3"
+          onClick={() => handleSocialLogin('kakao')}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -91,7 +110,12 @@ const SocialLoginSection = () => {
         className="w-full shrink-0"
         style={{ marginBottom: '24px' }}
       >
-        <Button variant="naver" size="xl" className="w-full gap-3">
+        <Button
+          variant="naver"
+          size="xl"
+          className="w-full gap-3"
+          onClick={() => handleSocialLogin('naver')}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
