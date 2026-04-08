@@ -32,7 +32,7 @@ const LoginBackground = () => {
         />
 
         {/* Overlay - Espresso Dark & Linear depth */}
-        <div className="absolute inset-0 bg-linear-to-b from-[#1A1614]/80 via-[#1A1614]/40 to-[#1A1614]/95" />
+        <div className="absolute inset-0 bg-linear-to-b from-primary-surface/80 via-primary-surface/40 to-primary-surface/95" />
       </motion.div>
     </div>
   );

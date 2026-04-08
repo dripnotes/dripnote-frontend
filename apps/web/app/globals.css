@@ -32,6 +32,7 @@
   --color-kakao: var(--social-kakao);
   --color-kakao-hover: var(--social-kakao-hover);
   --color-kakao-foreground: var(--social-kakao-fg);
+  --color-ring: #D97706;
   --font-playfair: var(--font-playfair);
   --font-outfit: var(--font-outfit);
   --font-inter: var(--font-inter);
