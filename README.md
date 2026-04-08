@@ -1,26 +1,20 @@
 # Dripnote (Coffee Service)
 
-> [!IMPORTANT]
->
-> ### 🤖 Agent Instructions (MUST READ BEFORE STARTING)
->
-> 이 프로젝트의 AI 에이전트는 새로운 세션을 시작할 때마다 반드시 다음 절차를 수행해야 합니다.
->
-> 1. **규칙 확인**: `.agents/rules/` 디렉토리의 모든 가이드를 정독하십시오. (특히 `global.md`의 Rule 13, 14, 21 및 `skill-guidelines.md` 필독)
-> 2. **워크플로우 준수**: 모든 작업은 `.agents/workflows/vibe-coding-cycle.md`의 6단계 주기를 따릅니다.
-> 3. **계획 우선**: 코드를 수정하기 전, 반드시 프로젝트 루트의 `PLAN.md`를 확인하고 현재 태스크를 업데이트하십시오.
-> 4. **에이전트 스킬**: 새로운 스킬을 작성할 때는 `.agents/rules/skill-guidelines.md`의 표준 사양을 반드시 준수하십시오.
-> 5. **명령어 규정**: 패키지 제어 시 반드시 `pnpm --filter @coffee-service/web <command>` 구조를 사용하십시오.
+### AI & Methodology
 
----
+이 프로젝트는 AI 에이전트와 효과적으로 협업하고 코드 품질을 유지하기 위해 다음의 지침과 방법론을 준수합니다.
 
-### Core Methodology
+#### 🤖 Quick Start for AI Agents
 
-이 프로젝트는 AI 에이전트와 효과적으로 협업하고 코드 품질을 유지하기 위해 다음의 3대 방법론을 준수합니다.
+- **컨텍스트 파악**: 새로운 세션을 시작할 때마다 반드시 `.agents/rules/`의 전역 규칙과 프로젝트 루트의 `PLAN.md`를 먼저 확인하십시오.
+- **워크플로우 준수**: 모든 개발 작업은 `.agents/workflows/vibe-coding-cycle.md`의 6단계 주기를 따릅니다.
+- **보고 규칙**: 세션 시작 시 규칙 숙지가 완료되었다면 사용자에게 간략히 보고한 후 작업을 시작하십시오.
 
-- **Vibe Coding**: 기능을 구현하기 전 반드시 페어 프로그래밍을 통해 `Implementation Plan`을 수립하고 사용자의 승인을 거치는 6단계 개발 사이클을 따릅니다.
-- **Harness Engineering**: 백엔드 API 부재 시에도 UI 개발과 비즈니스 로직을 검증할 수 있도록 Mock Data 및 콜백 가로채기 등 전용 하네스(Harness) 환경을 우선 구축합니다. (Rule 22)
-- **Spec-driven Development**: 모든 개발의 기준은 `specs/` 하위의 명세서입니다. 특히 `specs/common-ui-spec.md`를 통해 프로젝트 전체의 시각적 일관성을 확보합니다. (Rule 23)
+#### 💡 Core Development Principles
+
+- **Vibe Coding**: 기능을 구현하기 전 반드시 `Implementation Plan`을 수립하고 사용자의 승인을 거치는 사이클을 유지합니다.
+- **Harness Engineering**: 에이전트가 자율적으로 코드를 실행, 테스트, 검증하고 스스로 오류를 수정할 수 있는 환경을 설계하고 구축합니다. 상세 전략은 `[.agents/rules/harness-strategy.md]`를 참조하십시오. (Rule 22)
+- **Spec-driven Development**: 모든 개발의 기준은 `specs/` 하위의 명세서(특히 `common-ui-spec.md`)입니다. (Rule 23)
 
 ### Features
 
