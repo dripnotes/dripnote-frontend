@@ -14,21 +14,34 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // 1. Storage에서 토근 확인
-    const token = authUtils.getToken();
+    const checkAuth = () => {
+      // 1. Storage에서 토큰 확인
+      const token = authUtils.getToken();
 
-    // 2. 토큰 존재 시 가상 유저 정보 로드 (하네스 단계)
-    if (token) {
-      const userInfo = getMockUserInfo(token);
-      setUser(userInfo);
-      setIsAuthenticated(true);
-    } else {
-      setUser(null);
-      setIsAuthenticated(false);
-    }
+      // 2. 토큰 존재 시 가상 유저 정보 로드 (하네스 단계)
+      if (token) {
+        const userInfo = getMockUserInfo(token);
+        setUser(userInfo);
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+    };
 
-    // 3. 로딩 완료 (Next.js Hydration 대응)
+    // 최초 로드 시 실행 및 하이드레이션 대응
+    checkAuth();
     setIsLoading(false);
+
+    // 다른 탭에서의 스토리지 변경 감지 (인증 상태 동기화)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'dripnote-auth-token') {
+        checkAuth();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   return {

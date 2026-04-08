@@ -17,7 +17,7 @@ import SocialLoginSection from '@/components/login/SocialLoginSection';
  */
 export default function LoginPage() {
   return (
-    <main className="relative flex h-[100dvh] flex-col items-center justify-center overflow-hidden">
+    <main className="relative flex h-dvh flex-col items-center justify-center overflow-hidden">
       {/* 고감도 배경 및 오버레이 */}
       <LoginBackground />
 
@@ -60,7 +60,9 @@ export default function LoginPage() {
 
       {/* Subtle footer aligned with user's preference for simplicity */}
       <footer className="absolute bottom-6 flex w-full items-center justify-center lg:bottom-10">
-        <p className="text-[10px] text-white/40">© 2026 Dripnote. All rights reserved.</p>
+        <p className="text-[10px] text-white/40">
+          © {new Date().getFullYear()} Dripnote. All rights reserved.
+        </p>
       </footer>
     </main>
   );

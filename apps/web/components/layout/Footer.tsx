@@ -6,7 +6,7 @@ export default function Footer() {
           <span className="text-xl font-bold tracking-tighter text-gray-900">Dripnote</span>
         </div>
         <p className="text-center text-sm text-gray-500 sm:text-left">
-          © 2026 Dripnote. All rights reserved.
+          © {new Date().getFullYear()} Dripnote. All rights reserved.
         </p>
       </div>
     </footer>

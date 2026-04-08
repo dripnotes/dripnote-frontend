@@ -1,5 +1,6 @@
 'use client';
 
+import { Skeleton } from '@coffee-service/ui-library';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
 import { MapPin, Coffee } from 'lucide-react';
@@ -99,25 +100,31 @@ export default function HeroSection() {
             <h1 className="mb-4 flex flex-col leading-tight font-extrabold tracking-tight">
               <span className="text-4xl sm:text-5xl md:text-6xl">
                 {isLoading ? (
-                  <span className="opacity-0">안녕하세요</span>
+                  <Skeleton className="h-10 w-48 sm:h-12 sm:w-64 md:h-16 md:w-80" />
                 ) : isAuthenticated ? (
                   <>
-                    안녕하세요,{' '}
-                    <span className="text-primary/90 text-yellow-500">{user?.name}</span>님.
+                    안녕하세요, <span className="text-yellow-500">{user?.name}</span>님.
                   </>
                 ) : (
                   '안녕하세요, 커피 모험가님.'
                 )}
               </span>
-              <span className="mt-2 block text-[26px] whitespace-nowrap text-white sm:text-4xl md:text-5xl md:leading-[1.15]">
+              <span className="mt-2 block text-[26px] text-white sm:text-4xl sm:whitespace-nowrap md:text-5xl md:leading-[1.15]">
                 오늘은 어떤 한 잔을 내려볼까요?
               </span>
             </h1>
-            <p className="mb-8 text-lg break-keep text-gray-300 md:text-xl">
-              {isAuthenticated
-                ? '당신만을 위한 완벽한 커피 큐레이션을 준비했습니다. 지금 바로 확인해보세요.'
-                : '당신만의 완벽한 커피를 찾아보세요. 스페셜티 원두 큐레이션부터 우리 동네 숨겨진 로스터리까지.'}
-            </p>
+            {isLoading ? (
+              <div className="mb-8 space-y-2">
+                <Skeleton className="h-5 w-full max-w-[400px]" />
+                <Skeleton className="h-5 w-2/3 max-w-[280px]" />
+              </div>
+            ) : (
+              <p className="mb-8 text-lg break-keep text-gray-300 md:text-xl">
+                {isAuthenticated
+                  ? '당신만을 위한 완벽한 커피 큐레이션을 준비했습니다. 지금 바로 확인해보세요.'
+                  : '당신만의 완벽한 커피를 찾아보세요. 스페셜티 원두 큐레이션부터 우리 동네 숨겨진 로스터리까지.'}
+              </p>
+            )}
 
             <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
               <Link
