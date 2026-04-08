@@ -32,4 +32,4 @@
 - **UI Components**: 모든 핵심 UI 요소는 반드시 `ui-library` 패키지의 공용 컴포넌트를 우선적으로 활용해야 합니다.
 - **TypeScript**: TypeScript의 모범 사례와 타입 안전성(Type Safety)을 항상 엄격하게 유지합니다.
 - **Design Aesthetic**: UI 구현 시 기능 동작 이상으로 심미성과 사용자 경험(Premium Feel)을 최고 수준으로 고려해야 합니다. 부드러운 전환을 위해 `framer-motion`을 적극 활용합니다.
-- **Harness Engineering (Rule 22)**: 소프트웨어 개발을 '에이전트 우선(Agent-first)' 관점에서 재구성합니다. 엔지니어는 단순히 코드를 작성하는 것을 넘어, 에이전트가 자율적으로 코드를 실행, 테스트, 검증하고 스스로 오류를 수정(Self-Correction)할 수 있는 **'하네스(Harness)'** 환경을 설계하고 구축해야 합니다. 상세 내용은 `[.agents/rules/harness-strategy.md]`를 참조하십시오.
+- **Harness Engineering (Rule 22)**: 소프트웨어 개발을 '에이전트 우선(Agent-first)' 관점에서 재구성합니다. 엔지니어는 단순히 코드를 작성하는 것을 넘어, 에이전트가 자율적으로 코드를 실행, 테스트, 검증하고 스스로 오류를 수정(Self-Correction)할 수 있는 **'하네스(Harness)'** 환경을 설계하고 구축해야 합니다. 상세 내용은 `[.agents/workflows/vibe-coding-cycle.md]`를 참조하십시오.
