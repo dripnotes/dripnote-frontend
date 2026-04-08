@@ -9,7 +9,7 @@ description: [Vibe Coding] 스펙 기반 에이전트 페어 프로그래밍 워
 ## 1. 계획 (Planning)
 
 - 사용자가 `specs/*.md`에 요구사항을 작성하거나 에이전트에게 개발할 기능을 제시합니다.
-- **Action:** AI 에이전트는 코드를 즉시 수정하지 않고, 요구사항과 현재 아키텍처를 분석하여 프로젝트 최상단 루트의 `PLAN.md` 파일에 구체적인 **Implementation Plan (구현 계획안)**을 작성(업데이트)합니다.
+- **Action:** AI 에이전트는 코드를 즉시 수정하지 않고, 요구사항과 현재 아키텍처를 분석합니다. 이때 반드시 **`specs/common-ui-spec.md`를 먼저 확인하여 디자인 및 설계의 일관성을 확보**한 뒤, 프로젝트 최상단 루트의 `PLAN.md` 파일에 구체적인 **Implementation Plan (구현 계획안)**을 작성(업데이트)합니다.
 
 ## 2. 허가 (Approval)
 

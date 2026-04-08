@@ -15,17 +15,17 @@
 - [x] `.agents/rules/skill-guidelines.md` (Agent Skills 사양) 구축
 - [x] 기존 스킬 리팩토링 (`setup-monorepo`)
 
-### Phase 2: Login Page Implementation (In Progress 🚀)
+### Phase 2: Login Page Implementation (Completed ✅)
 
-- [x] Phase 2.1: UI Library Tailwind Integration Fix (완료 ✅)
-- [x] Phase 2.2: 소셜 로그인 버튼 마우스 인터랙션 구현 (완료 ✅)
-- [x] Phase 2.4: 인증 흐름 하네스 구축 (완료 ✅)
-  - 실제 백엔드 없이 소셜 로그인 완료 후의 리다이렉션 및 토큰 처리 로직을 검증할 수 있는 환경을 성공적으로 구축했습니다.
+- [x] Phase 2.1: UI Library Tailwind Integration Fix
+- [x] Phase 2.2: 소셜 로그인 버튼 마우스 인터랙션 구현
+- [x] Phase 2.4: 인증 흐름 하네스 구축
+  - 실제 백엔드 없이 소셜 로그인 완료 후의 토큰 처리(`LocalStorage`) 및 리다이렉션 로직을 검증할 수 있는 `LoginCallbackPage` 환경 구축 완료. (Rule 22 적용)
 
-### Phase 3: Main Page Enhancement (Next 🚀)
+### Phase 3: Infrastructure Polishing & Main Page Enhancement (In Progress 🚀)
 
-- **목표**: 메인 페이지의 시각적 요소와 개인화 기능을 강화합니다.
-- **주요 작업**:
-  - [ ] 히어로 섹션 개인화 (인증된 사용자의 경우 맞춤형 인사말 노출)
-  - [ ] 북마크 기능 하네스 구축 및 UI 연동
-  - [ ] 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등)
+- [x] Phase 3.1: 공통 명세 체계 구축 (`specs/common-ui-spec.md`) ✅
+- [x] Phase 3.2: 기존 스펙 리팩토링 및 불필요 파일 제거 (`docs/` 삭제) ✅
+- [ ] Phase 3.3: 히어로 섹션 개인화 (인증 상태 연동 및 인사말 노출) 🚀
+- [ ] Phase 3.4: 북마크 기능 하네스 구축 및 UI 연동
+- [ ] Phase 3.5: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)

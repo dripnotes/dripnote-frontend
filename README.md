@@ -14,9 +14,13 @@
 
 ---
 
-# Next.js Boilerplate
+### Core Methodology
 
-This is a Next.js boilerplate designed to help you quickly start developing web applications based on a modern tech stack.
+이 프로젝트는 AI 에이전트와 효과적으로 협업하고 코드 품질을 유지하기 위해 다음의 3대 방법론을 준수합니다.
+
+- **Vibe Coding**: 기능을 구현하기 전 반드시 페어 프로그래밍을 통해 `Implementation Plan`을 수립하고 사용자의 승인을 거치는 6단계 개발 사이클을 따릅니다.
+- **Harness Engineering**: 백엔드 API 부재 시에도 UI 개발과 비즈니스 로직을 검증할 수 있도록 Mock Data 및 콜백 가로채기 등 전용 하네스(Harness) 환경을 우선 구축합니다. (Rule 22)
+- **Spec-driven Development**: 모든 개발의 기준은 `specs/` 하위의 명세서입니다. 특히 `specs/common-ui-spec.md`를 통해 프로젝트 전체의 시각적 일관성을 확보합니다. (Rule 23)
 
 ### Features
 
