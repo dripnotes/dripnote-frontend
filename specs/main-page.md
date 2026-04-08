@@ -4,7 +4,27 @@
 
 Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main Page) 역할을 동시에 수행합니다. 사용자에게 직관적이고 시각적인 커피 경험을 제안하고, 추천 원두와 로스터리 위치 등 핵심 서비스로 빠르게 유도합니다.
 
-## 2. 주요 구성 요소 (UI/UX)
+## 2. 디자인 시스템 및 원칙 (Design System)
+
+### 2.1 브랜드 아이덴티티: "Internal Coffee Lab"
+
+- **Identity**: 2030 세대를 타겟으로 하는 차분하고 지적인 무드. 스페셜티 커피의 전문성을 반영합니다.
+- **Visual-First Strategy**: "Show, Don't Just Tell". 텍스트 설명 대신 고해상도 이미지와 공백을 통해 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
+
+### 2.2 디자인 토큰 (Design Tokens)
+
+- **Colors**:
+  - `Primary-Surface`: #1A1614 (Espresso Dark)
+  - `Secondary-Surface`: #2A2522
+  - `Tertiary-Surface`: #FAF7F5 (Cream Foam)
+  - `Brand-Amber`: #D97706 (Accent)
+- **Typography**:
+  - `Headings (Logo & Hero)`: Playfair Display
+  - `Sub-Headings & Labels`: Outfit
+  - `Body & Info`: Inter
+- **Motion**: "Fast & Linear Fluids" (Duration 0.2s ~ 0.4s)
+
+## 3. 주요 구성 요소 (UI/UX)
 
 ### 2.1 글로벌 네비게이션 (GNB)
 
@@ -51,9 +71,9 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 - **지도 최적화**: `react-kakao-maps-sdk` 컴포넌트를 사용하여 카카오 지도 렌더링 선언적 구성 및 최적화. (네이버 지도 API의 기본 유료화 정책으로 인해 초기 비용 통제가 필요하여 무료 사용량이 넉넉한 카카오 지도로 교체함)
 - **상단 GNB 이펙트**: 최상단에서는 투명한 배경을 유지하다가, 페이지 스크롤 시 반투명/배경색이 나타나는 방식 채택.
 
-## 3. 아키텍처 및 컴포넌트 계층 (Architecture)
+## 4. 아키텍처 및 컴포넌트 계층 (Architecture)
 
-### 3.1 컴포넌트 트리
+### 4.1 컴포넌트 트리
 
 메인 페이지(`app/page.tsx`) 내부는 다음 계층으로 구성됩니다:
 
@@ -64,20 +84,20 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
     - `RecommendedBeans` (Client Component - 추천 원두)
     - RoasteryMapSection (useKakaoLoader를 이용한 비동기 스크립트 렌더링)
 
-### 3.2 데이터 흐름 (Data Flow)
+### 4.2 데이터 흐름 (Data Flow)
 
 현재는 서버사이드 렌더링 혹은 백엔드 API 연동 이전 단계이므로 로컬의 `mockMainData`(`apps/web/lib/api/main.ts`)를 조회하여 하위 컴포넌트에 Props로 주입합니다.
 
 ---
 
-## 4. 핵심 동작 요구사항
+## 5. 핵심 동작 요구사항
 
 - **SPA 라우팅 연동**: 로그인 페이지, 원두 정보 페이지 등 내부 라우팅 요소 완비.
 - 지도 라이브러리 연동: 카카오 지도(Kakao Maps) 기능 최적화.
 
 ---
 
-## 5. API 연동 명세
+## 6. API 연동 명세
 
 ### 상황
 
