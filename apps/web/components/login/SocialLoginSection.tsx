@@ -45,11 +45,7 @@ const SocialLoginSection = () => {
       className="flex w-full max-w-sm flex-col items-center px-6"
     >
       {/* 구글 로그인 버튼 */}
-      <motion.div
-        variants={itemVariants}
-        className="w-full shrink-0"
-        style={{ marginBottom: '20px' }}
-      >
+      <motion.div variants={itemVariants} className="mb-3 w-full shrink-0">
         <Button
           variant="google"
           size="xl"
@@ -79,11 +75,7 @@ const SocialLoginSection = () => {
       </motion.div>
 
       {/* 카카오 로그인 버튼 */}
-      <motion.div
-        variants={itemVariants}
-        className="w-full shrink-0"
-        style={{ marginBottom: '20px' }}
-      >
+      <motion.div variants={itemVariants} className="mb-3 w-full shrink-0">
         <Button
           variant="kakao"
           size="xl"
@@ -104,11 +96,7 @@ const SocialLoginSection = () => {
       </motion.div>
 
       {/* 네이버 로그인 버튼 */}
-      <motion.div
-        variants={itemVariants}
-        className="w-full shrink-0"
-        style={{ marginBottom: '24px' }}
-      >
+      <motion.div variants={itemVariants} className="mb-4 w-full shrink-0">
         <Button
           variant="naver"
           size="xl"
@@ -129,7 +117,7 @@ const SocialLoginSection = () => {
       </motion.div>
 
       {/* Subtle Divider Line */}
-      <motion.div variants={itemVariants} className="mt-4 mb-4 h-px w-8 bg-white/10" />
+      <motion.div variants={itemVariants} className="mt-2 mb-3 h-px w-8 bg-white/10" />
 
       <motion.p
         variants={itemVariants}

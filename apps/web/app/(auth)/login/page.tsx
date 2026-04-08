@@ -17,7 +17,7 @@ import SocialLoginSection from '@/components/login/SocialLoginSection';
  */
 export default function LoginPage() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
+    <main className="relative flex h-[100dvh] flex-col items-center justify-center overflow-hidden">
       {/* 고감도 배경 및 오버레이 */}
       <LoginBackground />
 
@@ -26,7 +26,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.2, duration: 0.6, ease: 'easeOut' }}
-        className="absolute top-10 left-8 z-50 lg:top-14 lg:left-14"
+        className="absolute top-6 left-6 z-50 lg:top-14 lg:left-14"
       >
         <Link href="/">
           <Button
@@ -59,7 +59,7 @@ export default function LoginPage() {
       </motion.div>
 
       {/* Subtle footer aligned with user's preference for simplicity */}
-      <footer className="absolute bottom-10 flex w-full items-center justify-center">
+      <footer className="absolute bottom-6 flex w-full items-center justify-center lg:bottom-10">
         <p className="text-[10px] text-white/40">© 2026 Dripnote. All rights reserved.</p>
       </footer>
     </main>

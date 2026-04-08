@@ -17,6 +17,7 @@
 | `CHG-260408-04` | `docs` | [개발 라이프사이클 7단계 확장 및 프로토콜 정교화](docs/history/CHG-260408-04.md)      |
 | `CHG-260408-05` | `fix`  | [로그인 페이지 애니메이션 타이밍 최적화 (피드백 반영)](docs/history/CHG-260408-05.md) |
 | `CHG-260408-06` | `feat` | [Button icon variant 추가 및 Header 리팩토링](docs/history/CHG-260408-06.md)          |
+| `CHG-260408-07` | `fix`  | [로그인 페이지 모바일 뷰 최적화 (스크롤 제거)](docs/history/CHG-260408-07.md)         |
 
 ---
 
