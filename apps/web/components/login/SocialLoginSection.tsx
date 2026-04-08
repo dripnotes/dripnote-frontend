@@ -33,8 +33,7 @@ const SocialLoginSection = () => {
   return (
     <motion.div
       variants={containerVariants}
-      className="w-full max-w-sm px-6"
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      className="w-full max-w-sm px-6 flex flex-col items-center"
     >
       {/* 구글 로그인 버튼 */}
       <motion.div
