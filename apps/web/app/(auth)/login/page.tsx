@@ -58,9 +58,9 @@ export default function LoginPage() {
         <SocialLoginSection />
       </motion.div>
 
-      {/* Footer-like subtle info (optional) */}
-      <footer className="absolute bottom-8 text-[10px] tracking-widest text-white/30 uppercase">
-        © 2026 Dripnote Lab. All rights reserved.
+      {/* Subtle footer aligned with user's preference for simplicity */}
+      <footer className="absolute bottom-10 flex w-full items-center justify-center">
+        <p className="text-[10px] text-white/40">© 2026 Dripnote. All rights reserved.</p>
       </footer>
     </main>
   );
