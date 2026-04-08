@@ -19,9 +19,11 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'underline-offset-4 hover:underline text-primary',
         google:
-          'bg-[#FFFFFF] text-[#3C4043] border border-[#DADCE0] hover:bg-[#F1F3F4] font-medium shadow-none',
-        naver: 'bg-[#03C75A] text-[#FFFFFF] hover:bg-[#02B351] font-semibold border-none',
-        kakao: 'bg-[#FEE500] text-[#000000] hover:bg-[#FDD800] font-semibold border-none',
+          'bg-google text-google-foreground border border-google-border hover:bg-google-hover font-medium hover:-translate-y-0.5 shadow-sm hover:shadow-md duration-200 ease-linear',
+        naver:
+          'bg-naver text-naver-foreground hover:bg-naver-hover font-semibold border-none hover:-translate-y-0.5 shadow-sm hover:shadow-md duration-200 ease-linear',
+        kakao:
+          'bg-kakao text-kakao-foreground hover:bg-kakao-hover font-semibold border-none hover:-translate-y-0.5 shadow-sm hover:shadow-md duration-200 ease-linear',
       },
       size: {
         default: 'h-10 py-2 px-4',

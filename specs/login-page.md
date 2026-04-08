@@ -53,16 +53,18 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 ### 3.3 소셜 로그인 그룹 (Social Login Group)
 
 - **구성**: 구글(Google), 네이버(Naver), 카카오(Kakao) 3가지 소셜 로그인을 제공합니다.
-- **버튼 디자인 및 브랜드 가이드**:
-  - 각 플랫폼의 공식 브랜드 가이드라인을 준수하여 아이콘, 색상, 텍스트 배치를 설계합니다.
+- **버튼 디자인 및 브랜드 연동**:
+  - 각 플랫폼의 공식 브랜드 가이드라인을 철저하게 준수하여 디자인을 설계합니다.
+  - 하드코딩된 색상을 지양하고, 최상단 CSS(`:root`)에 소셜 전용 테마 변수를 구축하여 **Tailwind CSS Utility Class(`bg-google`, `text-kakao-foreground` 등)와 완전히 연동**합니다. 이를 통해 코드의 단일 진실 공급원(SSOT)을 확보헙니다.
     - [구글 브랜드 가이드라인](https://developers.google.com/identity/branding-guidelines?hl=ko)
     - [네이버 로그인 BI 가이드](https://developers.naver.com/docs/login/bi/bi.md)
-    - [카카오 디자인 가이드](https://developers.kakao.com/docs/latest/ko/kakaologin/design-guide)
+    - [카카오 디자인 가이드](https://developers.kakao.com/docs/latest/ko/kakaologin/design-guide) (텍스트 컬러: `rgba(0, 0, 0, 0.85)` 정확도 준수)
 
-> **변경 사유 (Context)**: 각 플랫폼의 공식 검수 통과 및 브랜드 아이덴티티 보호를 위해 공식 가이드를 필수 준수 사항으로 명시했습니다.
+> **변경 사유 (Context)**: 각 플랫폼의 공식 검수 통과 및 브랜드 아이덴티티 규칙을 보호하면서도, 시스템적으로 유지보수가 용이하도록 CSS 변수 맵핑 방식을 도입했습니다.
 
-- 터치 친화적인 규격 (Height: 52px 이상, Full Width).
-- 디자인 명세서의 "Linear Fluidity"를 적용하여 호버/터치 시 부드럽고 빠른 응답 제공.
+- **규격 및 마우스 인터랙션**:
+  - 터치 친화적인 규격을 일관되게 사용합니다 (Height: 52px 이상, Full Width).
+  - 디자인 명세서의 "Linear Fluidity"를 적용하여 버튼과 상호작용(Hover) 시 **버튼이 부드럽게 위로 떠오르며(`-translate-y-0.5`) 그림자(`shadow-sm` -> `shadow-md`)가 풍부하게 강조되는 깊이감 있는 모션**을 세밀하게 적용합니다 (`duration-200 ease-linear`).
 
 ## 4. 아키텍처 및 컴포넌트 계층 (Architecture)
 

@@ -44,17 +44,7 @@ const SocialLoginSection = () => {
         className="w-full shrink-0"
         style={{ marginBottom: '20px' }}
       >
-        <Button
-          variant="google"
-          size="xl"
-          className="w-full gap-3"
-          style={{
-            backgroundColor: '#FFFFFF',
-            color: '#3C4043',
-            border: '1px solid #DADCE0',
-            height: '52px',
-          }}
-        >
+        <Button variant="google" size="xl" className="w-full gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
             <path
               fill="#EA4335"
@@ -83,17 +73,7 @@ const SocialLoginSection = () => {
         className="w-full shrink-0"
         style={{ marginBottom: '20px' }}
       >
-        <Button
-          variant="kakao"
-          size="xl"
-          className="w-full gap-3"
-          style={{
-            backgroundColor: '#FEE500',
-            color: 'rgba(0, 0, 0, 0.85)',
-            border: 'none',
-            height: '52px',
-          }}
-        >
+        <Button variant="kakao" size="xl" className="w-full gap-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -113,12 +93,7 @@ const SocialLoginSection = () => {
         className="w-full shrink-0"
         style={{ marginBottom: '24px' }}
       >
-        <Button
-          variant="naver"
-          size="xl"
-          className="w-full gap-3"
-          style={{ backgroundColor: '#03C75A', color: '#FFFFFF', border: 'none', height: '52px' }}
-        >
+        <Button variant="naver" size="xl" className="w-full gap-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
