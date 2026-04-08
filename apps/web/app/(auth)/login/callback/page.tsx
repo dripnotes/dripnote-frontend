@@ -1,17 +1,15 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
 import { authUtils } from '@/lib/utils/auth-utils';
 
 /**
- * LoginCallbackPage - 인증 서버로부터 리다이렉트된 후 토큰을 처리하는 페이지
- * - URL Query Parameter에서 JWT 토큰을 추출합니다.
- * - 추출된 토큰을 LocalStorage에 저장합니다.
- * - 저장 완료 후 메인 페이지('/')로 리다이렉트합니다.
+ * AuthCallbackContent - 실제 토큰 처리 로직을 담당하는 내부 컴포넌트
+ * useSearchParams()를 사용하므로 Suspense 내부에 위치해야 합니다.
  */
-export default function LoginCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,7 +20,7 @@ export default function LoginCallbackPage() {
       // 1. 토큰 저장
       authUtils.setToken(token);
 
-      // 2. 메인 페이지로 이동 (잠시 대기 후 이동하여 사용자에게 처리 중임을 알릴 수 있음)
+      // 2. 메인 페이지로 이동
       console.log('인증 성공: 토큰 저장 완료');
       router.replace('/');
     } else {
@@ -33,14 +31,23 @@ export default function LoginCallbackPage() {
   }, [searchParams, router]);
 
   return (
+    <div className="flex flex-col items-center space-y-4">
+      {/* Loading Spinner or Simple Text */}
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
+      <p className="font-outfit text-sm font-light tracking-widest uppercase">Authenticating...</p>
+    </div>
+  );
+}
+
+/**
+ * LoginCallbackPage - 인증 서버로부터 리다이렉트된 후 토큰을 처리하는 페이지
+ */
+export default function LoginCallbackPage() {
+  return (
     <div className="bg-primary-surface flex min-h-screen items-center justify-center text-white">
-      <div className="flex flex-col items-center space-y-4">
-        {/* Loading Spinner or Simple Text */}
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
-        <p className="font-outfit text-sm font-light tracking-widest uppercase">
-          Authenticating...
-        </p>
-      </div>
+      <Suspense fallback={<p className="font-outfit text-sm font-light uppercase">Loading...</p>}>
+        <AuthCallbackContent />
+      </Suspense>
     </div>
   );
 }
