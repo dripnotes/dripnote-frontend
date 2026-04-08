@@ -1,21 +1,35 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bookmark, User } from 'lucide-react';
+import { Bookmark, User, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+import { authUtils } from '@/lib/utils/auth-utils';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
+    // 초기 인증 상태 확인
+    setIsAuthenticated(authUtils.isAuthenticated());
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    authUtils.removeToken();
+    setIsAuthenticated(false);
+    router.push('/login');
+  };
 
   return (
     <motion.header
@@ -50,13 +64,24 @@ export default function Header() {
           >
             <Bookmark className="h-5 w-5" />
           </button>
-          <Link
-            href="/login"
-            className="rounded-full p-2 transition-colors hover:bg-black/5"
-            aria-label="로그인 및 내 정보 확인"
-          >
-            <User className="h-5 w-5" />
-          </Link>
+
+          {isAuthenticated ? (
+            <button
+              onClick={handleLogout}
+              className="rounded-full p-2 transition-colors hover:bg-black/5"
+              aria-label="로그아웃"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="rounded-full p-2 transition-colors hover:bg-black/5"
+              aria-label="로그인 및 내 정보 확인"
+            >
+              <User className="h-5 w-5" />
+            </Link>
+          )}
         </div>
       </div>
     </motion.header>

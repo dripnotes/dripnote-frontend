@@ -32,23 +32,24 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 
 - **Focused Layout**: 일반적인 네비게이션 헤더, 푸터, 사이드바 등을 전면 배제하여 사용자가 인증 과정 외의 다른 기능으로 이탈하는 것을 방지합니다.
 - **Visual Dominance**: 고감도의 커피 브루잉 스틸컷 또는 차분한 로스터리 공간 이미지가 화면 전체의 80% 이상을 차지합니다.
-- **Background Overlay**: 이미지 위에 은은한 블랙/브라운 그라데이션 오버레이를 적용하여 콘텐츠의 가독성과 지적인 분위기를 동시에 확보합니다.
+- **Background Overlay**: 이미지 위에 에스프레소 다크(#1A1614) 기반의 선형 그라데이션 오버레이를 적용하여 콘텐츠의 가독성과 지적인 분위기를 동시에 확보합니다.
+- **Ken Burns Effect**: 정적인 배경에 생동감을 부여하기 위해 20초 이상의 긴 호흡으로 이미지가 매우 미세하게 확대되는 효과를 적용합니다.
 
-> **변경 사유 (Context)**: 로그인 페이지 본연의 목적인 '인증'에 100% 집중할 수 있게 하여 전환율을 높이고, 일반적인 웹 서비스의 복잡함을 걷어낸 프리미엄 디자인(Show, Don't Just Tell)을 강조하기 위함입니다.
+> **변경 사유 (Context)**: 로그인 페이지 본연의 목적인 '인증'에 100% 집중할 수 있게 하여 전환율을 높이고, 정적인 이미지가 주는 지루함을 탈피하여 완성도 높은 프리미엄 디자인(Ken Burns Effect)을 강조하기 위함입니다. (Rule 21 적용)
 
 ### 3.2 브랜드 아이덴티티 및 슬로건 (Branding)
 
-- **Logo**: 화면 상단 중앙에 **"Dripnote"** 로고(Playfair Display)를 배치합니다.
-- **Punchy Headline**: "Dripnote 시작하기" (한 문장 이내로 제한).
+- **Logo**: 화면 상단 중앙에 **"Dripnote"** 로고(Playfair Display, Font-weight: Extrabold)를 배치합니다. 로고 하단에 적절한 여백(`mb-3`)을 두어 슬로건과의 계층 구조를 명확히 합니다.
+- **Punchy Headline**: "시작하기" (Outfit, Light, Uppercase, `tracking-[0.2em]`).
+
+> **변경 사유 (Context)**: '연구소(Lab)' 특유의 간결하고 철저한 이미지를 시각화하기 위해 대문자와 넓은 자간을 활용한 미니멀 타이포그래피 전략을 채택했습니다. (Rule 21 적용)
 
 ### 3.3 내비게이션 (Navigation)
 
-- **Back to Main**: 화면 좌측 상단에 메인 페이지('/')로 돌아갈 수 있는 버튼을 배치합니다.
-- **디바이스 대응**:
-  - **Desktop**: 아이콘 + "메인으로 돌아가기" 문구를 함께 노출합니다.
-  - **Mobile**: 공간 효율을 위해 아이콘만 노출합니다. (현재는 데스크탑 우선 구현)
+- **Back to Main**: 화면 좌측 상단에 메인 페이지('/')로 돌아갈 수 있는 **"main"** 텍스트 버튼을 배치합니다.
+- **디자인 원칙**: 배경과 이질감을 최소화하기 위해 테두리와 배경색을 배제한 **최니멀 텍스트 전용(Minimalist Text-only)** 스타일을 유지하며, 소문자 사용과 넓은 자간을 통해 절제된 미학을 표현합니다.
 
-> **변경 사유 (Context)**: Focused Layout의 원칙을 유지하되, 사용자가 실수로 진입하거나 마음이 바뀌었을 때의 탈출구(Exit)를 제공하여 사용자 경험의 유연성을 확보하기 위함입니다.
+> **변경 사유 (Context)**: Focused Layout의 원칙을 유지하되, 내비게이션 요소가 메인 콘텐츠(인증)의 시각적 흐름을 방해하지 않도록 가장 정제된 형태의 UI를 적용했습니다. (Rule 21 적용)
 
 ### 3.4 소셜 로그인 그룹 (Social Login Group)
 
@@ -77,6 +78,7 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
     - `SocialButton` (Google)
     - `SocialButton` (Naver)
     - `SocialButton` (Kakao)
+  - `LoginCallbackPage` (app/login/callback/page.tsx - **NEW**)
 
 ---
 
@@ -104,8 +106,9 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 
 소셜 인증이 성공하면 서버는 프론트엔드의 메인 페이지로 다음과 같이 리다이렉트합니다.
 
-- **Redirect URL**: `http://localhost:3000/main?token={JWT}`
+- **Redirect URL**: `http://localhost:3000/login/callback?token={JWT}` (Harness 전용 콜백 경로 활용)
 - **프론트엔드 처리**:
-  1. 쿼리 파라미터(`token`)에서 **JWT**를 추출합니다.
-  2. 추출된 JWT를 브라우저의 보안 스토리지(Cookie 또는 LocalStorage)에 저장합니다.
-  3. 토큰 저장 완료 후 메인 페이지를 정상적으로 렌더링합니다.
+  1. `LoginCallbackPage`에서 URL 쿼리 파라미터(`token`)를 가로채 추출합니다.
+  2. `authUtils`를 사용하여 추출된 JWT를 브라우저의 전용 스토리지(`LocalStorage`)에 안전하게 저장합니다.
+  3. 토큰 저장 완료 후 메인 랜딩 페이지('/')로 자동 라우팅을 수행합니다.
+  4. 메인 페이지의 GNB(Header)는 저장된 토큰 유무를 실시간으로 감지하여 유저 아이콘을 로그아웃 아이콘으로 동적으로 전환합니다.

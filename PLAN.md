@@ -2,8 +2,8 @@
 
 ## 1. 개요 및 배경 (Context)
 
-- **목표**: 에이전트의 규칙 준수 인프라를 구축하고, `specs/login-page.md`에 정의된 프리미엄 로그인 UI를 구현합니다.
-- **배경**: 이전 작업에서 누락된 프로세스(PLAN.md, Rule 14, 21)를 보강 완료했으며, 이제 실질적인 기능 구현 단계로 진입합니다.
+- **목표**: 에이전트의 규칙 준수 인프라를 구축하고, `specs/login-page.md`에 정의된 프리미엄 로그인 UI를 구현하며, 실제 서버 없이도 인증 흐름을 검증할 수 있는 환경(Harness)을 구축합니다.
+- **배경**: 인프라 설정을 마치고 로그인 페이지의 시각적 구현(배경, 헤더, 소셜 버튼)을 완료했습니다. 이제 실제 인증 로직 연동을 위한 준비 단계인 하네스 구축이 필요합니다.
 
 ## 2. 작업 단계 (Tasks)
 
@@ -15,20 +15,17 @@
 - [x] `.agents/rules/skill-guidelines.md` (Agent Skills 사양) 구축
 - [x] 기존 스킬 리팩토링 (`setup-monorepo`)
 
-### Phase 2: Login Page Implementation (Next 🚀)
+### Phase 2: Login Page Implementation (In Progress 🚀)
 
-- [x] `@coffee-service/ui-library` 내 소셜 로그인 버튼 컴포넌트 테마 연동 작업 완료
-- [ ] `apps/web/app/login/page.tsx` 레이아웃 및 배경 시스템 구축
-- [ ] MSW 또는 고정 토큰을 활용한 인증 흐름 하네스 구축
+- [x] Phase 2.1: UI Library Tailwind Integration Fix (완료 ✅)
+- [x] Phase 2.2: 소셜 로그인 버튼 마우스 인터랙션 구현 (완료 ✅)
+- [x] Phase 2.4: 인증 흐름 하네스 구축 (완료 ✅)
+  - 실제 백엔드 없이 소셜 로그인 완료 후의 리다이렉션 및 토큰 처리 로직을 검증할 수 있는 환경을 성공적으로 구축했습니다.
 
-### Phase 2.1: UI Library Tailwind Integration Fix (대기 중)
+### Phase 3: Main Page Enhancement (Next 🚀)
 
-- **문제 상황**: 인라인 스타일을 제거하자 버튼 스타일이 깨지는 현상이 발생했습니다. 이는 `apps/web`의 Tailwind 설정이 외부 모노레포 패키지인 `packages/ui-library`를 온전히 스캔하지 않아, 해당 UI 패키지 안에서만 존재하는 유틸리티 클래스(`bg-google`, `hover:bg-kakao-hover` 등)가 생성되지 않았기 때문입니다.
-- **해결 계획**:
-  1. `apps/web/app/globals.css`에 `@source "../../packages/ui-library";`를 추가하여 v4 모노레포 스캐닝 적용.
-  2. `apps/web/tailwind.config.ts`의 `content` 배열에 외부 워크스페이스인 `../../packages/ui-library/**/*.tsx` 경로 추가.
-  3. `--social-kakao-fg` 값을 이전 명세서 및 인라인 스타일과 완전히 동일한 `rgba(0, 0, 0, 0.85)`로 복구.
-
----
-
-명세서에 명시된 "Fast & Linear Fluids" 모션 디자인에 맞춰 마우스 위치에 따라 버튼이 부드럽게 떠오르며 그림자가 강조되는 인터랙션을 **Phase 2.2**로 계획했습니다. 승인이 떨어지면 `Button.tsx`를 수정하겠습니다.
+- **목표**: 메인 페이지의 시각적 요소와 개인화 기능을 강화합니다.
+- **주요 작업**:
+  - [ ] 히어로 섹션 개인화 (인증된 사용자의 경우 맞춤형 인사말 노출)
+  - [ ] 북마크 기능 하네스 구축 및 UI 연동
+  - [ ] 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등)
