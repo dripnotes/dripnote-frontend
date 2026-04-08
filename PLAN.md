@@ -10,10 +10,11 @@
 ### Phase 1: Infrastructure (Completed ✅)
 
 - [x] `specs/login-page.md` 스펙 보완 (Rule 21 적용)
-- [x] `README.md` 에이전트 지침 및 스킬 가이드 추가
-- [x] `.agents/workflows/session-init.md` 워크플로우 생성
+- [x] `README.md` 개발 사이클 및 방법론 가이드 구축
+- [x] `.agents/workflows/session-init.md` 워크플로우 생성 및 최적화 (이후 제거)
 - [x] `.agents/rules/skill-guidelines.md` (Agent Skills 사양) 구축
 - [x] 기존 스킬 리팩토링 (`setup-monorepo`)
+- [x] 하네스 엔지니어링 전략 수립 및 규칙화 ([harness-strategy.md](file:///.agents/rules/harness-strategy.md))
 
 ### Phase 2: Login Page Implementation (Completed ✅)
 
