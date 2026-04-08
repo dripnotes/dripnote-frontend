@@ -21,6 +21,7 @@
 | `CHG-260408-08` | `feat` | [히어로 섹션 개인화 및 UI 최적화 (메인 페이지 전용 드래그 방지 포함)](docs/history/CHG-260408-08.md) |
 | `CHG-260408-09` | `fix`  | [Button variant active:scale 충돌 해결 및 스타일 명확화](docs/history/CHG-260408-09.md)              |
 | `CHG-260408-10` | `fix`  | [HeroSection Layout Shift 해결 및 Skeleton UI 도입](docs/history/CHG-260408-10.md)                   |
+| `CHG-260408-11` | `fix`  | [최종 정밀 피드백 반영 및 코드 안정성 강화](docs/history/CHG-260408-11.md)                           |
 
 ---
 

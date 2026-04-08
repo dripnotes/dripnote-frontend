@@ -6,8 +6,8 @@ import React from 'react';
 
 /**
  * SocialLoginSection - 구글, 네이버, 카카오 소셜 로그인 버튼
- * - 브랜드 가이드라인 100% 준수 (색상, 로고, 텍스트)
- * - 레이아웃 결함 해결: 인라인 스타일로 20px 간격을 강제 적용하여 충돌 방지
+ * - 브랜드 가이드라인 준수 (색상, 로고, 텍스트)
+ * - 인라인 스타일 대신 테일윈드(CSS) 클래스를 활용한 반응형 레이아웃 및 간격 관리
  */
 const SocialLoginSection = () => {
   const containerVariants = {
