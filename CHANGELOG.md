@@ -18,6 +18,7 @@
 | `CHG-260408-05` | `fix`  | [로그인 페이지 애니메이션 타이밍 최적화 (피드백 반영)](docs/history/CHG-260408-05.md) |
 | `CHG-260408-06` | `feat` | [Button icon variant 추가 및 Header 리팩토링](docs/history/CHG-260408-06.md)          |
 | `CHG-260408-07` | `fix`  | [로그인 페이지 모바일 뷰 최적화 (스크롤 제거)](docs/history/CHG-260408-07.md)         |
+| `CHG-260408-08` | `feat` | [히어로 섹션 개인화 및 UI 최적화](docs/history/CHG-260408-08.md)                      |
 
 ---
 

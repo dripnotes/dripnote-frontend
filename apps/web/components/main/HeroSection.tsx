@@ -7,6 +7,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { useAuth } from '@/hooks/use-auth';
+
 // Add some nice premium coffee background images (Using unspash placeholders for aesthetics)
 const SLIDES = [
   {
@@ -30,6 +32,7 @@ const SLIDES = [
 ];
 
 export default function HeroSection() {
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -85,22 +88,35 @@ export default function HeroSection() {
       </div>
 
       {/* Overlay Content */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-linear-to-t from-black/80 via-black/30 to-black/10">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-linear-to-t from-black/80 via-black/30 to-black/10 select-none">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
-            className="pointer-events-auto max-w-2xl text-white"
+            className="pointer-events-auto max-w-2xl text-white select-none"
           >
-            <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              안녕하세요, <span className="text-primary/90 text-yellow-500">재현</span>님.
-              <br />
-              오늘은 어떤 한 잔을 내려볼까요?
+            <h1 className="mb-4 flex flex-col leading-tight font-extrabold tracking-tight">
+              <span className="text-4xl sm:text-5xl md:text-6xl">
+                {isLoading ? (
+                  <span className="opacity-0">안녕하세요</span>
+                ) : isAuthenticated ? (
+                  <>
+                    안녕하세요,{' '}
+                    <span className="text-primary/90 text-yellow-500">{user?.name}</span>님.
+                  </>
+                ) : (
+                  '안녕하세요, 커피 모험가님.'
+                )}
+              </span>
+              <span className="mt-2 block text-[26px] whitespace-nowrap text-white sm:text-4xl md:text-5xl md:leading-[1.15]">
+                오늘은 어떤 한 잔을 내려볼까요?
+              </span>
             </h1>
-            <p className="mb-8 text-lg text-gray-300 md:text-xl">
-              당신만의 완벽한 커피를 찾아보세요. 스페셜티 원두 큐레이션부터 우리 동네 숨겨진
-              로스터리까지.
+            <p className="mb-8 text-lg break-keep text-gray-300 md:text-xl">
+              {isAuthenticated
+                ? '당신만을 위한 완벽한 커피 큐레이션을 준비했습니다. 지금 바로 확인해보세요.'
+                : '당신만의 완벽한 커피를 찾아보세요. 스페셜티 원두 큐레이션부터 우리 동네 숨겨진 로스터리까지.'}
             </p>
 
             <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">

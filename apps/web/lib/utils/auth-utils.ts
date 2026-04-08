@@ -42,4 +42,14 @@ export const authUtils = {
     }
     return false;
   },
+
+  /**
+   * 인증된 사용자의 이름을 가져옵니다. (Mock)
+   */
+  getUserName: () => {
+    if (typeof window !== 'undefined' && !!localStorage.getItem(AUTH_TOKEN_KEY)) {
+      return '재현';
+    }
+    return null;
+  },
 };
