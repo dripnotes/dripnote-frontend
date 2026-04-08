@@ -10,21 +10,11 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 
 ## 2. 디자인 시스템 및 원칙 (Design System)
 
-### 2.1 브랜드 아이덴티티: "Internal Coffee Lab"
+로그인 페이지의 모든 디자인 토큰(Color, Typography, Motion)은 [공통 UI 명세서(common-ui-spec.md)](common-ui-spec.md)를 엄격히 준수합니다.
 
-커피를 연구하고 기록하는 지적인 공간(Laboratory)의 이미지를 현대적으로 재해석합니다. "Show, Don't Just Tell" 원칙에 따라 고해상도 이미지가 무드를 주도하게 설계합니다.
+### 2.1 브랜드 무드: "Focused Laboratory"
 
-### 2.2 디자인 토큰 (Design Tokens)
-
-- **Colors**:
-  - `Primary-Surface`: #1A1614 (Espresso Dark)
-  - `Secondary-Surface`: #2A2522
-  - `Tertiary-Surface`: #FAF7F5 (Cream Foam)
-- **Typography**:
-  - `Headings (Logo)`: Playfair Display
-  - `Sub-Headings`: Outfit
-  - `Body`: Inter
-- **Motion**: "Fast & Linear Fluids" (Duration 0.2s ~ 0.4s, 선형적인 부드러움 강조)
+본 페이지는 공통 명세의 `Internal Coffee Lab` 컨셉 중에서도 **집중(Focused)**과 **몰입(Immersion)**을 극대화한 변형 스타일을 적용합니다. 고해상도 이미지가 무드를 주도하며, 정보 노출을 최소화하여 인증 단계로의 몰입을 유도합니다.
 
 ## 3. 주요 구성 요소 (UI/UX)
 

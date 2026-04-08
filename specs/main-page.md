@@ -6,23 +6,11 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 ## 2. 디자인 시스템 및 원칙 (Design System)
 
-### 2.1 브랜드 아이덴티티: "Internal Coffee Lab"
+메인 페이지의 모든 디자인 토큰(Color, Typography, Motion)과 브랜드 아이덴티티 원칙은 [공통 UI 명세서(common-ui-spec.md)](common-ui-spec.md)를 기반으로 합니다.
 
-- **Identity**: 2030 세대를 타겟으로 하는 차분하고 지적인 무드. 스페셜티 커피의 전문성을 반영합니다.
-- **Visual-First Strategy**: "Show, Don't Just Tell". 텍스트 설명 대신 고해상도 이미지와 공백을 통해 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
+### 2.1 메인 무드: "Visual-First Landing"
 
-### 2.2 디자인 토큰 (Design Tokens)
-
-- **Colors**:
-  - `Primary-Surface`: #1A1614 (Espresso Dark)
-  - `Secondary-Surface`: #2A2522
-  - `Tertiary-Surface`: #FAF7F5 (Cream Foam)
-  - `Brand-Amber`: #D97706 (Accent)
-- **Typography**:
-  - `Headings (Logo & Hero)`: Playfair Display
-  - `Sub-Headings & Labels`: Outfit
-  - `Body & Info`: Inter
-- **Motion**: "Fast & Linear Fluids" (Duration 0.2s ~ 0.4s)
+- **Visual Strategy**: 공통 명세의 `Internal Coffee Lab` 무드를 적극 활용하여, 텍스트 설명 대신 고해상도 이미지와 공백(White Space)을 통해 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
 
 ## 3. 주요 구성 요소 (UI/UX)
 

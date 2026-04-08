@@ -2,30 +2,31 @@
 
 ## 1. 개요 및 배경 (Context)
 
-- **목표**: 에이전트의 규칙 준수 인프라를 구축하고, `specs/login-page.md`에 정의된 프리미엄 로그인 UI를 구현하며, 실제 서버 없이도 인증 흐름을 검증할 수 있는 환경(Harness)을 구축합니다.
-- **배경**: 인프라 설정을 마치고 로그인 페이지의 시각적 구현(배경, 헤더, 소셜 버튼)을 완료했습니다. 이제 실제 인증 로직 연동을 위한 준비 단계인 하네스 구축이 필요합니다.
+- **목표**: 에이전트의 규칙 준수 인프라를 구축하고, `specs/login-page.md`에 정의된 프리미엄 로그인 UI를 구현하며, OpenAI의 철학에 기반한 **자율적 검증 환경(Harness)**을 구축합니다.
+- **배경**: 인프라 설정을 마치고 로그인 페이지의 시각적 구현을 완료했습니다. 이제 에이전트가 자율적으로 기능의 완결성을 검증하고 스스로 오류를 수정할 수 있는 **'하네스 엔지니어링'** 전략을 적용하여 개발 생산성을 극대화합니다.
 
 ## 2. 작업 단계 (Tasks)
 
 ### Phase 1: Infrastructure (Completed ✅)
 
 - [x] `specs/login-page.md` 스펙 보완 (Rule 21 적용)
-- [x] `README.md` 에이전트 지침 및 스킬 가이드 추가
-- [x] `.agents/workflows/session-init.md` 워크플로우 생성
+- [x] `README.md` 개발 사이클 및 방법론 가이드 구축
+- [x] `.agents/workflows/session-init.md` 워크플로우 생성 및 최적화 (이후 제거)
 - [x] `.agents/rules/skill-guidelines.md` (Agent Skills 사양) 구축
 - [x] 기존 스킬 리팩토링 (`setup-monorepo`)
+- [x] 하네스 엔지니어링 전략 수립 및 규칙화 ([harness-strategy.md](file:///.agents/rules/harness-strategy.md))
 
-### Phase 2: Login Page Implementation (In Progress 🚀)
+### Phase 2: Login Page Implementation (Completed ✅)
 
-- [x] Phase 2.1: UI Library Tailwind Integration Fix (완료 ✅)
-- [x] Phase 2.2: 소셜 로그인 버튼 마우스 인터랙션 구현 (완료 ✅)
-- [x] Phase 2.4: 인증 흐름 하네스 구축 (완료 ✅)
-  - 실제 백엔드 없이 소셜 로그인 완료 후의 리다이렉션 및 토큰 처리 로직을 검증할 수 있는 환경을 성공적으로 구축했습니다.
+- [x] Phase 2.1: UI Library Tailwind Integration Fix
+- [x] Phase 2.2: 소셜 로그인 버튼 마우스 인터랙션 구현
+- [x] Phase 2.4: 인증 흐름 하네스 구축
+  - 실제 백엔드 없이 소셜 로그인 완료 후의 토큰 처리(`LocalStorage`) 및 리다이렉션 로직을 검증할 수 있는 `LoginCallbackPage` 환경 구축 완료. (Rule 22 적용)
 
-### Phase 3: Main Page Enhancement (Next 🚀)
+### Phase 3: Infrastructure Polishing & Main Page Enhancement (In Progress 🚀)
 
-- **목표**: 메인 페이지의 시각적 요소와 개인화 기능을 강화합니다.
-- **주요 작업**:
-  - [ ] 히어로 섹션 개인화 (인증된 사용자의 경우 맞춤형 인사말 노출)
-  - [ ] 북마크 기능 하네스 구축 및 UI 연동
-  - [ ] 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등)
+- [x] Phase 3.1: 공통 명세 체계 구축 (`specs/common-ui-spec.md`) ✅
+- [x] Phase 3.2: 분산형 히스토리 아카이브 및 6-Stage 프로토콜 도입 (`docs/history/`) ✅
+- [ ] Phase 3.3: 히어로 섹션 개인화 (인증 상태 연동 및 인사말 노출) 🚀
+- [ ] Phase 3.4: 북마크 기능 하네스 구축 및 UI 연동
+- [ ] Phase 3.5: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)

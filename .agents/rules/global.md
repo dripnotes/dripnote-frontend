@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # AI Context & Global Rules
 
 이 문서는 AI 어시스턴트가 프로젝트 파악 및 코드 작성 시 항상 최우선으로 지켜야 하는 전역 규칙입니다.
@@ -15,16 +19,17 @@
 
 ## 3. Documentation Strategy (문서 관리 규칙)
 
-- **기록 및 관리용 문서**: 히스토리, 에러 로그, 아키텍처 결정 등 서비스 추적을 위해 작성하는 **모든 기획/기록 문서는 반드시 `docs/` 경로 내부**에 작성합니다.
-  - 예: 변경 추적 일지는 `docs/history/CHANGELOG.md` 에 남깁니다.
 - **Specs**: 화면 및 기능 명세서는 `specs/` 하위에 작성하며 최신 상태로 반영/유지합니다.
   - **스펙 변경 이유 명시 규칙**: 스펙 내용에 변경점이 발생하여 업데이트할 때는, 단순히 변경 내역만 적지 말고 **반드시 '그렇게 결정하고 변경한 이유(Reason / Context)'에 대한 설명을 함께 문서에 작성**해야 합니다.
+  - **공통 명세 준수 의무 (Rule 23)**: 모든 페이지 전용 스펙을 작성하거나 수정할 때는 반드시 `specs/common-ui-spec.md`를 먼저 확인하여 디자인 토큰 및 공통 UI 패턴과의 일관성을 확보해야 합니다.
+  - **세션 시작 보고 규칙 (Rule 24)**: 에이전트는 새로운 세션 시작 시 규칙 숙지와 `PLAN.md` 확인이 완료되었다면 사용자에게 간략히 보고하여 동기화 상태를 확인받아야 합니다.
+  - **템플릿 준수 의무 (Rule 25)**: 에이전트는 히스토리나 명세서 등 프로젝트 관리 문서를 작성할 때 반드시 `.agents/templates/` 디렉토리의 표준 템플릿을 확인하고 이를 준수해야 합니다.
 
 ## 4. Tech Stack & Environment
 
 - **Workspace**: PNPM Monorepo (`pnpm` 기반). 확립된 모노레포 구조와 명명 규칙을 엄격하게 준수합니다.
 - **Environment Variables**: 모노레포 구조 특성상 Next.js 서버는 `apps/web/` 내에서 구동되므로, `.env.local` 등 특정 앱의 구동 환경변수 파일은 프로젝트 최상단 파일이 아닌 **`apps/web/` 하위 내부**에 위치해야 합니다.
-- **Commands**: 패키지 구동 혹은 스크립트 실행 시 `pnpm --filter @coffee-service/web <명령어>` 구조로 실행합니다.
+- **Commands**: 패키지 구동 혹은 스크립트는 반드시 **`pnpm --filter @coffee-service/web <명령어>`** 구조로 실행합니다.
 - **Library & Styling**: Next.js 15 App Router, Tailwind CSS v4(`linear-to`, `shrink-0` 등 변경점 적용 필수), `lucide-react`.
 
 ## 5. General Implementation Principles
@@ -32,3 +37,4 @@
 - **UI Components**: 모든 핵심 UI 요소는 반드시 `ui-library` 패키지의 공용 컴포넌트를 우선적으로 활용해야 합니다.
 - **TypeScript**: TypeScript의 모범 사례와 타입 안전성(Type Safety)을 항상 엄격하게 유지합니다.
 - **Design Aesthetic**: UI 구현 시 기능 동작 이상으로 심미성과 사용자 경험(Premium Feel)을 최고 수준으로 고려해야 합니다. 부드러운 전환을 위해 `framer-motion`을 적극 활용합니다.
+- **Harness Engineering (Rule 22)**: 소프트웨어 개발을 '에이전트 우선(Agent-first)' 관점에서 재구성합니다. 엔지니어는 단순히 코드를 작성하는 것을 넘어, 에이전트가 자율적으로 코드를 실행, 테스트, 검증하고 스스로 오류를 수정(Self-Correction)할 수 있는 **'하네스(Harness)'** 환경을 설계하고 구축해야 합니다. 상세 내용은 [.agents/workflows/vibe-coding-cycle.md](../workflows/vibe-coding-cycle.md)를 참조하십시오.
