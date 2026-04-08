@@ -8,7 +8,7 @@ description: [Session Init] 새로운 세션 시작 시 규칙 준수 및 컨텍
 
 ## 🤖 에이전트 체크리스트
 
-### 1단계: 전역 규칙 및 프로세스 재확독
+### 1단계: 전역 규칙 및 프로세스 재확인
 
 - [ ] `.agents/rules/global.md`를 읽고 프로젝트의 14번(문서 수정 사전 검토제), 21번(변경 사유 명시) 규칙을 상기하십시오.
 - [ ] `.agents/rules/process-rules.md`를 읽고 `PLAN.md` 작성 의무를 확인하십시오.

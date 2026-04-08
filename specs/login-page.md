@@ -41,7 +41,7 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 - **Logo**: 화면 상단 중앙에 **"Dripnote"** 로고(Playfair Display)를 배치합니다.
 - **Punchy Headline**: "Dripnote 시작하기" (한 문장 이내로 제한).
 
-### 3.4 내비게이션 (Navigation)
+### 3.3 내비게이션 (Navigation)
 
 - **Back to Main**: 화면 좌측 상단에 메인 페이지('/')로 돌아갈 수 있는 버튼을 배치합니다.
 - **디바이스 대응**:
@@ -50,7 +50,7 @@ Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2
 
 > **변경 사유 (Context)**: Focused Layout의 원칙을 유지하되, 사용자가 실수로 진입하거나 마음이 바뀌었을 때의 탈출구(Exit)를 제공하여 사용자 경험의 유연성을 확보하기 위함입니다.
 
-### 3.3 소셜 로그인 그룹 (Social Login Group)
+### 3.4 소셜 로그인 그룹 (Social Login Group)
 
 - **구성**: 구글(Google), 네이버(Naver), 카카오(Kakao) 3가지 소셜 로그인을 제공합니다.
 - **버튼 디자인 및 브랜드 연동**:

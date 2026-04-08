@@ -10,7 +10,7 @@
 > 2. **워크플로우 준수**: 모든 작업은 `.agents/workflows/vibe-coding-cycle.md`의 6단계 주기를 따릅니다.
 > 3. **계획 우선**: 코드를 수정하기 전, 반드시 프로젝트 루트의 `PLAN.md`를 확인하고 현재 태스크를 업데이트하십시오.
 > 4. **에이전트 스킬**: 새로운 스킬을 작성할 때는 `.agents/rules/skill-guidelines.md`의 표준 사양을 반드시 준수하십시오.
-> 5. **명능어 규정**: 패키지 제어 시 반드시 `pnpm --filter @coffee-service/web <command>` 구조를 사용하십시오.
+> 5. **명령어 규정**: 패키지 제어 시 반드시 `pnpm --filter @coffee-service/web <command>` 구조를 사용하십시오.
 
 ---
 
