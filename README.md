@@ -33,14 +33,14 @@ graph TD
     UserVerification -- 폴리싱 필요 --> Implementation
 
     %% 5. 마무리 (Close Stage)
-    UserVerification -- 확인 완료 --> DocUpdate["10. 문서 최신화 (Stage 6)<br/>Specs 업데이트 - 이유 명시 필수<br/>walkthrough.md 작성"]
-    DocUpdate --> GroupedCommit["11. 작업 단위 커밋<br/>작업별 그룹화 커밋"]
+    UserVerification -- 확인 완료 --> DocUpdate["10. 문서 최신화 (Stage 6)<br/>Specs 업데이트 - 이유 명시 필수<br/>CHANGELOG & history 상시 갱신"]
+    DocUpdate --> GroupedCommit["11. 작업 단위 커밋 (Stage 7)<br/>한국어 메시지 필수 작성"]
     GroupedCommit --> End((완료))
 ```
 
 ### Core Principles
 
-- **Vibe Coding**: 구현 전 `Implementation Plan` 수립 및 승인 필수 (6단계 주기).
+- **Vibe Coding**: 구현 전 `Implementation Plan` 수립 및 승인 필수 (7단계 주기).
 - **Harness Engineering**: 에이전트가 자율적으로 검증할 수 있는 환경(Mock, Test) 선제적 구축. 상세 전략은 [.agents/workflows/vibe-coding-cycle.md](.agents/workflows/vibe-coding-cycle.md) 참조.
 - **Spec-driven Development**: `specs/` 하위 명세서가 모든 개발의 기준이 되며, 변경 시 근거(Context) 기술 필수.
 
