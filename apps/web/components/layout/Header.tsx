@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
 import { Bookmark, User, LogOut } from 'lucide-react';
 import Link from 'next/link';
@@ -58,29 +59,20 @@ export default function Header() {
           </Link>
         </nav>
         <div className="flex items-center space-x-4">
-          <button
-            className="rounded-full p-2 transition-colors hover:bg-black/5"
-            aria-label="저장된 원두 및 클래스 북마크 보기"
-          >
+          <Button variant="ghost" size="icon" aria-label="저장된 원두 및 클래스 북마크 보기">
             <Bookmark className="h-5 w-5" />
-          </button>
+          </Button>
 
           {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="rounded-full p-2 transition-colors hover:bg-black/5"
-              aria-label="로그아웃"
-            >
+            <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="로그아웃">
               <LogOut className="h-5 w-5" />
-            </button>
+            </Button>
           ) : (
-            <Link
-              href="/login"
-              className="rounded-full p-2 transition-colors hover:bg-black/5"
-              aria-label="로그인 및 내 정보 확인"
-            >
-              <User className="h-5 w-5" />
-            </Link>
+            <Button asChild variant="ghost" size="icon">
+              <Link href="/login" aria-label="로그인 및 내 정보 확인">
+                <User className="h-5 w-5" />
+              </Link>
+            </Button>
           )}
         </div>
       </div>

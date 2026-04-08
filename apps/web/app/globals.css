@@ -44,6 +44,9 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
+
+/* 기존 전역 user-select 제어 제거 (접근성 및 표준 브라우징 경험 준수) */
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none !important;

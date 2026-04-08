@@ -26,7 +26,13 @@
 ### Phase 3: Infrastructure Polishing & Main Page Enhancement (In Progress 🚀)
 
 - [x] Phase 3.1: 공통 명세 체계 구축 (`specs/common-ui-spec.md`) ✅
-- [x] Phase 3.2: 분산형 히스토리 아카이브 및 6-Stage 프로토콜 도입 (`docs/history/`) ✅
-- [ ] Phase 3.3: 히어로 섹션 개인화 (인증 상태 연동 및 인사말 노출) 🚀
-- [ ] Phase 3.4: 북마크 기능 하네스 구축 및 UI 연동
-- [ ] Phase 3.5: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)
+- [x] Phase 3.2: 분산형 히스토리 아카이브 및 7-Stage 프로토콜 도입 (`docs/history/`) ✅
+- [x] Phase 3.3: 로그인 페이지 애니메이션 타이밍 최적화 (사용자 피드백 반영 및 고도화) ✅
+- [x] Phase 3.4: Button 컴포넌트 icon variant 추가 및 Header 리팩토링 ✅
+- [x] Phase 3.5: 로그인 페이지 모바일 뷰 최적화 (100vh 내 요소 배치 및 스크롤 제거) ✅
+- [x] Phase 3.6: 히어로 섹션 개인화 및 UI 최적화 ✅
+  - [x] 인증 상태 관리를 위한 `useAuth` 하네스 및 Mock 데이터 구축
+  - [x] `HeroSection` 인사말 동적 전환 (Framer Motion 적용)
+  - [x] `h1` 태그 행간(Leading) 조정 및 `user-select: none` 적용
+- [ ] Phase 3.7: 북마크 기능 하네스 구축 및 UI 연동
+- [ ] Phase 3.8: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)
