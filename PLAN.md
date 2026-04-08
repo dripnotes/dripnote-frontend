@@ -27,6 +27,7 @@
 
 - [x] Phase 3.1: 공통 명세 체계 구축 (`specs/common-ui-spec.md`) ✅
 - [x] Phase 3.2: 분산형 히스토리 아카이브 및 7-Stage 프로토콜 도입 (`docs/history/`) ✅
+- [x] Phase 3.2.1: 로그인 페이지 애니메이션 타이밍 최적화 (사용자 피드백 반영 및 고도화) ✅
 - [ ] Phase 3.3: 히어로 섹션 개인화 (인증 상태 연동 및 인사말 노출) 🚀
 - [ ] Phase 3.4: 북마크 기능 하네스 구축 및 UI 연동
 - [ ] Phase 3.5: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)

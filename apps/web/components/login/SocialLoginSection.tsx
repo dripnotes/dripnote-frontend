@@ -16,7 +16,7 @@ const SocialLoginSection = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.8,
+        delayChildren: 0.3,
       },
     },
   };
