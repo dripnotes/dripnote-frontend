@@ -27,7 +27,7 @@ export default function RecommendedBeans({ beans }: RecommendedBeansProps) {
           </div>
           <Link
             href="/beans"
-            className="group text-primary mt-4 flex items-center text-sm font-semibold transition-colors hover:text-black sm:mt-0"
+            className="text-primary group mt-4 flex items-center text-sm font-semibold transition-colors hover:text-black sm:mt-0"
           >
             전체 보기
             <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />

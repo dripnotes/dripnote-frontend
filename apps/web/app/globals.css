@@ -1,27 +1,27 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @source "../../../packages/ui-library";
 
 :root {
-  --social-google: #FFFFFF;
-  --social-google-hover: #F1F3F4;
-  --social-google-border: #DADCE0;
-  --social-google-fg: #3C4043;
+  --social-google: #ffffff;
+  --social-google-hover: #f1f3f4;
+  --social-google-border: #dadce0;
+  --social-google-fg: #3c4043;
 
-  --social-naver: #03C75A;
-  --social-naver-hover: #02B351;
-  --social-naver-fg: #FFFFFF;
+  --social-naver: #03c75a;
+  --social-naver-hover: #02b351;
+  --social-naver-fg: #ffffff;
 
-  --social-kakao: #FEE500;
-  --social-kakao-hover: #FDD800;
+  --social-kakao: #fee500;
+  --social-kakao-hover: #fdd800;
   --social-kakao-fg: rgba(0, 0, 0, 0.85);
 }
 
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
-  --color-primary-surface: #1A1614;
-  --color-secondary-surface: #2A2522;
-  --color-tertiary-surface: #FAF7F5;
+  --color-primary-surface: #1a1614;
+  --color-secondary-surface: #2a2522;
+  --color-tertiary-surface: #faf7f5;
   --color-google: var(--social-google);
   --color-google-hover: var(--social-google-hover);
   --color-google-border: var(--social-google-border);
@@ -32,7 +32,7 @@
   --color-kakao: var(--social-kakao);
   --color-kakao-hover: var(--social-kakao-hover);
   --color-kakao-foreground: var(--social-kakao-fg);
-  --color-ring: #D97706;
+  --color-ring: #d97706;
   --font-playfair: var(--font-playfair);
   --font-outfit: var(--font-outfit);
   --font-inter: var(--font-inter);
