@@ -26,7 +26,7 @@
 ### Phase 3: Infrastructure Polishing & Main Page Enhancement (In Progress 🚀)
 
 - [x] Phase 3.1: 공통 명세 체계 구축 (`specs/common-ui-spec.md`) ✅
-- [x] Phase 3.2: 기존 스펙 리팩토링 및 불필요 파일 제거 (`docs/` 삭제) ✅
+- [x] Phase 3.2: 분산형 히스토리 아카이브 및 6-Stage 프로토콜 도입 (`docs/history/`) ✅
 - [ ] Phase 3.3: 히어로 섹션 개인화 (인증 상태 연동 및 인사말 노출) 🚀
 - [ ] Phase 3.4: 북마크 기능 하네스 구축 및 UI 연동
 - [ ] Phase 3.5: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)
