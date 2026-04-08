@@ -21,31 +21,42 @@ export default function LoginPage() {
       {/* 고감도 배경 및 오버레이 */}
       <LoginBackground />
 
-      {/* 좌측 상단: 메인으로 돌아가기 */}
+      {/* 좌측 상단: 메인으로 돌아가기 (Premium Glass Morphism) */}
       <motion.div
-        initial={{ opacity: 0, x: -10 }}
+        initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="absolute top-8 left-6 z-50 lg:top-12 lg:left-12"
+        transition={{ delay: 1.2, duration: 0.6, ease: 'easeOut' }}
+        className="absolute top-10 left-8 z-50 lg:top-14 lg:left-14"
       >
         <Link href="/">
           <Button
             variant="ghost"
-            className="group flex h-auto items-center gap-2 p-0 text-white/50 transition-colors hover:bg-transparent hover:text-white"
+            className="group flex h-auto items-center justify-center gap-2 p-0 text-white/40 transition-all hover:bg-transparent hover:text-white"
           >
-            <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
-            <span className="font-outfit hidden text-sm font-light tracking-wide sm:block">
-              메인으로 돌아가기
-            </span>
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <span className="font-outfit text-xs font-medium tracking-[0.2em] uppercase">main</span>
           </Button>
         </Link>
       </motion.div>
 
-      {/* 로고 및 인사말 */}
-      <LoginHeader />
-
-      {/* 소셜 로그인 버튼 그룹 */}
-      <SocialLoginSection />
+      {/* Main Content Area (Staggered Animation Wrapper) */}
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.15,
+            },
+          },
+        }}
+        className="relative z-10 flex w-full flex-col items-center"
+      >
+        <LoginHeader />
+        <SocialLoginSection />
+      </motion.div>
 
       {/* Footer-like subtle info (optional) */}
       <footer className="absolute bottom-8 text-[10px] tracking-widest text-white/30 uppercase">
