@@ -39,8 +39,7 @@ const SocialLoginSection = () => {
       {/* 구글 로그인 버튼 */}
       <motion.div
         variants={itemVariants}
-        className="w-full shrink-0"
-        style={{ marginBottom: '20px' }}
+        className="w-full shrink-0 mb-5"
       >
         <Button variant="google" size="xl" className="w-full gap-3">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
