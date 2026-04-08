@@ -6,7 +6,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 ## 2. 디자인 시스템 및 원칙 (Design System)
 
-메인 페이지의 모든 디자인 토근(Color, Typography, Motion)과 브랜드 아이덴티티 원칙은 [공통 UI 명세서(common-ui-spec.md)](common-ui-spec.md)를 기반으로 합니다.
+메인 페이지의 모든 디자인 토큰(Color, Typography, Motion)과 브랜드 아이덴티티 원칙은 [공통 UI 명세서(common-ui-spec.md)](common-ui-spec.md)를 기반으로 합니다.
 
 ### 2.1 메인 무드: "Visual-First Landing"
 

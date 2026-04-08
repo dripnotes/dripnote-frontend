@@ -41,7 +41,7 @@ graph TD
 ### Core Principles
 
 - **Vibe Coding**: 구현 전 `Implementation Plan` 수립 및 승인 필수 (6단계 주기).
-- **Harness Engineering**: 에이전트가 자율적으로 검증할 수 있는 환경(Mock, Test) 선제적 구축. 상세 전략은 `[.agents/workflows/vibe-coding-cycle.md]` 참조.
+- **Harness Engineering**: 에이전트가 자율적으로 검증할 수 있는 환경(Mock, Test) 선제적 구축. 상세 전략은 [.agents/workflows/vibe-coding-cycle.md](.agents/workflows/vibe-coding-cycle.md) 참조.
 - **Spec-driven Development**: `specs/` 하위 명세서가 모든 개발의 기준이 되며, 변경 시 근거(Context) 기술 필수.
 
 ## 🛠️ Tech Stack
