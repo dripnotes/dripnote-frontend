@@ -35,8 +35,22 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 ### 2.3 플레이버 노트 탐색 (Flavor Notes)
 
-- 커피의 주된 향미(Tasting Notes)를 직관적으로 선택할 수 있는 가로형 리스트. (API `tastings` 데이터 연동)
-- 각 향미 터치 시 `tasting_link`로 연결된 라우팅 처리.
+- **변경 사유 (Context)**:
+  - 기존 텍스트 위주 인터페이스에서 이미지 중심의 시각적 탐색(Visual Exploration) 방식으로 전환하여 사용자의 몰입감과 직관성을 높임.
+  - 2026-04-13: 사용자가 제공한 정확한 Unsplash 원본 이미지 링크로 전면 교체하여 시각적 정합성을 확보함. 일부 항목명을 브랜드 선호도에 맞춰 변경(밀크 초콜릿 -> 아몬드, 포도 -> 자몽). 또한 '캐러멜'과 '스모키' 항목을 추가하여 총 8종의 향미를 제공하며, 레이아웃을 데스크톱 4열, 태블릿 3열, 모바일 2열로 최적화함.
+- **컴포넌트 구조**: 정사각형 이미지 기반 가로 카드 리스트.
+  - **카드 스타일**:
+    - **Aspect Ratio**: 1:1 (Square)
+    - **Border Radius**: `rounded-xl` (약 12px) - 부드러운 인상을 위해 약간의 라운드 적용.
+    - **Background**: 각 향미를 상징하는 고감도 이미지를 `object-cover`로 배치.
+    - **Container**: `overflow-hidden` 처리를 통해 내부 이미지가 확대되어도 카드 전체 사이즈가 유지되도록 설정.
+  - **인터랙션 (Framer Motion)**:
+    - **Hover Effect**: 카드 마우스 호버 시 내부 이미지만 `scale: 1.1`로 부드럽게 확대됨. (Duration: 0.3s, Easing: `easeOut`)
+    - **Tap/Click**: 클릭 시 해당 향미 카테고리(`tasting_link`)로 라우팅.
+  - **텍스트 레이어**:
+    - **Position**: 카드 좌측 최하단에 위치.
+    - **Style**: 가독성을 위해 하단에 `linear-gradient` (Transparent to Black/40%) 스크림 오버레이를 배경으로 깔고, `Brand-Cream` 색상 혹은 화이트 텍스트 적용.
+    - **Typography**: `Outfit` (Label Style), Bold.
 
 ### 2.4 오늘의 추천 원두 (Recommended Beans)
 
@@ -125,11 +139,11 @@ HTTP/1.1 400
 
 ### Response Body
 
-| Name         | Type   | Description                                                                                                                                                                                                                                                                                                                           | null 여부 | 형식 |
-| ------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| - statusCode | String | 커스텀한 응답 코드                                                                                                                                                                                                                                                                                                                    | x         |      |
-| - message    | String | 성공 : 빈 문자열<br>실패 : 실패한 이유                                                                                                                                                                                                                                                                                                | x         |      |
-| - data       | Object | `tastings` (array) : 향미 목록<br>`tasting_name` (string) : 향미 이름<br>`tasting_link` (string) : 향미 정렬 링크<br>`beans` (array) : 추천 원두 목록<br>`bean_name` (string) : 추천 원두 이름<br>`bean_image_link` (string) : 추천 원두 썸네일 이미지<br>`bean_tasting` (array) : 원두 향미 목록<br>`bean_link` (string) : 원두 링크 | x         |      |
+| Name         | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                   | null 여부 | 형식 |
+| ------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| - statusCode | String | 커스텀한 응답 코드                                                                                                                                                                                                                                                                                                                                                                            | x         |      |
+| - message    | String | 성공 : 빈 문자열<br>실패 : 실패한 이유                                                                                                                                                                                                                                                                                                                                                        | x         |      |
+| - data       | Object | `tastings` (array) : 향미 목록<br>`tasting_name` (string) : 향미 이름<br>`tasting_image_link` (string) : 향미 배경 이미지 URL<br>`tasting_link` (string) : 향미 정렬 링크<br>`beans` (array) : 추천 원두 목록<br>`bean_name` (string) : 추천 원두 이름<br>`bean_image_link` (string) : 추천 원두 썸네일 이미지<br>`bean_tasting` (array) : 원두 향미 목록<br>`bean_link` (string) : 원두 링크 | x         |      |
 
 ### Success JSON
 
@@ -142,10 +156,12 @@ HTTP/1.1 400
     "tastings": [
       {
         "tasting_name": "카카오",
+        "tasting_image_link": "https://example.com/images/cacao.jpg",
         "tasting_link": "/api/beans?tastingId=1"
       },
       {
         "tasting_name": "복숭아",
+        "tasting_image_link": "https://example.com/images/peach.jpg",
         "tasting_link": "/api/beans?tastingId=2"
       }
     ],

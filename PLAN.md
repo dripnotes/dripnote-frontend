@@ -31,8 +31,6 @@
 - [x] Phase 3.4: Button 컴포넌트 icon variant 추가 및 Header 리팩토링 ✅
 - [x] Phase 3.5: 로그인 페이지 모바일 뷰 최적화 (100vh 내 요소 배치 및 스크롤 제거) ✅
 - [x] Phase 3.6: 히어로 섹션 개인화 및 UI 최적화 ✅
-  - [x] 인증 상태 관리를 위한 `useAuth` 하네스 및 Mock 데이터 구축
-  - [x] `HeroSection` 인사말 동적 전환 (Framer Motion 적용)
-  - [x] `h1` 태그 행간(Leading) 조정 및 `user-select: none` 적용
-- [ ] Phase 3.7: 북마크 기능 하네스 구축 및 UI 연동
-- [ ] Phase 3.8: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)
+- [x] Phase 3.7: 플레이버 노트 탐색(Flavor Notes) UI 개편 및 이미지 카드 적용 ✅
+- [ ] Phase 3.8: 북마크 기능 하네스 구축 및 UI 연동
+- [ ] Phase 3.9: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)
