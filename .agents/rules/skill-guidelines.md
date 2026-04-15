@@ -1,3 +1,8 @@
+---
+trigger: always_on
+description: 이 문서는 `agentskills.io`의 표준 사양을 기반으로, 프로젝트 내에서 에이전트의 기능을 확장하고 전문성을 패키징하는 **Agent Skills**를 작성하는 방법을 규정합니다.
+---
+
 # 에이전트 스킬 개발 가이드 (Agent Skill Development Guidelines)
 
 이 문서는 `agentskills.io`의 표준 사양을 기반으로, 프로젝트 내에서 에이전트의 기능을 확장하고 전문성을 패키징하는 **Agent Skills**를 작성하는 방법을 규정합니다.
