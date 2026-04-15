@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PageContainer from '@/components/layout/PageContainer';
 import FlavorNotes from '@/components/main/FlavorNotes';
 import HeroSection from '@/components/main/HeroSection';
 import RecommendedBeans from '@/components/main/RecommendedBeans';
@@ -12,11 +13,11 @@ export default function Home() {
   const { tastings, beans } = mockMainData;
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-white">
+    <PageContainer withHeaderOffset={false}>
       <HeroSection />
       <FlavorNotes tastings={tastings} />
       <RecommendedBeans beans={beans} />
       <RoasteryMapSection />
-    </div>
+    </PageContainer>
   );
 }

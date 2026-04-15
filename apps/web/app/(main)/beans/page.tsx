@@ -3,6 +3,7 @@
 import { SlidersHorizontal } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+import PageContainer from '@/components/layout/PageContainer';
 import BeanCardList from '@/components/beans/BeanCardList';
 import BeanFilterDrawer from '@/components/beans/BeanFilterDrawer';
 import BeanFilterPanel from '@/components/beans/BeanFilterPanel';
@@ -26,7 +27,7 @@ export default function BeansPage() {
   const handleReset = () => setFilters(DEFAULT_FILTERS);
 
   return (
-    <div className="min-h-screen bg-white pt-16">
+    <PageContainer>
       {/* ── 본문 ── */}
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
         <div className="flex gap-8">
@@ -73,6 +74,6 @@ export default function BeansPage() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
-    </div>
+    </PageContainer>
   );
 }
