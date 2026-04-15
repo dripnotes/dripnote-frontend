@@ -10,8 +10,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useAuth } from '@/hooks/use-auth';
 
+// 캐러셀 슬라이드 타입
+export interface CarouselSlide {
+  id: number;
+  imageUrl: string;
+  alt: string;
+}
+
+interface HeroSectionProps {
+  carouselImages?: CarouselSlide[];
+}
+
 // Add some nice premium coffee background images (Using unspash placeholders for aesthetics)
-const SLIDES = [
+const DEFAULT_SLIDES: CarouselSlide[] = [
   {
     id: 1,
     imageUrl:
@@ -32,7 +43,8 @@ const SLIDES = [
   },
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ carouselImages }: HeroSectionProps = {}) {
+  const SLIDES = carouselImages ?? DEFAULT_SLIDES;
   const { user, isAuthenticated, isLoading } = useAuth();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 });
   const [selectedIndex, setSelectedIndex] = useState(0);
