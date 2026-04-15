@@ -45,8 +45,8 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
   );
 }
 
-/** 1~5 (또는 1~3) Step Selector */
-function StepSelector({
+/** N등분 Rating Bar */
+function RatingBar({
   max,
   value,
   onChange,
@@ -55,22 +55,36 @@ function StepSelector({
   value: number;
   onChange: (v: number) => void;
 }) {
+  const getActiveColor = (n: number, max: number) => {
+    if (max === 5) {
+      if (n === 1) return 'bg-amber-200';
+      if (n === 2) return 'bg-amber-300';
+      if (n === 3) return 'bg-amber-400';
+      if (n === 4) return 'bg-amber-500';
+      return 'bg-amber-600';
+    } else if (max === 3) {
+      if (n === 1) return 'bg-amber-300';
+      if (n === 2) return 'bg-amber-500';
+      return 'bg-amber-600';
+    }
+    return 'bg-amber-500';
+  };
+
   return (
-    <div className="flex gap-1">
-      {Array.from({ length: max }, (_, i) => i + 1).map((n) => (
-        <motion.button
-          key={n}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => onChange(value === n ? 0 : n)}
-          className={`h-7 w-7 rounded-md text-xs font-medium transition-all ${
-            value === n
-              ? 'bg-amber-500 text-white shadow-sm'
-              : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-          }`}
-        >
-          {n}
-        </motion.button>
-      ))}
+    <div className="flex w-full gap-1 rounded-md bg-transparent">
+      {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
+        const isActive = n <= value;
+        const colorClass = isActive ? getActiveColor(n, max) : 'bg-gray-100 hover:bg-gray-200';
+        return (
+          <motion.button
+            key={n}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onChange(value === n ? 0 : n)}
+            className={`h-7 flex-1 rounded text-xs transition-colors duration-200 ${colorClass}`}
+            aria-label={`${n}점`}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -131,7 +145,7 @@ export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilt
         <div className="space-y-3">
           <div>
             <p className="mb-1.5 text-xs text-gray-500">쓴맛</p>
-            <StepSelector
+            <RatingBar
               max={5}
               value={filters.flavor.bitterness}
               onChange={(v) =>
@@ -141,7 +155,7 @@ export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilt
           </div>
           <div>
             <p className="mb-1.5 text-xs text-gray-500">단맛</p>
-            <StepSelector
+            <RatingBar
               max={5}
               value={filters.flavor.sweetness}
               onChange={(v) =>
@@ -151,7 +165,7 @@ export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilt
           </div>
           <div>
             <p className="mb-1.5 text-xs text-gray-500">산미</p>
-            <StepSelector
+            <RatingBar
               max={5}
               value={filters.flavor.acidity}
               onChange={(v) => onChange({ ...filters, flavor: { ...filters.flavor, acidity: v } })}
@@ -164,11 +178,13 @@ export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilt
       <div className="border-b border-gray-100 py-5">
         <p className={SECTION_TITLE}>Body</p>
         <div className="flex items-center gap-2">
-          <StepSelector
-            max={3}
-            value={filters.body}
-            onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
-          />
+          <div className="flex w-full flex-1 flex-col gap-1.5">
+            <RatingBar
+              max={3}
+              value={filters.body}
+              onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
+            />
+          </div>
           <span className="text-xs text-gray-400">
             {filters.body === 1
               ? '가벼움'

@@ -28,22 +28,6 @@ export default function BeansPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* ── 검색 헤더 ── */}
-      <div className="sticky top-16 z-30 border-b border-gray-100 bg-white/95 px-4 py-3 backdrop-blur-sm md:px-8">
-        <div className="mx-auto flex max-w-7xl items-center gap-3">
-          <BeanSearchBar value={searchQuery} onChange={setSearchQuery} />
-
-          {/* 모바일 필터 버튼 */}
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="flex shrink-0 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-3 text-xs text-gray-600 transition-colors hover:border-amber-300 hover:text-amber-600 md:hidden"
-            aria-label="필터 열기"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-
       {/* ── 본문 ── */}
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
         <div className="flex gap-8">
@@ -52,10 +36,27 @@ export default function BeansPage() {
 
           {/* 우측 카드 목록 */}
           <div className="min-w-0 flex-1">
-            {/* 결과 수 */}
-            <div className="font-outfit mb-5 text-xs text-gray-400">
-              {filteredBeans.length}개의 원두
+            {/* 검색 및 필터 정보 영역 */}
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex w-full flex-1 items-center gap-3 sm:w-auto">
+                <BeanSearchBar value={searchQuery} onChange={setSearchQuery} />
+
+                {/* 모바일 필터 버튼 */}
+                <button
+                  onClick={() => setIsDrawerOpen(true)}
+                  className="flex shrink-0 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-3 text-xs text-gray-600 transition-colors hover:border-amber-300 hover:text-amber-600 md:hidden"
+                  aria-label="필터 열기"
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                </button>
+              </div>
+
+              {/* 결과 수 */}
+              <div className="font-outfit shrink-0 text-xs text-gray-400">
+                {filteredBeans.length}개의 원두
+              </div>
             </div>
+
             <BeanCardList beans={filteredBeans} isLoading={false} />
           </div>
         </div>

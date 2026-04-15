@@ -36,7 +36,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
   );
 }
 
-function StepSelector({
+function RatingBar({
   max,
   value,
   onChange,
@@ -45,22 +45,36 @@ function StepSelector({
   value: number;
   onChange: (v: number) => void;
 }) {
+  const getActiveColor = (n: number, max: number) => {
+    if (max === 5) {
+      if (n === 1) return 'bg-amber-200';
+      if (n === 2) return 'bg-amber-300';
+      if (n === 3) return 'bg-amber-400';
+      if (n === 4) return 'bg-amber-500';
+      return 'bg-amber-600';
+    } else if (max === 3) {
+      if (n === 1) return 'bg-amber-300';
+      if (n === 2) return 'bg-amber-500';
+      return 'bg-amber-600';
+    }
+    return 'bg-amber-500';
+  };
+
   return (
-    <div className="flex gap-1.5">
-      {Array.from({ length: max }, (_, i) => i + 1).map((n) => (
-        <motion.button
-          key={n}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => onChange(value === n ? 0 : n)}
-          className={`h-8 w-8 rounded-md text-xs font-medium transition-all ${
-            value === n
-              ? 'bg-amber-500 text-white shadow-sm'
-              : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-          }`}
-        >
-          {n}
-        </motion.button>
-      ))}
+    <div className="flex w-full gap-1.5 rounded-md bg-transparent">
+      {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
+        const isActive = n <= value;
+        const colorClass = isActive ? getActiveColor(n, max) : 'bg-gray-100 hover:bg-gray-200';
+        return (
+          <motion.button
+            key={n}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onChange(value === n ? 0 : n)}
+            className={`h-8 flex-1 rounded transition-colors duration-200 ${colorClass}`}
+            aria-label={`${n}점`}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -123,7 +137,7 @@ export default function BeanFilterDrawer({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="fixed right-0 bottom-0 left-0 z-50 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white px-5 pb-8 md:hidden"
+            className="fixed right-0 bottom-0 left-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white px-6 pb-12 md:hidden"
           >
             {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
@@ -171,7 +185,7 @@ export default function BeanFilterDrawer({
                     <p className="mb-2 text-xs text-gray-500">
                       {key === 'bitterness' ? '쓴맛' : key === 'sweetness' ? '단맛' : '산미'}
                     </p>
-                    <StepSelector
+                    <RatingBar
                       max={5}
                       value={filters.flavor[key]}
                       onChange={(v) =>
@@ -186,12 +200,14 @@ export default function BeanFilterDrawer({
             {/* Body */}
             <div className="border-t border-gray-100 py-5">
               <p className={SECTION_TITLE}>Body</p>
-              <div className="flex items-center gap-3">
-                <StepSelector
-                  max={3}
-                  value={filters.body}
-                  onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
-                />
+              <div className="flex w-full items-center gap-3">
+                <div className="flex-1">
+                  <RatingBar
+                    max={3}
+                    value={filters.body}
+                    onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
+                  />
+                </div>
                 <span className="text-xs text-gray-400">
                   {filters.body === 1
                     ? '가벼움'

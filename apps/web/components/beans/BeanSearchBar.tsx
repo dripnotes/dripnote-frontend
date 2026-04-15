@@ -36,7 +36,7 @@ export default function BeanSearchBar({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full md:max-w-xs">
       <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors" />
       <input
         type="text"

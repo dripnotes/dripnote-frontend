@@ -4,7 +4,7 @@ import { Button } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
 import { Bookmark, User, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { authUtils } from '@/lib/utils/auth-utils';
@@ -13,6 +13,9 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,16 +35,18 @@ export default function Header() {
     router.push('/login');
   };
 
+  const headerStyles = isHomePage
+    ? isScrolled
+      ? 'border-b border-white/10 bg-[#1A1614]/85 text-white shadow-sm backdrop-blur-md'
+      : 'bg-transparent text-white'
+    : 'bg-[#1A1614] text-white shadow-sm border-b border-white/10';
+
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 z-50 w-full transition-colors duration-300 ${
-        isScrolled
-          ? 'border-b border-white/10 bg-[#1A1614]/85 text-white shadow-sm backdrop-blur-md'
-          : 'bg-transparent text-white'
-      }`}
+      className={`fixed top-0 z-50 w-full transition-colors duration-300 ${headerStyles}`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="font-playfair text-2xl font-bold tracking-tighter">
