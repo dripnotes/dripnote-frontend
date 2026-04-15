@@ -101,11 +101,19 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 **Props**:
 
 ```ts
+// 캐러셀 슬라이드 단위 타입 (HeroSection.tsx에서 export)
+interface CarouselSlide {
+  id: number;
+  imageUrl: string;
+  alt: string;
+}
+
 interface HeroSectionProps {
-  carouselImages: string[]; // 캐러셀 이미지 URL 배열
-  username?: string; // 개인화 인사말용 사용자명 (없으면 지역명 등 대체)
+  carouselImages?: CarouselSlide[]; // 미제공 시 DEFAULT_SLIDES 사용
 }
 ```
+
+> **변경 사유 (Context)**: 2026-04-15 구현-스펙 정합성 반영(Rule 29). 초기 스펙은 단순 `string[]`으로 설계했으나, 실제 구현 시 슬라이드마다 `id`, `imageUrl`, `alt` 세 필드가 필요하여 `CarouselSlide` 타입으로 구체화됐습니다. 또한 미제공 시 컴포넌트 내부의 `DEFAULT_SLIDES`로 폴백하는 방식을 채택하여 선택적(`?:`) prop으로 변경됐습니다.
 
 **State**:
 | 상태명 | 타입 | 초기값 | 설명 |
