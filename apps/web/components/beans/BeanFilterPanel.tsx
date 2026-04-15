@@ -1,0 +1,200 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { RotateCcw } from 'lucide-react';
+
+import {
+  AROMA_TYPES,
+  type AromaType,
+  type BeanFilterState,
+  ROASTING_TYPES,
+  type RoastingType,
+} from '@/lib/api/beans';
+
+interface BeanFilterPanelProps {
+  filters: BeanFilterState;
+  onChange: (filters: BeanFilterState) => void;
+  onReset: () => void;
+}
+
+const isFiltered = (filters: BeanFilterState) =>
+  filters.aromas.length > 0 ||
+  filters.flavor.bitterness > 0 ||
+  filters.flavor.sweetness > 0 ||
+  filters.flavor.acidity > 0 ||
+  filters.body > 0 ||
+  filters.roasting.length > 0;
+
+const SECTION_TITLE =
+  'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-400';
+
+/** 아로마·로스팅 Chip */
+function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <motion.button
+      whileTap={{ scale: 0.93 }}
+      onClick={onClick}
+      className={`cursor-pointer rounded-full px-3 py-1 text-xs transition-all ${
+        active
+          ? 'bg-amber-500 font-semibold text-white shadow-sm'
+          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+      }`}
+    >
+      {label}
+    </motion.button>
+  );
+}
+
+/** 1~5 (또는 1~3) Step Selector */
+function StepSelector({
+  max,
+  value,
+  onChange,
+}: {
+  max: number;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <div className="flex gap-1">
+      {Array.from({ length: max }, (_, i) => i + 1).map((n) => (
+        <motion.button
+          key={n}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => onChange(value === n ? 0 : n)}
+          className={`h-7 w-7 rounded-md text-xs font-medium transition-all ${
+            value === n
+              ? 'bg-amber-500 text-white shadow-sm'
+              : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+          }`}
+        >
+          {n}
+        </motion.button>
+      ))}
+    </div>
+  );
+}
+
+export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilterPanelProps) {
+  const filtered = isFiltered(filters);
+
+  const toggleAroma = (aroma: AromaType) => {
+    const next = filters.aromas.includes(aroma)
+      ? filters.aromas.filter((a) => a !== aroma)
+      : [...filters.aromas, aroma];
+    onChange({ ...filters, aromas: next });
+  };
+
+  const toggleRoasting = (r: RoastingType) => {
+    const next = filters.roasting.includes(r)
+      ? filters.roasting.filter((x) => x !== r)
+      : [...filters.roasting, r];
+    onChange({ ...filters, roasting: next });
+  };
+
+  return (
+    <aside className="hidden w-56 shrink-0 md:block">
+      {/* 헤더 */}
+      <div className="mb-5 flex items-center justify-between">
+        <span className="font-outfit text-sm font-semibold text-gray-800">Filter</span>
+        {filtered && (
+          <motion.button
+            initial={{ opacity: 0, x: 6 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={onReset}
+            className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
+          >
+            <RotateCcw className="h-3 w-3" />
+            초기화
+          </motion.button>
+        )}
+      </div>
+
+      {/* Aroma */}
+      <div className="border-b border-gray-100 pb-5">
+        <p className={SECTION_TITLE}>Aroma</p>
+        <div className="flex flex-wrap gap-2">
+          {AROMA_TYPES.map((a) => (
+            <Chip
+              key={a}
+              label={a}
+              active={filters.aromas.includes(a)}
+              onClick={() => toggleAroma(a)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Flavor */}
+      <div className="border-b border-gray-100 py-5">
+        <p className={SECTION_TITLE}>Flavor</p>
+        <div className="space-y-3">
+          <div>
+            <p className="mb-1.5 text-xs text-gray-500">쓴맛</p>
+            <StepSelector
+              max={5}
+              value={filters.flavor.bitterness}
+              onChange={(v) =>
+                onChange({ ...filters, flavor: { ...filters.flavor, bitterness: v } })
+              }
+            />
+          </div>
+          <div>
+            <p className="mb-1.5 text-xs text-gray-500">단맛</p>
+            <StepSelector
+              max={5}
+              value={filters.flavor.sweetness}
+              onChange={(v) =>
+                onChange({ ...filters, flavor: { ...filters.flavor, sweetness: v } })
+              }
+            />
+          </div>
+          <div>
+            <p className="mb-1.5 text-xs text-gray-500">산미</p>
+            <StepSelector
+              max={5}
+              value={filters.flavor.acidity}
+              onChange={(v) => onChange({ ...filters, flavor: { ...filters.flavor, acidity: v } })}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="border-b border-gray-100 py-5">
+        <p className={SECTION_TITLE}>Body</p>
+        <div className="flex items-center gap-2">
+          <StepSelector
+            max={3}
+            value={filters.body}
+            onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
+          />
+          <span className="text-xs text-gray-400">
+            {filters.body === 1
+              ? '가벼움'
+              : filters.body === 2
+                ? '보통'
+                : filters.body === 3
+                  ? '묵직함'
+                  : ''}
+          </span>
+        </div>
+      </div>
+
+      {/* Roasting */}
+      <div className="pt-5">
+        <p className={SECTION_TITLE}>Roasting</p>
+        <div className="flex flex-wrap gap-2">
+          {ROASTING_TYPES.map((r) => (
+            <Chip
+              key={r}
+              label={r}
+              active={filters.roasting.includes(r)}
+              onClick={() => toggleRoasting(r)}
+            />
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}
