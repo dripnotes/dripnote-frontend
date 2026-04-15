@@ -12,7 +12,7 @@ interface BeanSearchBarProps {
 export default function BeanSearchBar({
   value,
   onChange,
-  placeholder = '원두 이름 또는 원산지를 입력하세요',
+  placeholder = '검색어를 입력하세요',
 }: BeanSearchBarProps) {
   const [localValue, setLocalValue] = useState(value);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -36,7 +36,7 @@ export default function BeanSearchBar({
   };
 
   return (
-    <div className="relative w-full md:max-w-xs">
+    <div className="relative w-full">
       <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors" />
       <input
         type="text"

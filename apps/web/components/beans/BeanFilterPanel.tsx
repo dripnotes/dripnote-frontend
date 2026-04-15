@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 
+import BeanSearchBar from './BeanSearchBar';
+
 import {
   AROMA_TYPES,
   type AromaType,
@@ -15,6 +17,8 @@ interface BeanFilterPanelProps {
   filters: BeanFilterState;
   onChange: (filters: BeanFilterState) => void;
   onReset: () => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 }
 
 const isFiltered = (filters: BeanFilterState) =>
@@ -89,7 +93,13 @@ function RatingBar({
   );
 }
 
-export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilterPanelProps) {
+export default function BeanFilterPanel({
+  filters,
+  onChange,
+  onReset,
+  searchQuery,
+  onSearchChange,
+}: BeanFilterPanelProps) {
   const filtered = isFiltered(filters);
 
   const toggleAroma = (aroma: AromaType) => {
@@ -122,6 +132,11 @@ export default function BeanFilterPanel({ filters, onChange, onReset }: BeanFilt
             초기화
           </motion.button>
         )}
+      </div>
+      
+      {/* Search */}
+      <div className="mb-6">
+        <BeanSearchBar value={searchQuery} onChange={onSearchChange} />
       </div>
 
       {/* Aroma */}

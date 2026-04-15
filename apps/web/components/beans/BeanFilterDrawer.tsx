@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { RotateCcw, X } from 'lucide-react';
 import { useEffect } from 'react';
 
+import BeanSearchBar from './BeanSearchBar';
+
 import {
   AROMA_TYPES,
   type AromaType,
@@ -18,6 +20,8 @@ interface BeanFilterDrawerProps {
   onChange: (filters: BeanFilterState) => void;
   onReset: () => void;
   onClose: () => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 }
 
 function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
@@ -88,6 +92,8 @@ export default function BeanFilterDrawer({
   onChange,
   onReset,
   onClose,
+  searchQuery,
+  onSearchChange,
 }: BeanFilterDrawerProps) {
   // body 스크롤 잠금
   useEffect(() => {
@@ -159,6 +165,11 @@ export default function BeanFilterDrawer({
                   <X className="h-4 w-4" />
                 </button>
               </div>
+            </div>
+
+            {/* Search */}
+            <div className="mb-4">
+              <BeanSearchBar value={searchQuery} onChange={onSearchChange} />
             </div>
 
             {/* Aroma */}
