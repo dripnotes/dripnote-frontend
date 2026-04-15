@@ -1,30 +1,32 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 /**
  * LoginHeader - 브랜드 로고, 슬로건, 메인 페이지 복귀 링크
- * - Back Link: 텍스트 전용 ("main"), 아이콘·버튼 없음 (스펙 #2, #3)
+ * - Back Link: ChevronLeft 아이콘 + "Main" 텍스트, 미니멀 스타일
  * - Logo: Playfair Display (Dripnote)
  * - Headline: "시작하기" (Outfit, Light, Uppercase)
  */
 const LoginHeader = () => {
   return (
     <>
-      {/* 좌측 상단: 메인 복귀 링크 - 텍스트 전용, 아이콘/버튼 없음 */}
+      {/* 좌측 상단: 메인 복귀 링크 */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.2, duration: 0.6, ease: 'easeOut' }}
+        transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
         className="fixed top-6 left-6 z-50 lg:top-14 lg:left-14"
       >
         <Link
           href="/"
-          className="font-outfit text-xs font-medium tracking-widest text-white/40 uppercase transition-colors hover:text-white/80"
+          className="font-outfit flex items-center gap-1 text-sm font-medium tracking-widest text-white/65 transition-colors hover:text-white/90"
         >
-          main
+          <ChevronLeft className="h-4 w-4" />
+          Main
         </Link>
       </motion.div>
 
