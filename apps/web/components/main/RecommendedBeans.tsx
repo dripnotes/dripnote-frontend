@@ -63,7 +63,7 @@ export default function RecommendedBeans({ beans }: RecommendedBeansProps) {
                       {bean.bean_tasting.map((tasting, tIdx) => (
                         <span
                           key={tIdx}
-                          className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800"
+                          className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-600"
                         >
                           {tasting}
                         </span>

@@ -1,15 +1,20 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import Link from 'next/link';
 import React from 'react';
 
 import { FlavorNote } from '@/lib/api/main';
+
+import FlavorCard from './FlavorCard';
 
 interface FlavorNotesProps {
   tastings: FlavorNote[];
 }
 
+/**
+ * FlavorNotes - 향미 카테고리별 이미지 카드 격자 섹션
+ * - 반응형: Mobile 2열 / Tablet 3열 / Desktop 4열
+ * - 각 카드는 FlavorCard 컴포넌트에 위임 (스펙 #11)
+ */
 export default function FlavorNotes({ tastings }: FlavorNotesProps) {
   return (
     <section className="w-full bg-white py-20">
@@ -26,38 +31,13 @@ export default function FlavorNotes({ tastings }: FlavorNotesProps) {
         {/* Responsive Grid Layout */}
         <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
           {tastings.map((note, idx) => (
-            <Link key={idx} href={note.tasting_link} className="group">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: idx * 0.05,
-                  duration: 0.5,
-                  ease: 'easeOut',
-                }}
-                className="relative aspect-square cursor-pointer overflow-hidden rounded-xl bg-gray-100 shadow-sm transition-shadow hover:shadow-xl"
-              >
-                {/* Background Image with Hover Zoom */}
-                <motion.img
-                  src={note.tasting_image_link}
-                  alt={note.tasting_name}
-                  className="h-full w-full object-cover"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                />
-
-                {/* Scrim Overlay (Gradient for text readability) */}
-                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-
-                {/* Flavor Text (Bottom-Left) */}
-                <div className="absolute bottom-4 left-4">
-                  <span className="font-outfit text-lg font-bold text-[#F5E6D3]">
-                    {note.tasting_name}
-                  </span>
-                </div>
-              </motion.div>
-            </Link>
+            <FlavorCard
+              key={idx}
+              tasting_name={note.tasting_name}
+              tasting_image_link={note.tasting_image_link}
+              tasting_link={note.tasting_link}
+              index={idx}
+            />
           ))}
         </div>
       </div>
