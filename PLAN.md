@@ -34,3 +34,9 @@
 - [x] Phase 3.7: 플레이버 노트 탐색(Flavor Notes) UI 개편 및 이미지 카드 적용 ✅
 - [ ] Phase 3.8: 북마크 기능 하네스 구축 및 UI 연동
 - [ ] Phase 3.9: 실제 API 명세에 맞춘 Mock Data 정교화 (MSW 등 고려)
+
+### Phase 4: BeanSearchBar Relocation (Completed ✅)
+
+- [x] `BeanFilterPanel` 및 `BeanFilterDrawer`에 `BeanSearchBar` 통합 ✅
+- [x] 검색 상태 전파를 위한 Props 인터페이스 확장 ✅
+- [x] 검색창 이동에 따른 결과 요약 영역 UI 재배치 ✅
