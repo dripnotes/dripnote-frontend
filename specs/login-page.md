@@ -91,7 +91,7 @@ interface LoginBackgroundProps {
 
 #### 1. Overview (맥락)
 
-- **목적**: 브랜드 로고("Dripnote"), 페이지 슬로건("시작하기"), 메인 페이지 복귀 링크("main")를 포함하는 로그인 페이지의 상단 UI 영역
+- **목적**: 브랜드 로고("Dripnote"), 페이지 슬로건("시작하기"), 메인 페이지 복귀 링크(`← Main`)를 포함하는 로그인 페이지의 상단 UI 영역
 - **위치**: `apps/web/app/login/_components/LoginHeader.tsx`
 - **부모 컴포넌트**: `LoginPage`
 
@@ -111,35 +111,43 @@ interface LoginBackgroundProps {
 
 #### 4. UI States (상태 명세)
 
-| 상태        | 트리거 조건 | UI 표현                               |
-| ----------- | ----------- | ------------------------------------- |
-| **Default** | 초기 렌더링 | 로고 + 슬로건 + "main" 링크 정상 노출 |
+| 상태        | 트리거 조건 | UI 표현                                      |
+| ----------- | ----------- | -------------------------------------------- |
+| **Default** | 초기 렌더링 | 로고 + 슬로건 + `← Main` 복귀 링크 정상 노출 |
 
 #### 5. Functional Requirements (단계별 요구사항)
 
 1. 화면 상단 중앙에 **"Dripnote"** 로고(`Playfair Display`, ExtraBold)를 표시한다
 2. 로고 하단(`mb-3` 여백)에 **"시작하기"** 슬로건(`Outfit`, Light, Uppercase, `tracking-[0.2em]`)을 표시한다
-3. 화면 좌측 상단에 메인 페이지(`/`)로 이동하는 **"main"** 텍스트 링크를 배치한다
-4. "main" 링크는 테두리와 배경색을 배제한 최니멀 텍스트 전용 스타일(소문자, 넓은 자간)을 유지한다
+3. 화면 좌측 상단에 메인 페이지(`/`)로 이동하는 **`← Main`** 복귀 링크를 배치한다
+   - `ChevronLeft` 아이콘(lucide-react, 16px) + `"Main"` 텍스트를 `flex gap-1`로 수평 정렬한다
+   - 테두리와 배경색을 배제한 미니멀 텍스트 전용 스타일을 유지한다
+4. 복귀 링크는 페이지 로드 후 `0.2s` 딜레이로 즉시 등장하여 탈출구(escape hatch)로서의 가용성을 확보한다
 
-> **변경 사유 (Context)**: '연구소(Lab)' 특유의 간결하고 철저한 이미지를 시각화하기 위해 대문자와 넓은 자간을 활용한 미니멀 타이포그래피 전략을 채택했습니다. Focused Layout 원칙을 유지하되, 내비게이션 요소가 메인 콘텐츠(인증)의 시각적 흐름을 방해하지 않도록 가장 정제된 형태의 UI를 적용했습니다.
+> **변경 사유 (Context)**: 2026-04-15 사용자 피드백 반영. 기존 텍스트 전용 "main"(소문자)은 가독성이 낮고 1.2s 딜레이로 너무 늦게 렌더링되는 문제가 있었습니다. `ChevronLeft` 아이콘 추가로 직관적인 "뒤로 가기" 의미를 강화하고, 딜레이를 0.2s로 단축하여 사용자가 인증을 원하지 않을 때 즉시 탈출할 수 있도록 개선했습니다. 미니멀 스타일은 유지하여 Focused Layout 원칙(인증에 집중)을 훼손하지 않습니다.
 
 #### 6. Design Spec (디자인 명세)
 
-- **Layout**: 로고+슬로건은 화면 상단 중앙 배치, "main" 링크는 `position: absolute top-4 left-6`
-- **Animation**: 없음 (정적 요소)
+- **Layout**: 로고+슬로건은 화면 상단 중앙 배치, `← Main` 링크는 `position: fixed top-6 left-6` (lg: `top-14 left-14`)
+- **Animation** (`framer-motion`):
+  - 트리거: 컴포넌트 마운트
+  - 효과: `x: -20 → 0`, `opacity: 0 → 1`
+  - Delay: `0.2s`, Duration: `0.4s`, Easing: `easeOut`
 - **Typography**:
-  - 로고: `Playfair Display`, ExtraBold(800), `Brand-Cream` 또는 White
+  - 로고: `Playfair Display`, ExtraBold(800), White
   - 슬로건: `Outfit`, Light, `uppercase`, `tracking-[0.2em]`
-  - back link: `Outfit`, 소문자, `tracking-widest`, White 60% opacity
+  - back link: `Outfit`, `text-sm`, `tracking-widest`, White **65%** opacity / hover White **90%** opacity
+- **Back Link Icon**: `ChevronLeft` (lucide-react, `h-4 w-4`), `flex items-center gap-1`
 - **Responsive**: 중앙 정렬 유지, 모바일에서 폰트 크기 축소
 
 #### 7. Definition of Done (검증 기준)
 
 - [ ] (기능) "Dripnote" 로고가 화면 상단 중앙에 `Playfair Display` ExtraBold로 렌더링된다
 - [ ] (기능) "시작하기" 슬로건이 `Outfit` Light, Uppercase, `tracking-[0.2em]`으로 표시된다
-- [ ] (기능) "main" 링크 클릭 시 `/`로 이동한다
-- [ ] (디자인) "main" 링크에 배경색/테두리 없는 텍스트 전용 스타일이 적용된다
+- [ ] (기능) `← Main` 링크 클릭 시 `/`로 이동한다
+- [ ] (디자인) `ChevronLeft` 아이콘 + "Main" 텍스트가 `flex gap-1`로 수평 정렬된다
+- [ ] (디자인) back link 투명도가 기본 65%, hover 시 90%로 전환된다
+- [ ] (인터랙션) 페이지 로드 후 `0.2s` 딜레이로 `x:-20→0` 슬라이드인 애니메이션이 실행된다
 - [ ] (디자인) 로고와 슬로건 사이에 `mb-3` 여백이 존재한다
 
 ---
