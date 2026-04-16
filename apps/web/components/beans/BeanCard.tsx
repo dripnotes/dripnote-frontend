@@ -32,29 +32,31 @@ export default function BeanCard({
           duration: 0.3,
           ease: 'easeOut',
         }}
-        whileHover={{ y: -4 }}
-        style={{ transition: 'box-shadow 0.25s ease' }}
-        className={`relative flex aspect-[3/4] flex-col overflow-hidden rounded-2xl ${bgClass} cursor-pointer shadow-sm hover:shadow-xl`}
+        whileHover={{ y: -6 }}
+        className={`relative aspect-[3/4] cursor-pointer overflow-hidden rounded-2xl ${bgClass} shadow-md transition-shadow duration-300 hover:shadow-2xl`}
       >
-        {/* 아로마 식재료 이미지 (카드 중앙, 60~70% 높이) */}
-        <div className="relative mx-auto mt-6 w-4/5 flex-1">
+        {/* 전체 배경 이미지 (Full Bleed Image) */}
+        <div className="absolute inset-0 z-0">
           <Image
             src={aromaImageUrl}
             alt={`${primaryAroma} — ${name}`}
             fill
-            className="object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         </div>
 
-        {/* 텍스트 영역 — 최하단 */}
-        <div className="px-4 pt-3 pb-5">
-          {/* 원산지 */}
-          <p className="font-outfit mb-1 text-[10px] font-normal tracking-[0.15em] text-black/50 uppercase">
+        {/* 텍스트 가독성을 위한 그라데이션 오버레이 (Bottom Shadow) */}
+        <div className="absolute inset-x-0 bottom-0 z-10 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+        {/* 텍스트 영역 — 이미지 위에 오버레이 (Bottom-Left) */}
+        <div className="absolute bottom-0 left-0 z-20 w-full p-6 text-white">
+          {/* 원산지 (Sans-serif, Tiny, Spaced) */}
+          <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
             {origin}
           </p>
-          {/* 원두명 */}
-          <p className="font-outfit text-sm leading-snug font-semibold text-black/85">{name}</p>
+          {/* 원두명 (Serif, Elegant, Large) */}
+          <h3 className="font-playfair text-2xl leading-tight font-bold tracking-tight">{name}</h3>
         </div>
       </motion.article>
     </Link>

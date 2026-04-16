@@ -122,7 +122,7 @@ export const mockBeansData: BeanInfo[] = [
     origin: 'HUEHUETENANGO, GUATEMALA',
     primaryAroma: '초콜릿',
     aromaImageUrl:
-      'https://images.unsplash.com/photo-1548907040-4d42bfa51dc6?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1571091799989-e88304d6aed3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     roasting: 'Medium',
     body: 2,
     bitterness: 3,
@@ -220,7 +220,7 @@ export const mockBeansData: BeanInfo[] = [
     origin: 'HUYE, RWANDA',
     primaryAroma: '견과',
     aromaImageUrl:
-      'https://images.unsplash.com/photo-1508819842993-db09273e012c?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1626023873533-f5cc77cc2458?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     roasting: 'Light',
     body: 2,
     bitterness: 2,

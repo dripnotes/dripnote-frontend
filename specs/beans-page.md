@@ -392,16 +392,16 @@ interface BeanCardListProps {
 
 #### 1. Overview (맥락)
 
-- **목적**: 단일 원두를 아로마 대표 식재료 이미지와 추출 배경 색상으로 표현하는 프리미엄 카드 컴포넌트. 텍스트를 최소화하고 원산지·이름·가격만 하단에 노출한다.
+- **목적**: 단일 원두를 아로마 대표 식재료 풀-사이즈 사진과 텍스트 오버레이로 표현하는 프리미엄 카드 컴포넌트. 정보 탐색적 성격보다 시각적 감성(Look & Feel)을 극대화합니다.
 - **위치**: `apps/web/components/beans/BeanCard.tsx`
 - **부모 컴포넌트**: `BeanCardList`
-- **레퍼런스 디자인**: 제공된 예시 이미지 (과일 아로마 → 오렌지 이미지, 웜 피치 배경)
+- **레퍼런스 디자인**: 제공된 "Sunrise Vegan Bowl" 예시와 동일한 이미지 중심 레이아웃
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
 
 - **주요 도구**: `next/image`, `next/link`, `framer-motion`, Tailwind CSS v4
-- **스타일링 규칙**: 배경색은 `AromaColor Palette` 토큰에서 `primaryAroma` 기반으로 결정, 하드코딩 금지
-- **이미지 규칙**: 식재료 이미지는 `object-contain` (카드 안에 식재료 전체가 보이도록), 배경 색상이 여백을 채움
+- **이미지 규칙**: `object-cover`를 사용하여 카드 전체 영역을 채움.
+- **가독성 규칙**: 이미지와 텍스트 사이의 대비를 위해 하단에 어두운 그라데이션 오버레이 필수 적용.
 
 #### 3. Data Interface (I/O)
 
@@ -411,59 +411,46 @@ interface BeanCardListProps {
 interface BeanCardProps {
   id: number;
   name: string; // 원두 이름
-  origin: string; // 원산지 (예: "HUILA, COLOMBIA")
-  primaryAroma: AromaType; // 배경 색상 결정
-  aromaImageUrl: string; // 식재료 이미지 URL
+  origin: string; // 원산지
+  primaryAroma: AromaType; // 로딩 전 배경색 결정 (Placeholder)
+  aromaImageUrl: string; // 배경으로 쓰일 식재료 사진 URL
   link: string; // 클릭 시 이동 경로
-  index?: number; // 진입 애니메이션 딜레이용
+  index?: number;
 }
 ```
 
-**State**: 없음
-
-**Events / Callbacks**: 없음 (`next/link`로 직접 라우팅)
-
 #### 4. UI States (상태 명세)
 
-| 상태        | 트리거 조건 | UI 표현                                          |
-| ----------- | ----------- | ------------------------------------------------ |
-| **Default** | 초기 렌더링 | 아로마 배경색 + 중앙 식재료 이미지 + 하단 텍스트 |
-| **Hover**   | 마우스 오버 | 카드 미세 부유(`y: -4px`) + 그림자 강화          |
+| 상태        | 트리거 조건 | UI 표현                                                 |
+| ----------- | ----------- | ------------------------------------------------------- |
+| **Default** | 초기 렌더링 | 풀-사이즈 배경 이미지 + 하단 그라데이션 + 화이트 텍스트 |
+| **Hover**   | 마우스 오버 | 카드 부유(`y: -6px`) + 배경 이미지 확대(`scale-110`)    |
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `primaryAroma` 값에 따라 `AromaColor Palette`에서 배경 색상을 결정한다
-2. 카드 중앙에 `aromaImageUrl` 이미지를 `object-contain`으로 표시한다
-   - 이미지는 카드 높이의 약 60~70%를 차지하며, 식재료 전체가 보인다
-3. 카드 하단 영역에 텍스트를 최소화하여 표시한다 (텍스트 순서: 원산지 → 원두명)
-   - 원산지: `Uppercase`, `text-xs`, `tracking-widest`, 반투명(`text-black/50`)
-   - 원두명: `Outfit SemiBold`, `text-sm`, `text-black/85`
-
-> **변경 사유 (Context)**: 2026-04-15 결정. Dripnote는 정보 탐색 서비스이므로 가격을 강조하는 커머스 UI와 구분하기 위해 가격 표시를 생략합니다. 4. 호버 시 카드가 위로 살짝 부유하며 그림자가 강해진다 5. 클릭 시 `link`로 라우팅한다
+1. `aromaImageUrl`을 카드 전체 배경으로 사용한다 (`fill`, `object-cover`)
+2. 하단 60% 영역에 선형 그라데이션(`black/90` → `transparent`)을 적용하여 텍스트 가독성을 확보한다
+3. 텍스트는 좌측 하단에 정렬하며, 원산지 → 원두명 순서로 배치한다
+4. 호버 시 카드가 위로 떠오르며 배경 이미지가 미세하게 확대되어 입체감을 준다
+5. 클릭 시 `link`로 라우팅한다
 
 #### 6. Design Spec (디자인 명세)
 
-- **Layout**: `aspect-[3/4]` (세로 카드), `rounded-2xl`, `overflow-hidden`
-- **Background**: `primaryAroma` → `AromaColor Palette` 토큰 매핑 (예: `bg-aroma-fruit = #FDDCB5`)
-- **Image Area**: 카드 중앙 배치, `object-contain`, 카드 높이 60~70%, 배경색이 여백을 자연스럽게 채움
-- **Text Area**: 카드 하단, 좌측 정렬, 내부 `px-4 pb-5 pt-3`
+- **Layout**: `aspect-[3/4]`, `rounded-2xl`, `overflow-hidden`, `relative`
+- **Overlay**: `bg-gradient-to-t from-black/90 via-black/40 to-transparent` (하단 60% 높이)
 - **Animation** (`framer-motion`):
-  - 마운트/상태변경: `opacity: 0 → 1`, `scale: 0.98 → 1.0` (Fade & Subtle Scale)
-  - 언마운트: `opacity: 1 → 0`, `scale: 1.0 → 0.98`
-  - 호버: `y: 0 → -4`, `shadow-md → shadow-xl`, Duration `0.25s`, Easing `easeOut`
+  - 마운트: `opacity: 0 → 1`, `scale: 0.98 → 1.0`
+  - 호버: `y: -6.0`, `scale-110` (Image), `shadow-2xl`, Duration `0.3s~0.5s`
 - **Typography**:
-  - 원산지: `Outfit`, Regular, `text-xs`, Uppercase, `tracking-[0.15em]`, `text-black/50`
-  - 원두명: `Outfit`, SemiBold, `text-sm`, `text-black/85`
-- **Responsive**: 부모 `BeanCardList` 그리드에 따라 크기 자동 조절
+  - 원산지(Origin): `font-outfit`, `text-[10px]`, `text-white/70`, `uppercase`, `tracking-[0.2em]`
+  - 원두명(Name): `font-playfair`, `text-2xl`, `text-white`, `font-bold`, `leading-tight`
 
 #### 7. Definition of Done (검증 기준)
 
-- [ ] (기능) 카드 클릭 시 `link`로 라우팅된다
-- [ ] (디자인) `primaryAroma`에 따라 `AromaColor Palette`의 배경 색상이 적용된다
-- [ ] (디자인) 식재료 이미지가 `object-contain`으로 카드 중앙에 표시된다
-- [ ] (디자인) 하단 텍스트가 원산지 → 원두명 → 가격 순서로 표시된다
-- [ ] (디자인) 원산지가 Uppercase, `tracking-[0.15em]`, 반투명으로 표시된다
-- [ ] (인터랙션) 호버 시 `y: -4px`, `shadow-xl` 전환이 `0.25s easeOut`으로 동작한다
+- [ ] (디자인) 이미지가 카드 전체를 가득 채우고 잘림 현상이 자연스럽다
+- [ ] (디자인) 하단 텍스트가 어떤 배경 이미지 위에서도 명확히 읽힌다
+- [ ] (인터랙션) 호버 시 이미지 확대와 카드 부유 효과가 동시에 조화롭게 일어난다
+- [ ] (반응형) 그리드 내에서 카드의 세로 비율(`3:4`)이 깨지지 않는다
 
 ---
 

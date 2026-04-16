@@ -1,6 +1,7 @@
 'use client';
 
 import { SlidersHorizontal } from 'lucide-react';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 import BeanCardList from '@/components/beans/BeanCardList';
@@ -44,9 +45,17 @@ export default function BeansPage() {
           <div className="w-full min-w-0 flex-1">
             {/* 검색 및 필터 정보 영역 */}
             <div className="mb-6 flex items-center justify-between">
-              {/* 결과 수 */}
-              <div className="font-outfit shrink-0 text-xs text-gray-400">
-                {filteredBeans.length}개의 원두
+              {/* 로고 및 결과 수 */}
+              <div className="flex flex-col gap-0.5">
+                <Link
+                  href="/"
+                  className="font-playfair text-2xl font-bold tracking-tighter text-gray-900"
+                >
+                  Dripnote
+                </Link>
+                <div className="font-outfit shrink-0 text-xs text-gray-400">
+                  {filteredBeans.length}개의 원두
+                </div>
               </div>
 
               {/* 모바일 필터 버튼 */}
