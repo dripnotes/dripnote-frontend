@@ -164,6 +164,9 @@ export default function BeanFilterDrawer({
                 onClose();
               }
             }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="filter-drawer-title"
             className="fixed right-0 bottom-0 left-0 z-50 flex h-[96vh] flex-col rounded-t-[2.5rem] bg-white md:hidden"
           >
             {/* Handle bar Area (Drag Trigger) */}
@@ -178,7 +181,12 @@ export default function BeanFilterDrawer({
             <div className="scrollbar-hide flex-1 overflow-y-auto px-6 pb-8">
               {/* 헤더 */}
               <div className="flex items-center justify-between py-4">
-                <span className="font-outfit text-sm font-semibold text-gray-800">Filter</span>
+                <span
+                  id="filter-drawer-title"
+                  className="font-outfit text-sm font-semibold text-gray-800"
+                >
+                  Filter
+                </span>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={onReset}
@@ -277,12 +285,20 @@ export default function BeanFilterDrawer({
 
             {/* 고정 적용 버튼 영역 */}
             <div className="shrink-0 border-t border-gray-100 bg-white px-6 py-5 pb-10">
-              <button
-                onClick={handleApply}
-                className="font-outfit w-full rounded-2xl bg-amber-500 py-4 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-amber-600 active:scale-[0.98]"
-              >
-                적용하기
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleApply}
+                  className="font-outfit flex-[2] rounded-2xl bg-amber-500 py-4 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-amber-600 active:scale-[0.98]"
+                >
+                  적용하기
+                </button>
+                <button
+                  onClick={onClose}
+                  className="font-outfit flex-1 rounded-2xl border border-gray-200 bg-gray-50 py-4 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 active:scale-[0.98]"
+                >
+                  취소하기
+                </button>
+              </div>
             </div>
           </motion.div>
         </>
