@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Playfair_Display, Outfit, Inter } from 'next/font/google';
 
 import './globals.css';
+import TanstackQueryLayout from '@/layouts/TanstackQueryLayout';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -43,7 +44,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${outfit.variable} ${inter.variable} font-inter antialiased`}
       >
-        {children}
+        <TanstackQueryLayout devTools={false}>{children}</TanstackQueryLayout>
       </body>
     </html>
   );
