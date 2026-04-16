@@ -1,4 +1,4 @@
-# 구현 계획 (Implementation Plan) - [Infrastructure] 에이전트 규칙 준수 및 로그인 페이지 개발
+# 구현 계획 (Implementation Plan) - [Infrastructure] 에이전트 규칙 준수 및 원두 페이지 UX 고도화
 
 ## 1. 개요 및 배경 (Context)
 
@@ -40,3 +40,9 @@
 - [x] `BeanFilterPanel` 및 `BeanFilterDrawer`에 `BeanSearchBar` 통합 ✅
 - [x] 검색 상태 전파를 위한 Props 인터페이스 확장 ✅
 - [x] 검색창 이동에 따른 결과 요약 영역 UI 재배치 ✅
+
+### Phase 5: Beans Page UI Consistency & UX Optimization (Completed ✅)
+
+- [x] Phase 5.1: 데스크톱 카드 목록 너비 고정 (`w-full` 및 컨테이너 정렬) ✅
+- [x] Phase 5.2: 필터 변경 시 `AnimatePresence` 및 `layout` 애니메이션 적용 ✅
+- [x] Phase 5.3: 필터 변경 시 자연스러운 슬라이딩 효과 검증 ✅

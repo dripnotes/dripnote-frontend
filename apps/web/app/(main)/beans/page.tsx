@@ -3,10 +3,10 @@
 import { SlidersHorizontal } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-import PageContainer from '@/components/layout/PageContainer';
 import BeanCardList from '@/components/beans/BeanCardList';
 import BeanFilterDrawer from '@/components/beans/BeanFilterDrawer';
 import BeanFilterPanel from '@/components/beans/BeanFilterPanel';
+import PageContainer from '@/components/layout/PageContainer';
 import {
   applyBeanFilters,
   DEFAULT_FILTERS,
@@ -29,8 +29,8 @@ export default function BeansPage() {
   return (
     <PageContainer>
       {/* ── 본문 ── */}
-      <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
-        <div className="flex gap-8">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 md:px-8">
+        <div className="flex w-full items-start gap-8">
           {/* 좌측 필터 패널 (Desktop/Tablet) */}
           <BeanFilterPanel
             filters={filters}
@@ -41,7 +41,7 @@ export default function BeansPage() {
           />
 
           {/* 우측 카드 목록 */}
-          <div className="min-w-0 flex-1">
+          <div className="w-full min-w-0 flex-1">
             {/* 검색 및 필터 정보 영역 */}
             <div className="mb-6 flex items-center justify-between">
               {/* 결과 수 */}

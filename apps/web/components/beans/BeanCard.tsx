@@ -25,10 +25,13 @@ export default function BeanCard({
   return (
     <Link href={link} className="group block">
       <motion.article
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.05, duration: 0.4, ease: 'easeOut' }}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.98 }}
+        transition={{
+          duration: 0.3,
+          ease: 'easeOut',
+        }}
         whileHover={{ y: -4 }}
         style={{ transition: 'box-shadow 0.25s ease' }}
         className={`relative flex aspect-[3/4] flex-col overflow-hidden rounded-2xl ${bgClass} cursor-pointer shadow-sm hover:shadow-xl`}

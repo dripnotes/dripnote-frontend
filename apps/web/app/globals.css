@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @source "../../../packages/ui-library";
 
+html {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --social-google: #ffffff;
   --social-google-hover: #f1f3f4;
