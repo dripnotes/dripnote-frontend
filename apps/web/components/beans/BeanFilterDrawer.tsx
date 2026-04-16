@@ -1,10 +1,8 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { RotateCcw, X } from 'lucide-react';
-import { useEffect } from 'react';
-
-import BeanSearchBar from './BeanSearchBar';
+import { RotateCcw } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import {
   AROMA_TYPES,
@@ -13,6 +11,8 @@ import {
   ROASTING_TYPES,
   type RoastingType,
 } from '@/lib/api/beans';
+
+import BeanSearchBar from './BeanSearchBar';
 
 interface BeanFilterDrawerProps {
   isOpen: boolean;
@@ -95,6 +95,12 @@ export default function BeanFilterDrawer({
   searchQuery,
   onSearchChange,
 }: BeanFilterDrawerProps) {
+  const [localFilters, setLocalFilters] = useState(filters);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
   // body 스크롤 잠금
   useEffect(() => {
     if (isOpen) {
@@ -108,17 +114,22 @@ export default function BeanFilterDrawer({
   }, [isOpen]);
 
   const toggleAroma = (aroma: AromaType) => {
-    const next = filters.aromas.includes(aroma)
-      ? filters.aromas.filter((a) => a !== aroma)
-      : [...filters.aromas, aroma];
-    onChange({ ...filters, aromas: next });
+    const next = localFilters.aromas.includes(aroma)
+      ? localFilters.aromas.filter((a) => a !== aroma)
+      : [...localFilters.aromas, aroma];
+    setLocalFilters({ ...localFilters, aromas: next });
   };
 
   const toggleRoasting = (r: RoastingType) => {
-    const next = filters.roasting.includes(r)
-      ? filters.roasting.filter((x) => x !== r)
-      : [...filters.roasting, r];
-    onChange({ ...filters, roasting: next });
+    const next = localFilters.roasting.includes(r)
+      ? localFilters.roasting.filter((x) => x !== r)
+      : [...localFilters.roasting, r];
+    setLocalFilters({ ...localFilters, roasting: next });
+  };
+
+  const handleApply = () => {
+    onChange(localFilters);
+    onClose();
   };
 
   return (
@@ -143,7 +154,7 @@ export default function BeanFilterDrawer({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="fixed right-0 bottom-0 left-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white px-6 pb-12 md:hidden"
+            className="fixed right-0 bottom-0 left-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white px-6 md:hidden"
           >
             {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
@@ -161,9 +172,6 @@ export default function BeanFilterDrawer({
                   <RotateCcw className="h-3 w-3" />
                   초기화
                 </button>
-                <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-                  <X className="h-4 w-4" />
-                </button>
               </div>
             </div>
 
@@ -180,7 +188,7 @@ export default function BeanFilterDrawer({
                   <Chip
                     key={a}
                     label={a}
-                    active={filters.aromas.includes(a)}
+                    active={localFilters.aromas.includes(a)}
                     onClick={() => toggleAroma(a)}
                   />
                 ))}
@@ -198,9 +206,12 @@ export default function BeanFilterDrawer({
                     </p>
                     <RatingBar
                       max={5}
-                      value={filters.flavor[key]}
+                      value={localFilters.flavor[key]}
                       onChange={(v) =>
-                        onChange({ ...filters, flavor: { ...filters.flavor, [key]: v } })
+                        setLocalFilters({
+                          ...localFilters,
+                          flavor: { ...localFilters.flavor, [key]: v },
+                        })
                       }
                     />
                   </div>
@@ -215,16 +226,18 @@ export default function BeanFilterDrawer({
                 <div className="flex-1">
                   <RatingBar
                     max={3}
-                    value={filters.body}
-                    onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
+                    value={localFilters.body}
+                    onChange={(v) =>
+                      setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
+                    }
                   />
                 </div>
                 <span className="text-xs text-gray-400">
-                  {filters.body === 1
+                  {localFilters.body === 1
                     ? '가벼움'
-                    : filters.body === 2
+                    : localFilters.body === 2
                       ? '보통'
-                      : filters.body === 3
+                      : localFilters.body === 3
                         ? '묵직함'
                         : ''}
                 </span>
@@ -232,27 +245,29 @@ export default function BeanFilterDrawer({
             </div>
 
             {/* Roasting */}
-            <div className="border-t border-gray-100 py-5">
+            <div className="border-t border-gray-100 py-5 pb-8">
               <p className={SECTION_TITLE}>Roasting</p>
               <div className="flex flex-wrap gap-2">
                 {ROASTING_TYPES.map((r) => (
                   <Chip
                     key={r}
                     label={r}
-                    active={filters.roasting.includes(r)}
+                    active={localFilters.roasting.includes(r)}
                     onClick={() => toggleRoasting(r)}
                   />
                 ))}
               </div>
             </div>
 
-            {/* 적용 버튼 */}
-            <button
-              onClick={onClose}
-              className="font-outfit mt-2 w-full rounded-xl bg-amber-500 py-3 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
-            >
-              적용하기
-            </button>
+            {/* 스티키 적용 버튼 */}
+            <div className="sticky bottom-0 -mx-6 border-t border-gray-100 bg-white px-6 py-4">
+              <button
+                onClick={handleApply}
+                className="font-outfit w-full rounded-xl bg-amber-500 py-3 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+              >
+                적용하기
+              </button>
+            </div>
           </motion.div>
         </>
       )}

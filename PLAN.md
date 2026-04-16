@@ -46,3 +46,9 @@
 - [x] Phase 5.1: 데스크톱 카드 목록 너비 고정 (`w-full` 및 컨테이너 정렬) ✅
 - [x] Phase 5.2: 필터 변경 시 `AnimatePresence` 및 `layout` 애니메이션 적용 ✅
 - [x] Phase 5.3: 필터 변경 시 자연스러운 슬라이딩 효과 검증 ✅
+
+### Phase 6: Deferred Filtering & Sticky Apply Button (In Progress 🚀)
+
+- [ ] Phase 6.1: 검색창(`BeanSearchBar`) 엔터 키보드 이벤트 전환 (Live 변경 방지)
+- [ ] Phase 6.2: 데스크톱 필터 패널(`BeanFilterPanel`) 로컬 상태 관리 및 하단 스티키 "적용하기" 버튼 추가
+- [ ] Phase 6.3: 모바일 필터 드로어(`BeanFilterDrawer`) 로컬 상태 동기화 및 "적용하기" 명시적 제출 구현

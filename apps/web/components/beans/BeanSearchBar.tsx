@@ -1,7 +1,7 @@
 'use client';
 
 import { Search, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface BeanSearchBarProps {
   value: string;
@@ -15,19 +15,20 @@ export default function BeanSearchBar({
   placeholder = '검색어를 입력하세요',
 }: BeanSearchBarProps) {
   const [localValue, setLocalValue] = useState(value);
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
-    setLocalValue(newVal);
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      onChange(newVal);
-    }, 300);
+    setLocalValue(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onChange(localValue);
+    }
   };
 
   const handleClear = () => {
@@ -42,6 +43,7 @@ export default function BeanSearchBar({
         type="text"
         value={localValue}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className="font-outfit h-12 w-full rounded-xl bg-white pr-10 pl-11 text-sm text-gray-800 shadow-sm ring-1 ring-gray-300 transition-all outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-amber-500"
       />
