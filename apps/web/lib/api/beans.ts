@@ -262,7 +262,7 @@ export function applyBeanFilters(
     if (filters.aromas.length > 0 && !filters.aromas.includes(bean.primaryAroma)) {
       return false;
     }
-    // Flavor 필터 (선택된 값 이상인 bean만 표시)
+    // Flavor 필터 (선택된 값과 일치하는 bean만 표시)
     if (filters.flavor.bitterness > 0 && bean.bitterness !== filters.flavor.bitterness)
       return false;
     if (filters.flavor.sweetness > 0 && bean.sweetness !== filters.flavor.sweetness) return false;
