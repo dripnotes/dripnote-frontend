@@ -286,18 +286,23 @@ interface BeanFilterDrawerProps {
 
 #### 6. Design Spec (디자인 명세)
 
-- **Layout**: `fixed bottom-0 left-0 right-0`, 최대 높이 `80vh`, `rounded-t-2xl`, `bg-white`, 하단 여유공간 확보를 위한 스크롤 컨테이너 패딩(`pb-12 px-6`)
-- **Animation** (`framer-motion`):
-  - Open: `y: 100% → 0`, Duration `0.35s`, Easing `easeOut`
-  - Close: `y: 0 → 100%`, Duration `0.25s`, Easing `easeIn`
-- **Handle Bar**: 상단 중앙 `w-10 h-1 rounded-full bg-gray-300 mx-auto mt-3`
-- **Apply Button**: 드로어 최하단에 스티키(`sticky bottom-0`) 배치, 콘텐츠 오버레이 방지 위해 여백 조절
-- **Responsive**: 모바일(`< 768px`)에서만 사용, 그 이상에서는 렌더링하지 않음
+- **Layout**: `fixed bottom-0 left-0 right-0`, 화면 높이의 96%(`h-[96vh]`), `rounded-t-[2.5rem]`, `bg-white`
+- **Drawer Interaction & Animation**:
+  - Open: `y: 100% → 0`, Spring Transition (Damping: 25, Stiffness: 200)
+  - Drag: 핸들바를 이용한 Y축 드래그 지원 (`drag="y"`, `dragControls` 사용)
+  - Physics: `dragConstraints={{ top: 0, bottom: 0 }}`, `dragElastic={{ top: 0, bottom: 1 }}` 적용으로 1:1 추종 및 자동 복위 구현
+  - Dismiss: 드래그 오프셋이 150px 초과 시 `onClose()` 트리거
+- **Handle Bar**: 상단 중앙 `w-12 h-1.5 rounded-full bg-gray-200 mx-auto mt-4`, 드래그 트리거 역할
+- **Layout Structure**:
+  - (Fixed Top) Handle Bar 전용 드래그 영역 (`pt-4 pb-2`)
+  - (Inner Scroll) 필터 콘텐츠 영역 (`flex-1 overflow-y-auto`, `px-6 pb-8`)
+  - (Fixed Bottom) 적용하기 버튼 영역 (`shrink-0`, `py-5 pb-10`)
+- **Responsive**: 모바일(`< 768px`) 전용 UI
 
 #### 7. Definition of Done (검증 기준)
 
 - [ ] (기능) 필터 버튼 클릭 시 Drawer가 하단에서 슬라이드 업으로 열린다
-- [ ] (기능) Backdrop 클릭 또는 닫기 버튼 클릭 시 Drawer가 닫힌다
+- [ ] (기능) Backdrop 클릭 또는 닫기 버튼 클릭 시 Drawer가 닫진다
 - [ ] (기능) Drawer 열린 상태에서 배경 스크롤이 비활성화된다
 - [ ] (기능) 스티키 "적용하기" 버튼 클릭 시 필터링이 반영되고 Drawer가 닫힌다
 - [ ] (인터랙션) 열기 `0.35s easeOut`, 닫기 `0.25s easeIn` 애니메이션이 동작한다

@@ -1,6 +1,4 @@
-'use client';
-
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -96,6 +94,7 @@ export default function BeanFilterDrawer({
   onSearchChange,
 }: BeanFilterDrawerProps) {
   const [localFilters, setLocalFilters] = useState(filters);
+  const dragControls = useDragControls();
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -153,117 +152,134 @@ export default function BeanFilterDrawer({
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="fixed right-0 bottom-0 left-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white px-6 md:hidden"
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            drag="y"
+            dragControls={dragControls}
+            dragListener={false}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 1 }}
+            dragMomentum={false}
+            onDragEnd={(_, info) => {
+              if (info.offset.y > 150) {
+                onClose();
+              }
+            }}
+            className="fixed right-0 bottom-0 left-0 z-50 flex h-[96vh] flex-col rounded-t-[2.5rem] bg-white md:hidden"
           >
-            {/* Handle bar */}
-            <div className="flex justify-center pt-3 pb-1">
-              <div className="h-1 w-10 rounded-full bg-gray-300" />
+            {/* Handle bar Area (Drag Trigger) */}
+            <div
+              onPointerDown={(e) => dragControls.start(e)}
+              className="flex cursor-grab justify-center pt-4 pb-2 active:cursor-grabbing"
+            >
+              <div className="h-1.5 w-12 rounded-full bg-gray-200" />
             </div>
 
-            {/* 헤더 */}
-            <div className="flex items-center justify-between py-4">
-              <span className="font-outfit text-sm font-semibold text-gray-800">Filter</span>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={onReset}
-                  className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
-                >
-                  <RotateCcw className="h-3 w-3" />
-                  초기화
-                </button>
+            {/* Scrollable Content */}
+            <div className="scrollbar-hide flex-1 overflow-y-auto px-6 pb-8">
+              {/* 헤더 */}
+              <div className="flex items-center justify-between py-4">
+                <span className="font-outfit text-sm font-semibold text-gray-800">Filter</span>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={onReset}
+                    className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    초기화
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Search */}
-            <div className="mb-4">
-              <BeanSearchBar value={searchQuery} onChange={onSearchChange} />
-            </div>
-
-            {/* Aroma */}
-            <div className="border-t border-gray-100 py-5">
-              <p className={SECTION_TITLE}>Aroma</p>
-              <div className="flex flex-wrap gap-2">
-                {AROMA_TYPES.map((a) => (
-                  <Chip
-                    key={a}
-                    label={a}
-                    active={localFilters.aromas.includes(a)}
-                    onClick={() => toggleAroma(a)}
-                  />
-                ))}
+              {/* Search */}
+              <div className="mb-4">
+                <BeanSearchBar value={searchQuery} onChange={onSearchChange} />
               </div>
-            </div>
 
-            {/* Flavor */}
-            <div className="border-t border-gray-100 py-5">
-              <p className={SECTION_TITLE}>Flavor</p>
-              <div className="space-y-4">
-                {(['bitterness', 'sweetness', 'acidity'] as const).map((key) => (
-                  <div key={key}>
-                    <p className="mb-2 text-xs text-gray-500">
-                      {key === 'bitterness' ? '쓴맛' : key === 'sweetness' ? '단맛' : '산미'}
-                    </p>
+              {/* Aroma */}
+              <div className="border-t border-gray-100 py-5">
+                <p className={SECTION_TITLE}>Aroma</p>
+                <div className="flex flex-wrap gap-2">
+                  {AROMA_TYPES.map((a) => (
+                    <Chip
+                      key={a}
+                      label={a}
+                      active={localFilters.aromas.includes(a)}
+                      onClick={() => toggleAroma(a)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Flavor */}
+              <div className="border-t border-gray-100 py-5">
+                <p className={SECTION_TITLE}>Flavor</p>
+                <div className="space-y-4">
+                  {(['bitterness', 'sweetness', 'acidity'] as const).map((key) => (
+                    <div key={key}>
+                      <p className="mb-2 text-xs text-gray-500">
+                        {key === 'bitterness' ? '쓴맛' : key === 'sweetness' ? '단맛' : '산미'}
+                      </p>
+                      <RatingBar
+                        max={5}
+                        value={localFilters.flavor[key]}
+                        onChange={(v) =>
+                          setLocalFilters({
+                            ...localFilters,
+                            flavor: { ...localFilters.flavor, [key]: v },
+                          })
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="border-t border-gray-100 py-5">
+                <p className={SECTION_TITLE}>Body</p>
+                <div className="flex w-full items-center gap-3">
+                  <div className="flex-1">
                     <RatingBar
-                      max={5}
-                      value={localFilters.flavor[key]}
+                      max={3}
+                      value={localFilters.body}
                       onChange={(v) =>
-                        setLocalFilters({
-                          ...localFilters,
-                          flavor: { ...localFilters.flavor, [key]: v },
-                        })
+                        setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
                       }
                     />
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Body */}
-            <div className="border-t border-gray-100 py-5">
-              <p className={SECTION_TITLE}>Body</p>
-              <div className="flex w-full items-center gap-3">
-                <div className="flex-1">
-                  <RatingBar
-                    max={3}
-                    value={localFilters.body}
-                    onChange={(v) =>
-                      setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
-                    }
-                  />
+                  <span className="text-xs text-gray-400">
+                    {localFilters.body === 1
+                      ? '가벼움'
+                      : localFilters.body === 2
+                        ? '보통'
+                        : localFilters.body === 3
+                          ? '묵직함'
+                          : ''}
+                  </span>
                 </div>
-                <span className="text-xs text-gray-400">
-                  {localFilters.body === 1
-                    ? '가벼움'
-                    : localFilters.body === 2
-                      ? '보통'
-                      : localFilters.body === 3
-                        ? '묵직함'
-                        : ''}
-                </span>
+              </div>
+
+              {/* Roasting */}
+              <div className="border-t border-gray-100 py-5 pb-8">
+                <p className={SECTION_TITLE}>Roasting</p>
+                <div className="flex flex-wrap gap-2">
+                  {ROASTING_TYPES.map((r) => (
+                    <Chip
+                      key={r}
+                      label={r}
+                      active={localFilters.roasting.includes(r)}
+                      onClick={() => toggleRoasting(r)}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Roasting */}
-            <div className="border-t border-gray-100 py-5 pb-8">
-              <p className={SECTION_TITLE}>Roasting</p>
-              <div className="flex flex-wrap gap-2">
-                {ROASTING_TYPES.map((r) => (
-                  <Chip
-                    key={r}
-                    label={r}
-                    active={localFilters.roasting.includes(r)}
-                    onClick={() => toggleRoasting(r)}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* 스티키 적용 버튼 */}
-            <div className="sticky bottom-0 -mx-6 border-t border-gray-100 bg-white px-6 py-4">
+            {/* 고정 적용 버튼 영역 */}
+            <div className="shrink-0 border-t border-gray-100 bg-white px-6 py-5 pb-10">
               <button
                 onClick={handleApply}
-                className="font-outfit w-full rounded-xl bg-amber-500 py-3 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+                className="font-outfit w-full rounded-2xl bg-amber-500 py-4 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-amber-600 active:scale-[0.98]"
               >
                 적용하기
               </button>

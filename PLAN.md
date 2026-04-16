@@ -47,8 +47,15 @@
 - [x] Phase 5.2: 필터 변경 시 `AnimatePresence` 및 `layout` 애니메이션 적용 ✅
 - [x] Phase 5.3: 필터 변경 시 자연스러운 슬라이딩 효과 검증 ✅
 
-### Phase 6: Deferred Filtering & Sticky Apply Button (In Progress 🚀)
+### Phase 6: Deferred Filtering & Sticky Apply Button (Completed ✅)
 
-- [ ] Phase 6.1: 검색창(`BeanSearchBar`) 엔터 키보드 이벤트 전환 (Live 변경 방지)
-- [ ] Phase 6.2: 데스크톱 필터 패널(`BeanFilterPanel`) 로컬 상태 관리 및 하단 스티키 "적용하기" 버튼 추가
-- [ ] Phase 6.3: 모바일 필터 드로어(`BeanFilterDrawer`) 로컬 상태 동기화 및 "적용하기" 명시적 제출 구현
+- [x] Phase 6.1: 검색창(`BeanSearchBar`) 엔터 키보드 이벤트 전환 (Live 변경 방지) ✅
+- [x] Phase 6.2: 데스크톱 필터 패널(`BeanFilterPanel`) 로컬 상태 관리 및 하단 스티키 "적용하기" 버튼 추가 ✅
+- [x] Phase 6.3: 모바일 필터 드로어(`BeanFilterDrawer`) 로컬 상태 동기화 및 "적용하기" 명시적 제출 구현 ✅
+
+### Phase 7: Mobile Drawer Interaction & Layout Enhancement (Completed ✅)
+
+- [x] Phase 7.1: `framer-motion` 드래그 핸들(Handle Bar) 컨트롤 및 닫기 임계값 적용 ✅
+- [x] Phase 7.2: 내부 스크롤 영역 격리 (Handle Bar & Apply Button 고정) ✅
+- [x] Phase 7.3: 드로어 최대 높이 확장 (96vh) 및 여백 최적화 ✅
+- [x] Phase 7.4: 드래그 물리 효과 최적화 (1:1 추종 및 자동 복귀) ✅

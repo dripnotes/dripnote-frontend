@@ -37,7 +37,7 @@ export default function BeanSearchBar({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full p-0.5">
       <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors" />
       <input
         type="text"
@@ -45,7 +45,7 @@ export default function BeanSearchBar({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="font-outfit h-12 w-full rounded-xl bg-white pr-10 pl-11 text-sm text-gray-800 shadow-sm ring-1 ring-gray-300 transition-all outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-amber-500"
+        className="font-outfit h-10 w-full rounded-xl bg-white pr-10 pl-11 text-sm text-gray-800 shadow-sm ring-1 ring-gray-300 transition-all outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-amber-500"
       />
       {localValue && (
         <button
