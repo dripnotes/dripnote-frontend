@@ -6,9 +6,10 @@ import { useState } from 'react';
 
 interface Props {
   children: React.ReactNode;
+  devTools?: boolean;
 }
 
-export default function TanstackQueryLayout({ children }: Props) {
+export default function TanstackQueryLayout({ children, devTools = false }: Props) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -26,7 +27,7 @@ export default function TanstackQueryLayout({ children }: Props) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {devTools && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

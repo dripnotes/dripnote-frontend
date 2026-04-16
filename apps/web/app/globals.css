@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @source "../../../packages/ui-library";
 
+html {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --social-google: #ffffff;
   --social-google-hover: #f1f3f4;
@@ -14,6 +18,17 @@
   --social-kakao: #fee500;
   --social-kakao-hover: #fdd800;
   --social-kakao-fg: rgba(0, 0, 0, 0.85);
+
+  /* Aroma Color Palette — BeanCard 배경색 시스템 */
+  --aroma-caramel: #f2d49b;
+  --aroma-wine: #e8c5c0;
+  --aroma-chocolate: #c9a882;
+  --aroma-fruit: #fddcb5;
+  --aroma-herb: #c9e4ca;
+  --aroma-malt: #e8d9b5;
+  --aroma-nutty: #e0caaa;
+  --aroma-floral: #f5d5d5;
+  --aroma-smoky: #d0cec8;
 }
 
 @theme {
@@ -36,6 +51,16 @@
   --font-playfair: var(--font-playfair);
   --font-outfit: var(--font-outfit);
   --font-inter: var(--font-inter);
+  /* Aroma Color Palette */
+  --color-aroma-caramel: var(--aroma-caramel);
+  --color-aroma-wine: var(--aroma-wine);
+  --color-aroma-chocolate: var(--aroma-chocolate);
+  --color-aroma-fruit: var(--aroma-fruit);
+  --color-aroma-herb: var(--aroma-herb);
+  --color-aroma-malt: var(--aroma-malt);
+  --color-aroma-nutty: var(--aroma-nutty);
+  --color-aroma-floral: var(--aroma-floral);
+  --color-aroma-smoky: var(--aroma-smoky);
 }
 
 body {

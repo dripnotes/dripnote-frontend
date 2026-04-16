@@ -48,3 +48,12 @@ trigger: always_on
 - **TypeScript**: TypeScript의 모범 사례와 타입 안전성(Type Safety)을 항상 엄격하게 유지합니다.
 - **Design Aesthetic**: UI 구현 시 기능 동작 이상으로 심미성과 사용자 경험(Premium Feel)을 최고 수준으로 고려해야 합니다. 부드러운 전환을 위해 `framer-motion`을 적극 활용합니다.
 - **Harness Engineering (Rule 22)**: 소프트웨어 개발을 '에이전트 우선(Agent-first)' 관점에서 재구성합니다. 엔지니어는 단순히 코드를 작성하는 것을 넘어, 에이전트가 자율적으로 코드를 실행, 테스트, 검증하고 스스로 오류를 수정(Self-Correction)할 수 있는 **'하네스(Harness)'** 환경을 설계하고 구축해야 합니다. 상세 내용은 [.agents/workflows/vibe-coding-cycle.md](../workflows/vibe-coding-cycle.md)의 7단계 프로세스를 참조하십시오.
+
+## 6. Architecture & UI Patterns
+
+- **레이아웃 래퍼 의무화 (Page Layout)**: 개별 페이지의 본문 컨텐츠는 반드시 공용 레이아웃 컨테이너(예: `@/components/layout/PageContainer.tsx`) 내부에 작성하여, 모바일 탭 바 및 데스크톱 헤더와의 간섭을 피하고 전체 서비스의 여백 일관성을 유지해야 합니다.
+- **전역 오버레이 상태 중앙화 (Zustand)**: 모달(Modal), 드로어(Drawer), 알럿(Alert), 토스트(Toast) 등 전역적으로 쓰이는 UI 요소는 각 페이지에서 개별적으로 중복 렌더링하지 않습니다. 대신 `Zustand` 스토어로 열기/닫기 상태 및 컨텐츠를 관리하여, 최상단 Provider 계층에서 단 하나만 렌더링되게 통제합니다.
+- **데이터 페칭 아키텍처 (Server Action vs TanStack Query)**:
+  - 초기 페이지 랜딩에 필요한 데이터 페칭 및 단순 조작은 **Server Component**와 **Server Action**을 최우선으로 사용합니다.
+  - 무한 스크롤, 실시간 디바운스 검색(Live Search), 캐시 기반의 낙관적 업데이트(Optimistic UI) 등 고도화된 클라이언트 상호작용이 필요한 클라이언트 컴포넌트에 한해서, Server Action을 Fetcher 함수로 사용하여 **TanStack Query**와 결합합니다.
+- **선언적 컴포넌트 설계 (Compound Component Pattern)**: 복합적이고 다용도로 쓰이는 UI 요소(예: 복잡한 탭 UI, 필터 드로어, 아코디언 등)를 설계할 때는 모든 데이터를 최상단 Prop(`data={...}`) 하나에 넣는 방식을 지양합니다. 자식 컴포넌트를 서브 컴포넌트로 노출하여 유연하게 조립하는 **Compound Component 패턴**을 적극 활용합니다. (예: `<DropMenu.Root>`, `<DropMenu.Trigger>`, `<DropMenu.Content>`)
