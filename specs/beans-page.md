@@ -105,11 +105,11 @@ interface BeanSearchBarProps {
 }
 ```
 
-**State**: 없음 (Controlled Component, 상위에서 관리)
+**State**: `localValue: string` (입력 중인 미확정 상태 보유)
 
 **Events / Callbacks**:
 
-- `onChange(value: string)`: Enter 키 입력 또는 초기화 시 상위로 전달
+- `onChange(value: string)`: Enter 키 입력 또는 초기화 시 상위로 전달 (Commit 시점에만 호출)
 
 #### 4. UI States (상태 명세)
 
@@ -183,11 +183,11 @@ interface BeanFilterPanelProps {
 }
 ```
 
-**State**: 없음 (Controlled Component)
+**State**: `localFilters: BeanFilterState` (미요청 필터 상태 보유)
 
 **Events / Callbacks**:
 
-- `onChange(filters)`: 필터 변경 시 상위로 전달
+- `onChange(filters)`: "적용하기" 버튼 클릭 시 최종 변경 사항을 상위로 전달
 - `onReset()`: 전체 필터 초기화
 
 #### 4. UI States (상태 명세)
@@ -244,7 +244,7 @@ interface BeanFilterPanelProps {
 #### 2. Tech Stack & Constraints (기술 및 제약)
 
 - **주요 도구**: `framer-motion`, Tailwind CSS v4
-- **기타 제약**: Drawer 외부 영역 클릭(Backdrop) 또는 닫기 버튼으로 닫힘, 컨텐츠는 `BeanFilterPanel`과 동일한 필터 UI 공유
+- **기타 제약**: 하단 "취소하기" 버튼, Drawer 외부 영역 클릭(Backdrop) 또는 아래로 드래그하여 닫힘, 컨텐츠는 `BeanFilterPanel`과 동일한 필터 UI 공유
 
 #### 3. Data Interface (I/O)
 
@@ -262,7 +262,7 @@ interface BeanFilterDrawerProps {
 }
 ```
 
-**State**: 없음 (Controlled Component)
+**State**: `localFilters: BeanFilterState` (적용 전 임시 상태 보유)
 
 **Events / Callbacks**:
 
@@ -279,14 +279,14 @@ interface BeanFilterDrawerProps {
 
 1. `isOpen: true` 시 Backdrop(`bg-black/40`)이 화면 전체를 덮으며 Drawer가 아래에서 올라온다
 2. Drawer 내부는 `BeanFilterPanel`과 동일하게 `BeanSearchBar` 및 전체 필터 항목을 포함한다
-3. 상단 핸들 바(드래그 표시) 또는 닫기(✕) 버튼으로 Drawer를 닫는다
+3. 아래로 드래그하거나 "취소하기" 버튼을 클릭하여 Drawer를 닫는다
 4. Backdrop 클릭 시 `onClose()`를 호출한다
 5. 모든 필터링 조작은 `localFilters` 상태만 갱신하며, 하단 스티키 "적용하기" 버튼 클릭 시 `onChange(localFilters)` 호출 후 Drawer가 닫힌다.
 6. Drawer가 열린 상태에서 body 스크롤을 잠근다 (`overflow-hidden`)
 
 #### 6. Design Spec (디자인 명세)
 
-- **Layout**: `fixed bottom-0 left-0 right-0`, 화면 높이의 96%(`h-[96vh]`), `rounded-t-[2.5rem]`, `bg-white`
+- **Layout**: `fixed bottom-0 left-0 right-0`, 화면 전체 높이(`h-full`), `rounded-t-[2.5rem]`, `bg-white`
 - **Drawer Interaction & Animation**:
   - Open: `y: 100% → 0`, Spring Transition (Damping: 25, Stiffness: 200)
   - Drag: 핸들바를 이용한 Y축 드래그 지원 (`drag="y"`, `dragControls` 사용)
@@ -302,7 +302,7 @@ interface BeanFilterDrawerProps {
 #### 7. Definition of Done (검증 기준)
 
 - [ ] (기능) 필터 버튼 클릭 시 Drawer가 하단에서 슬라이드 업으로 열린다
-- [ ] (기능) Backdrop 클릭 또는 닫기 버튼 클릭 시 Drawer가 닫진다
+- [ ] (기능) Backdrop 클릭 또는 취소 버튼 클릭 시 Drawer가 닫힌다
 - [ ] (기능) Drawer 열린 상태에서 배경 스크롤이 비활성화된다
 - [ ] (기능) 스티키 "적용하기" 버튼 클릭 시 필터링이 반영되고 Drawer가 닫힌다
 - [ ] (인터랙션) 열기 `0.35s easeOut`, 닫기 `0.25s easeIn` 애니메이션이 동작한다
@@ -339,7 +339,7 @@ interface BeanInfo {
   link: string; // 원두 상세 페이지 경로
 }
 
-// 가격 표시 안 함 (2026-04-15 결정: 정보 탐색 서비스에서 가격 정보 비노출)
+// 가격 표시 안 함 (2026-04-15 결정: 정보 탐색 서비스 경험 제공을 위해 가격 정보 비노출 정책 유지)
 
 interface BeanCardListProps {
   beans: BeanInfo[];
@@ -481,7 +481,7 @@ const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
 ## 6. 핵심 동작 요구사항
 
-- **텍스트 최소화**: 카드 내 키워드(원산지, 원두명, 가격)만 노출하며 설명 문구 배제
+- **텍스트 최소화**: 카드 내 키워드(원산지, 원두명)만 노출하며 설명 문구 배제
 - **아로마 색상 시스템**: `AromaColor Palette` 토큰으로 카드 배경 색상을 일관성 있게 관리
 - **명시적 지연 반영(Deferred)**: 필터 상태는 즉시 반영되지 않고 '적용하기' 버튼에 의해 제출되어야 한다
 - **모바일 Drawer**: 모바일에서 필터가 Drawer로 동작하여 탐색 공간을 최대화
@@ -495,7 +495,7 @@ const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
 | #   | 항목                   | 현재 가정                       | 확인 필요                                                  |
 | --- | ---------------------- | ------------------------------- | ---------------------------------------------------------- |
-| 1   | **가격 표시 여부**     | 선택적으로 표시 (`price?`)      | 서비스 특성상 가격 노출 필요 여부                          |
+| 1   | **가격 표시 여부**     | 비표시 (결정됨)                 | (완료) 정보 탐색 중심 서비스로 가격 정보 제외 확정         |
 | 2   | **필터링 방식**        | 클라이언트 사이드 필터링 (Mock) | API 연동 시 서버 사이드 필터링으로 전환 여부               |
 | 3   | **카드 클릭 목적지**   | `/beans/{id}` 원두 상세 페이지  | 상세 페이지 존재 여부 및 경로                              |
 | 4   | **Flavor 필터 표현**   | Rating Bar (연속된 막대)        | (완료) 이전 Step Selector에서 레이팅 바 형태로 스펙 개선됨 |
@@ -512,7 +512,7 @@ const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
 ### Request
 
-```
+```http
 GET /api/beans?search={keyword}&aromas={}&bitterness={1-5}&sweetness={1-5}&acidity={1-5}&body={1-3}&roasting={}
 ```
 

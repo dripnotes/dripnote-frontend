@@ -169,7 +169,7 @@ export default function BeanFilterDrawer({
             role="dialog"
             aria-modal="true"
             aria-labelledby="filter-drawer-title"
-            className="fixed right-0 bottom-0 left-0 z-50 flex h-[96vh] flex-col rounded-t-[2.5rem] bg-white md:hidden"
+            className="fixed right-0 bottom-0 left-0 z-50 flex h-full flex-col rounded-t-[2.5rem] bg-white md:hidden"
           >
             {/* Handle bar Area (Drag Trigger) */}
             <div
