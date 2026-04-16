@@ -43,7 +43,7 @@ export default function BeanSearchBar({
         value={localValue}
         onChange={handleChange}
         placeholder={placeholder}
-        className="font-outfit h-12 w-full rounded-xl bg-gray-50 pr-10 pl-11 text-sm text-gray-800 ring-1 ring-gray-200 transition-all outline-none placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-amber-500"
+        className="font-outfit h-12 w-full rounded-xl bg-white pr-10 pl-11 text-sm text-gray-800 shadow-sm ring-1 ring-gray-300 transition-all outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-amber-500"
       />
       {localValue && (
         <button

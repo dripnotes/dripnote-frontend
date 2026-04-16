@@ -3,8 +3,6 @@
 import { motion } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 
-import BeanSearchBar from './BeanSearchBar';
-
 import {
   AROMA_TYPES,
   type AromaType,
@@ -12,6 +10,8 @@ import {
   ROASTING_TYPES,
   type RoastingType,
 } from '@/lib/api/beans';
+
+import BeanSearchBar from './BeanSearchBar';
 
 interface BeanFilterPanelProps {
   filters: BeanFilterState;
@@ -30,7 +30,7 @@ const isFiltered = (filters: BeanFilterState) =>
   filters.roasting.length > 0;
 
 const SECTION_TITLE =
-  'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-400';
+  'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-500';
 
 /** 아로마·로스팅 Chip */
 function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
@@ -41,7 +41,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       className={`cursor-pointer rounded-full px-3 py-1 text-xs transition-all ${
         active
           ? 'bg-amber-500 font-semibold text-white shadow-sm'
-          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          : 'border border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 hover:bg-gray-100'
       }`}
     >
       {label}
@@ -78,13 +78,15 @@ function RatingBar({
     <div className="flex w-full gap-1 rounded-md bg-transparent">
       {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
         const isActive = n <= value;
-        const colorClass = isActive ? getActiveColor(n, max) : 'bg-gray-100 hover:bg-gray-200';
+        const colorClass = isActive
+          ? `${getActiveColor(n, max)} border-transparent`
+          : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300';
         return (
           <motion.button
             key={n}
             whileTap={{ scale: 0.95 }}
             onClick={() => onChange(value === n ? 0 : n)}
-            className={`h-7 flex-1 rounded text-xs transition-colors duration-200 ${colorClass}`}
+            className={`h-7 flex-1 rounded border text-xs transition-colors duration-200 ${colorClass}`}
             aria-label={`${n}점`}
           />
         );
@@ -133,7 +135,7 @@ export default function BeanFilterPanel({
           </motion.button>
         )}
       </div>
-      
+
       {/* Search */}
       <div className="mb-6">
         <BeanSearchBar value={searchQuery} onChange={onSearchChange} />
@@ -191,7 +193,18 @@ export default function BeanFilterPanel({
 
       {/* Body */}
       <div className="border-b border-gray-100 py-5">
-        <p className={SECTION_TITLE}>Body</p>
+        <div className="flex items-center justify-between">
+          <p className={SECTION_TITLE}>Body</p>
+          <p className="text-xs text-gray-400">
+            {filters.body === 1
+              ? '가벼움'
+              : filters.body === 2
+                ? '보통'
+                : filters.body === 3
+                  ? '묵직함'
+                  : ''}
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <div className="flex w-full flex-1 flex-col gap-1.5">
             <RatingBar
@@ -200,15 +213,6 @@ export default function BeanFilterPanel({
               onChange={(v) => onChange({ ...filters, body: v as BeanFilterState['body'] })}
             />
           </div>
-          <span className="text-xs text-gray-400">
-            {filters.body === 1
-              ? '가벼움'
-              : filters.body === 2
-                ? '보통'
-                : filters.body === 3
-                  ? '묵직함'
-                  : ''}
-          </span>
         </div>
       </div>
 
