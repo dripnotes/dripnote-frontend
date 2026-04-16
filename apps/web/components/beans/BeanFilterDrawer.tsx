@@ -27,6 +27,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
     <motion.button
       whileTap={{ scale: 0.93 }}
       onClick={onClick}
+      aria-pressed={active}
       className={`cursor-pointer rounded-full px-3 py-1.5 text-xs transition-all ${
         active
           ? 'bg-amber-500 font-semibold text-white shadow-sm'
