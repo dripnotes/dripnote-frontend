@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import {
   AROMA_TYPES,
   type AromaType,
+  DEFAULT_FILTERS,
   type BeanFilterState,
   ROASTING_TYPES,
   type RoastingType,
@@ -140,7 +141,10 @@ export default function BeanFilterPanel({
             <motion.button
               initial={{ opacity: 0, x: 6 }}
               animate={{ opacity: 1, x: 0 }}
-              onClick={onReset}
+              onClick={() => {
+                onReset();
+                setLocalFilters(DEFAULT_FILTERS);
+              }}
               className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
             >
               <RotateCcw className="h-3 w-3" />
