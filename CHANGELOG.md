@@ -12,8 +12,9 @@
 
 | 고유 번호       | 분류   | 작업 명세 (Task)                                                                                     |
 | :-------------- | :----- | :--------------------------------------------------------------------------------------------------- |
-| `CHG-260416-02` | `feat` | [레이아웃 아키텍처 개편 및 모바일 앱 뷰(Bottom Nav) 도입](docs/history/CHG-260416-02.md)               |
-| `CHG-260416-01` | `feat` | [원두 탐색 검색창(BeanSearchBar) 통합 및 UI 구조 일원화](docs/history/CHG-260416-01.md)                |
+| `CHG-260416-03` | `feat` | [원두 페이지 UX 고도화 및 레이아웃 안정화 (Fade 애니메이션)](docs/history/CHG-260416-03.md)          |
+| `CHG-260416-02` | `feat` | [레이아웃 아키텍처 개편 및 모바일 앱 뷰(Bottom Nav) 도입](docs/history/CHG-260416-02.md)             |
+| `CHG-260416-01` | `feat` | [원두 탐색 검색창(BeanSearchBar) 통합 및 UI 구조 일원화](docs/history/CHG-260416-01.md)              |
 | `CHG-260415-05` | `feat` | [원두 정보 페이지 UI 사용성 개선 (Rating Bar 및 레이아웃 최적화)](docs/history/CHG-260415-05.md)     |
 | `CHG-260415-04` | `feat` | [원두 정보 페이지(/beans) 스펙 작성 및 구현](docs/history/CHG-260415-04.md)                          |
 | `CHG-260415-03` | `fix`  | [로그인 페이지 복귀 링크 UX 개선](docs/history/CHG-260415-03.md)                                     |
