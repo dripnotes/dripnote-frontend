@@ -1,7 +1,4 @@
-feat: VisualCard 공통 컴포넌트화 및 카드 UI 리팩토링
+fix: BeanFilterDrawer 모바일 핸들 터치 이슈 수정
 
-- ui-library에 Compound Component 패턴의 VisualCard 구현
-- AromaCard, BeanCard, RecommendedBeanCard를 VisualCard 기반 Preset으로 리팩토링
-- BeanCard의 오버레이 가독성 및 시각적 자연스러움 개선 (전체 영역 그라데이션 적용)
-- AromaNotes, BeanCardList, RecommendedBeans 섹션의 카드 구현부를 신규 Preset으로 대체
-- 불필요하게 파편화된 기존 카드 컴포넌트 파일 제거
+- 핸들 영역(Drag Trigger)에 touch-none 및 select-none 클래스 추가하여 브라우저 제스처 간섭 제거
+- 터치 편의성을 위해 핸들 영역 패딩(Hitbox) 확장

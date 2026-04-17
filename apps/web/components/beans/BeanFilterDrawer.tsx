@@ -174,7 +174,7 @@ export default function BeanFilterDrawer({
             {/* Handle bar Area (Drag Trigger) */}
             <div
               onPointerDown={(e) => dragControls.start(e)}
-              className="flex cursor-grab justify-center pt-4 pb-2 active:cursor-grabbing"
+              className="flex cursor-grab touch-none justify-center pt-5 pb-3 select-none active:cursor-grabbing"
             >
               <div className="h-1.5 w-12 rounded-full bg-gray-200" />
             </div>
