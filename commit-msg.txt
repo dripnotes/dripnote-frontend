@@ -1,4 +1,4 @@
-fix: BeanFilterDrawer 모바일 핸들 터치 이슈 수정
+feat: 원두 탐색 페이지 로고 노출 제어 및 작업 이력 정리
 
-- 핸들 영역(Drag Trigger)에 touch-none 및 select-none 클래스 추가하여 브라우저 제스처 간섭 제거
-- 터치 편의성을 위해 핸들 영역 패딩(Hitbox) 확장
+- 원두 탐색 페이지 상단 로고가 데스크톱에서 중복 노출되는 문제 수정 (md:hidden)
+- 작업 이력 문서(CHG-260417-05) 생성 및 CHANGELOG 업데이트

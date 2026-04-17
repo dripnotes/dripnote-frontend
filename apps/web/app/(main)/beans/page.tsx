@@ -76,7 +76,7 @@ function BeansPageContent() {
               <div className="flex flex-col gap-0.5">
                 <Link
                   href="/"
-                  className="font-playfair text-2xl font-bold tracking-tighter text-gray-900"
+                  className="font-playfair text-2xl font-bold tracking-tighter text-gray-900 md:hidden"
                 >
                   Dripnote
                 </Link>
