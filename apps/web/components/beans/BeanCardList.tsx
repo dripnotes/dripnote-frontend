@@ -2,9 +2,8 @@
 
 import { AnimatePresence } from 'framer-motion';
 
+import BeanCard from '@/components/common/cards/BeanCard';
 import { type BeanInfo } from '@/lib/api/beans';
-
-import BeanCard from './BeanCard';
 
 interface BeanCardListProps {
   beans: BeanInfo[];

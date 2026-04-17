@@ -4,9 +4,8 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
+import AromaCard from '@/components/common/cards/AromaCard';
 import { AromaNote } from '@/lib/api/main';
-
-import AromaCard from './AromaCard';
 
 interface AromaNotesProps {
   aromas: AromaNote[];
