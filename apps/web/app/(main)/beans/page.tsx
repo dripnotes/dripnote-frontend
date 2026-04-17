@@ -2,7 +2,8 @@
 
 import { SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useMemo, useState, useEffect } from 'react';
 
 import BeanCardList from '@/components/beans/BeanCardList';
 import BeanFilterDrawer from '@/components/beans/BeanFilterDrawer';
@@ -13,12 +14,30 @@ import {
   DEFAULT_FILTERS,
   type BeanFilterState,
   mockBeansData,
+  getAromaById,
+  AromaType,
 } from '@/lib/api/beans';
 
-export default function BeansPage() {
+function BeansPageContent() {
+  const searchParams = useSearchParams();
+  const aromaId = searchParams.get('aromaId');
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<BeanFilterState>(DEFAULT_FILTERS);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // URL 파라미터(aromaId)가 있을 경우 초기 필터 반영
+  useEffect(() => {
+    if (aromaId) {
+      const aromaDef = getAromaById(aromaId);
+      if (aromaDef) {
+        setFilters((prev) => ({
+          ...prev,
+          aromas: [aromaDef.ko as AromaType],
+        }));
+      }
+    }
+  }, [aromaId]);
 
   const filteredBeans = useMemo(
     () => applyBeanFilters(mockBeansData, filters, searchQuery),
@@ -84,5 +103,13 @@ export default function BeansPage() {
         onSearchChange={setSearchQuery}
       />
     </PageContainer>
+  );
+}
+
+export default function BeansPage() {
+  return (
+    <Suspense>
+      <BeansPageContent />
+    </Suspense>
   );
 }

@@ -1,5 +1,68 @@
 // Temporary Mock Data for Beans Page until backend API is ready
 
+export interface AromaDefinition {
+  id: string; // 영문 ID (예: 'caramel')
+  ko: string; // 한국어 명칭 (예: '캐러멜')
+  imageUrl: string; // 기본 이미지 URL
+}
+
+export const AROMA_DEFINITIONS: AromaDefinition[] = [
+  {
+    id: 'wine',
+    ko: '와인',
+    imageUrl:
+      'https://images.unsplash.com/photo-1474722883778-792e7990302f?q=80&w=691&auto=format&fit=crop',
+  },
+  {
+    id: 'herb',
+    ko: '허브',
+    imageUrl:
+      'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    id: 'floral',
+    ko: '꽃',
+    imageUrl:
+      'https://images.unsplash.com/photo-1612380635121-411eda9ecbb9?q=80&w=687&auto=format&fit=crop',
+  },
+  {
+    id: 'malt',
+    ko: '맥아',
+    imageUrl:
+      'https://images.unsplash.com/photo-1733276478182-4cc629dadd39?q=80&w=1170&auto=format&fit=crop',
+  },
+  {
+    id: 'nutty',
+    ko: '견과',
+    imageUrl:
+      'https://images.unsplash.com/photo-1508779018996-601e37fa274e?q=80&w=687&auto=format&fit=crop',
+  },
+  {
+    id: 'fruit',
+    ko: '과일',
+    imageUrl:
+      'https://images.unsplash.com/photo-1639588473831-dd9d014646ae?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    id: 'caramel',
+    ko: '캐러멜',
+    imageUrl:
+      'https://plus.unsplash.com/premium_photo-1695865411429-fc175f8d408d?q=80&w=688&auto=format&fit=crop',
+  },
+  {
+    id: 'smoky',
+    ko: '스모키',
+    imageUrl:
+      'https://images.unsplash.com/photo-1621460244277-7038c21f2f32?q=80&w=687&auto=format&fit=crop',
+  },
+  {
+    id: 'chocolate',
+    ko: '초콜릿',
+    imageUrl:
+      'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?q=80&w=600&auto=format&fit=crop',
+  },
+];
+
 export type AromaType =
   | '캐러멜'
   | '와인'
@@ -9,7 +72,8 @@ export type AromaType =
   | '맥아'
   | '견과'
   | '꽃'
-  | '스모크';
+  | '스모키';
+
 export type RoastingType = 'Light' | 'Medium' | 'Dark';
 
 export interface BeanInfo {
@@ -57,21 +121,19 @@ export const AROMA_BG_CLASS: Record<AromaType, string> = {
   맥아: 'bg-aroma-malt',
   견과: 'bg-aroma-nutty',
   꽃: 'bg-aroma-floral',
-  스모크: 'bg-aroma-smoky',
+  스모키: 'bg-aroma-smoky',
 };
 
-export const AROMA_TYPES: AromaType[] = [
-  '캐러멜',
-  '와인',
-  '초콜릿',
-  '과일',
-  '허브',
-  '맥아',
-  '견과',
-  '꽃',
-  '스모크',
-];
+export const AROMA_TYPES: AromaType[] = AROMA_DEFINITIONS.map((def) => def.ko as AromaType);
 export const ROASTING_TYPES: RoastingType[] = ['Light', 'Medium', 'Dark'];
+
+export function getAromaById(id: string) {
+  return AROMA_DEFINITIONS.find((def) => def.id === id);
+}
+
+export function getAromaByKoName(ko: string) {
+  return AROMA_DEFINITIONS.find((def) => def.ko === ko);
+}
 
 export const mockBeansData: BeanInfo[] = [
   {
@@ -136,7 +198,7 @@ export const mockBeansData: BeanInfo[] = [
     origin: 'SUL DE MINAS, BRAZIL',
     primaryAroma: '캐러멜',
     aromaImageUrl:
-      'https://images.unsplash.com/photo-1610450949065-1f2841536c88?q=80&w=600&auto=format&fit=crop',
+      'https://plus.unsplash.com/premium_photo-1695865411429-fc175f8d408d?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     roasting: 'Medium',
     body: 3,
     bitterness: 3,
@@ -148,7 +210,7 @@ export const mockBeansData: BeanInfo[] = [
     id: 6,
     name: 'Sumatra Mandheling G1',
     origin: 'NORTH SUMATRA, INDONESIA',
-    primaryAroma: '스모크',
+    primaryAroma: '스모키',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1621460244277-7038c21f2f32?q=80&w=600&auto=format&fit=crop',
     roasting: 'Dark',
@@ -178,7 +240,7 @@ export const mockBeansData: BeanInfo[] = [
     origin: 'BANI MATAR, YEMEN',
     primaryAroma: '와인',
     aromaImageUrl:
-      'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1474722883778-792e7990302f?q=80&w=691&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     roasting: 'Medium',
     body: 2,
     bitterness: 3,
@@ -206,7 +268,7 @@ export const mockBeansData: BeanInfo[] = [
     origin: 'MARCALA, HONDURAS',
     primaryAroma: '맥아',
     aromaImageUrl:
-      'https://images.unsplash.com/photo-1508779018996-601e37fa274e?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1733276478182-4cc629dadd39?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     roasting: 'Medium',
     body: 2,
     bitterness: 3,
@@ -220,7 +282,7 @@ export const mockBeansData: BeanInfo[] = [
     origin: 'HUYE, RWANDA',
     primaryAroma: '견과',
     aromaImageUrl:
-      'https://images.unsplash.com/photo-1626023873533-f5cc77cc2458?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1508779018996-601e37fa274e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     roasting: 'Light',
     body: 2,
     bitterness: 2,
