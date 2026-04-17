@@ -336,3 +336,69 @@ export function applyBeanFilters(
     return true;
   });
 }
+
+/** 필터 상태를 URL Query String으로 인코딩 */
+export function encodeFiltersToParams(
+  filters: BeanFilterState,
+  searchQuery: string,
+): URLSearchParams {
+  const params = new URLSearchParams();
+
+  if (filters.aromas.length > 0) {
+    const aromaCodes = filters.aromas
+      .map((ko) => AROMA_DEFINITIONS.find((d) => d.ko === ko)?.id)
+      .filter(Boolean)
+      .join(',');
+    if (aromaCodes) params.set('aromas', aromaCodes);
+  }
+
+  if (filters.flavor.bitterness > 0) params.set('bitterness', filters.flavor.bitterness.toString());
+  if (filters.flavor.sweetness > 0) params.set('sweetness', filters.flavor.sweetness.toString());
+  if (filters.flavor.acidity > 0) params.set('acidity', filters.flavor.acidity.toString());
+  if (filters.body > 0) params.set('body', filters.body.toString());
+
+  if (filters.roasting.length > 0) {
+    params.set('roasting', filters.roasting.join(','));
+  }
+
+  if (searchQuery.trim()) params.set('q', searchQuery.trim());
+
+  return params;
+}
+
+/** URL Query String을 필터 상태로 디코딩 */
+export function decodeParamsToFilters(params: URLSearchParams): {
+  filters: BeanFilterState;
+  searchQuery: string;
+} {
+  // 깊은 복사로 기본값 가져오기
+  const filters: BeanFilterState = JSON.parse(JSON.stringify(DEFAULT_FILTERS));
+
+  // aromas 파라미터 처리
+  const aromasParam = params.get('aromas');
+  if (aromasParam) {
+    const ids = aromasParam.split(',');
+    filters.aromas = ids
+      .map((id) => AROMA_DEFINITIONS.find((d) => d.id === id)?.ko)
+      .filter(Boolean) as AromaType[];
+  }
+
+  const b = params.get('bitterness');
+  const s = params.get('sweetness');
+  const a = params.get('acidity');
+  if (b) filters.flavor.bitterness = parseInt(b, 10);
+  if (s) filters.flavor.sweetness = parseInt(s, 10);
+  if (a) filters.flavor.acidity = parseInt(a, 10);
+
+  const body = params.get('body');
+  if (body) filters.body = parseInt(body, 10) as BeanFilterState['body'];
+
+  const roasting = params.get('roasting');
+  if (roasting) {
+    filters.roasting = roasting.split(',') as RoastingType[];
+  }
+
+  const searchQuery = params.get('q') || '';
+
+  return { filters, searchQuery };
+}

@@ -25,7 +25,7 @@ export const mockMainData: MainData = {
     id: def.id,
     name: def.ko,
     imageUrl: def.imageUrl,
-    link: `/beans?aromaId=${def.id}`,
+    link: `/beans?aromas=${def.id}`,
   })),
   recommendedBeans: mockBeansData.slice(0, 3).map((bean) => ({
     id: bean.id,

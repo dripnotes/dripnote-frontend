@@ -2,8 +2,8 @@
 
 import { SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useMemo, useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useMemo, useState } from 'react';
 
 import BeanCardList from '@/components/beans/BeanCardList';
 import BeanFilterDrawer from '@/components/beans/BeanFilterDrawer';
@@ -14,37 +14,45 @@ import {
   DEFAULT_FILTERS,
   type BeanFilterState,
   mockBeansData,
-  getAromaById,
-  AromaType,
+  decodeParamsToFilters,
+  encodeFiltersToParams,
 } from '@/lib/api/beans';
 
 function BeansPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const aromaId = searchParams.get('aromaId');
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<BeanFilterState>(DEFAULT_FILTERS);
+  // URL 파라미터를 기반으로 필터 및 검색어 상태 도출 (Single Source of Truth)
+  const { filters, searchQuery } = useMemo(
+    () => decodeParamsToFilters(searchParams),
+    [searchParams],
+  );
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  // URL 파라미터(aromaId)가 있을 경우 초기 필터 반영
-  useEffect(() => {
-    if (aromaId) {
-      const aromaDef = getAromaById(aromaId);
-      if (aromaDef) {
-        setFilters((prev) => ({
-          ...prev,
-          aromas: [aromaDef.ko as AromaType],
-        }));
-      }
-    }
-  }, [aromaId]);
 
   const filteredBeans = useMemo(
     () => applyBeanFilters(mockBeansData, filters, searchQuery),
     [filters, searchQuery],
   );
 
-  const handleReset = () => setFilters(DEFAULT_FILTERS);
+  /** URL 쿼리 스트링 업데이트 공통 함수 */
+  const updateUrl = (newFilters: BeanFilterState, newSearch: string) => {
+    const params = encodeFiltersToParams(newFilters, newSearch);
+    const queryString = params.toString();
+    router.push(`/beans${queryString ? '?' + queryString : ''}`, { scroll: false });
+  };
+
+  const handleFilterChange = (newFilters: BeanFilterState) => {
+    updateUrl(newFilters, searchQuery);
+  };
+
+  const handleSearchChange = (newSearch: string) => {
+    updateUrl(filters, newSearch);
+  };
+
+  const handleReset = () => {
+    updateUrl(DEFAULT_FILTERS, '');
+  };
 
   return (
     <PageContainer>
@@ -54,10 +62,10 @@ function BeansPageContent() {
           {/* 좌측 필터 패널 (Desktop/Tablet) */}
           <BeanFilterPanel
             filters={filters}
-            onChange={setFilters}
+            onChange={handleFilterChange}
             onReset={handleReset}
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
           />
 
           {/* 우측 카드 목록 */}
@@ -96,11 +104,11 @@ function BeansPageContent() {
       <BeanFilterDrawer
         isOpen={isDrawerOpen}
         filters={filters}
-        onChange={setFilters}
+        onChange={handleFilterChange}
         onReset={handleReset}
         onClose={() => setIsDrawerOpen(false)}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={handleSearchChange}
       />
     </PageContainer>
   );

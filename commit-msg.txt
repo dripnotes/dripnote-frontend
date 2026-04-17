@@ -1,0 +1,6 @@
+feat: 필터 및 검색 설정 URL Query String 동기화
+
+- URL을 필터 상태의 단일 진실 공급원(SSOT)으로 설정
+- encodeFiltersToParams/decodeParamsToFilters 헬퍼 함수 추가 (명칭 'aromas'로 통일)
+- BeansPage 내 Derived State 기반 로직 리팩토링 및 쿼리 파라미터 양방향 동기화 구현
+- 새로고침, 뒤로 가기 및 공유 시 검색 컨텍스트 보존 기능 확보
