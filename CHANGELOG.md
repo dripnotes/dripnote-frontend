@@ -12,6 +12,17 @@
 
 | 고유 번호       | 분류   | 작업 명세 (Task)                                                                                     |
 | :-------------- | :----- | :--------------------------------------------------------------------------------------------------- |
+| `CHG-260420-05` | `docs` | [명세서(Specs) 최신화 및 아키텍처 정합성 정비](docs/history/CHG-260420-05.md)    |
+| `CHG-260420-04` | `perf` | [URL 업데이트 로직 최적화 (replace vs push)](docs/history/CHG-260420-04.md)      |
+| `CHG-260420-03` | `feat` | [VisualCard asChild 패턴 개선 및 카드 컴포넌트 표준화](docs/history/CHG-260420-03.md)  |
+| `CHG-260420-02` | `feat` | [RatingScale 공통 컴포넌트 추출 및 중복 제거](docs/history/CHG-260420-02.md)         |
+| `CHG-260420-01` | `perf` | [beans.ts 내 필터 데이터 복사 로직 최적화](docs/history/CHG-260420-01.md)                     |
+| `CHG-260419-01` | `feat` | [BeanCard 디자인 통합 및 로스팅 지표 숫자형 전환 고도화](docs/history/CHG-260419-01.md)         |
+| `CHG-260417-05` | `fix`  | [원두 탐색 페이지 로고 노출 반응형 제어](docs/history/CHG-260417-05.md)                              |
+| `CHG-260417-04` | `fix`  | [BeanFilterDrawer 모바일 핸들 터치 이슈 수정](docs/history/CHG-260417-04.md)                         |
+| `CHG-260417-03` | `feat` | [VisualCard 공통 컴포넌트화 및 카드 UI 리팩토링](docs/history/CHG-260417-03.md)                      |
+| `CHG-260417-02` | `feat` | [필터 및 검색 설정 URL Query String 동기화](docs/history/CHG-260417-02.md)                           |
+| `CHG-260417-01` | `feat` | [Aroma 명칭 통일 및 메인 페이지 향미 섹션 레이아웃 고도화](docs/history/CHG-260417-01.md)            |
 | `CHG-260416-12` | `docs` | [명세서·작업 이력 문서 정비 및 드로어 UI 고도화](docs/history/CHG-260416-12.md)                      |
 | `CHG-260416-11` | `docs` | [필터링 로직 주석 정합성 및 기획 의도 확인](docs/history/CHG-260416-11.md)                           |
 | `CHG-260416-10` | `fix`  | [BeanSearchBar IME 입력 및 버튼 타입 개선](docs/history/CHG-260416-10.md)                            |

@@ -9,11 +9,10 @@ import {
   type AromaType,
   DEFAULT_FILTERS,
   type BeanFilterState,
-  ROASTING_TYPES,
-  type RoastingType,
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
+import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanFilterPanelProps {
   filters: BeanFilterState;
@@ -29,12 +28,12 @@ const isFiltered = (filters: BeanFilterState) =>
   filters.flavor.sweetness > 0 ||
   filters.flavor.acidity > 0 ||
   filters.body > 0 ||
-  filters.roasting.length > 0;
+  filters.roasting > 0;
 
 const SECTION_TITLE =
   'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-500';
 
-/** 아로마·로스팅 Chip */
+/** 아로마 Chip */
 function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <motion.button
@@ -52,51 +51,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
   );
 }
 
-/** N등분 Rating Bar */
-function RatingBar({
-  max,
-  value,
-  onChange,
-}: {
-  max: number;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  const getActiveColor = (n: number, max: number) => {
-    if (max === 5) {
-      if (n === 1) return 'bg-amber-200';
-      if (n === 2) return 'bg-amber-300';
-      if (n === 3) return 'bg-amber-400';
-      if (n === 4) return 'bg-amber-500';
-      return 'bg-amber-600';
-    } else if (max === 3) {
-      if (n === 1) return 'bg-amber-300';
-      if (n === 2) return 'bg-amber-500';
-      return 'bg-amber-600';
-    }
-    return 'bg-amber-500';
-  };
-
-  return (
-    <div className="flex w-full gap-1 rounded-md bg-transparent">
-      {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
-        const isActive = n <= value;
-        const colorClass = isActive
-          ? `${getActiveColor(n, max)} border-transparent`
-          : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300';
-        return (
-          <motion.button
-            key={n}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onChange(value === n ? 0 : n)}
-            className={`h-7 flex-1 rounded border text-xs transition-colors duration-200 ${colorClass}`}
-            aria-label={`${n}점`}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 export default function BeanFilterPanel({
   filters,
@@ -118,13 +72,6 @@ export default function BeanFilterPanel({
       ? localFilters.aromas.filter((a) => a !== aroma)
       : [...localFilters.aromas, aroma];
     setLocalFilters({ ...localFilters, aromas: next });
-  };
-
-  const toggleRoasting = (r: RoastingType) => {
-    const next = localFilters.roasting.includes(r)
-      ? localFilters.roasting.filter((x) => x !== r)
-      : [...localFilters.roasting, r];
-    setLocalFilters({ ...localFilters, roasting: next });
   };
 
   const handleApply = () => {
@@ -179,7 +126,7 @@ export default function BeanFilterPanel({
           <div className="space-y-3">
             <div>
               <p className="mb-1.5 text-xs text-gray-500">쓴맛</p>
-              <RatingBar
+              <RatingScale
                 max={5}
                 value={localFilters.flavor.bitterness}
                 onChange={(v) =>
@@ -192,7 +139,7 @@ export default function BeanFilterPanel({
             </div>
             <div>
               <p className="mb-1.5 text-xs text-gray-500">단맛</p>
-              <RatingBar
+              <RatingScale
                 max={5}
                 value={localFilters.flavor.sweetness}
                 onChange={(v) =>
@@ -205,7 +152,7 @@ export default function BeanFilterPanel({
             </div>
             <div>
               <p className="mb-1.5 text-xs text-gray-500">산미</p>
-              <RatingBar
+              <RatingScale
                 max={5}
                 value={localFilters.flavor.acidity}
                 onChange={(v) =>
@@ -233,32 +180,36 @@ export default function BeanFilterPanel({
                     : ''}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex w-full flex-1 flex-col gap-1.5">
-              <RatingBar
-                max={3}
-                value={localFilters.body}
-                onChange={(v) =>
-                  setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
-                }
-              />
-            </div>
-          </div>
+          <RatingScale
+            max={3}
+            value={localFilters.body}
+            onChange={(v) =>
+              setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
+            }
+          />
         </div>
 
         {/* Roasting */}
         <div className="pt-5 pb-5">
-          <p className={SECTION_TITLE}>Roasting</p>
-          <div className="flex flex-wrap gap-2">
-            {ROASTING_TYPES.map((r) => (
-              <Chip
-                key={r}
-                label={r}
-                active={localFilters.roasting.includes(r)}
-                onClick={() => toggleRoasting(r)}
-              />
-            ))}
+          <div className="flex items-center justify-between">
+            <p className={SECTION_TITLE}>Roasting</p>
+            <p className="text-xs text-gray-400">
+              {localFilters.roasting === 1
+                ? 'Light'
+                : localFilters.roasting === 2
+                  ? 'Medium'
+                  : localFilters.roasting === 3
+                    ? 'Dark'
+                    : ''}
+            </p>
           </div>
+          <RatingScale
+            max={3}
+            value={localFilters.roasting}
+            onChange={(v) =>
+              setLocalFilters({ ...localFilters, roasting: v as BeanFilterState['roasting'] })
+            }
+          />
         </div>
       </div>
 

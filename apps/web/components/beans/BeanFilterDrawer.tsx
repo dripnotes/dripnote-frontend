@@ -7,11 +7,10 @@ import {
   type AromaType,
   DEFAULT_FILTERS,
   type BeanFilterState,
-  ROASTING_TYPES,
-  type RoastingType,
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
+import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanFilterDrawerProps {
   isOpen: boolean;
@@ -40,48 +39,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
   );
 }
 
-function RatingBar({
-  max,
-  value,
-  onChange,
-}: {
-  max: number;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  const getActiveColor = (n: number, max: number) => {
-    if (max === 5) {
-      if (n === 1) return 'bg-amber-200';
-      if (n === 2) return 'bg-amber-300';
-      if (n === 3) return 'bg-amber-400';
-      if (n === 4) return 'bg-amber-500';
-      return 'bg-amber-600';
-    } else if (max === 3) {
-      if (n === 1) return 'bg-amber-300';
-      if (n === 2) return 'bg-amber-500';
-      return 'bg-amber-600';
-    }
-    return 'bg-amber-500';
-  };
-
-  return (
-    <div className="flex w-full gap-1.5 rounded-md bg-transparent">
-      {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
-        const isActive = n <= value;
-        const colorClass = isActive ? getActiveColor(n, max) : 'bg-gray-100 hover:bg-gray-200';
-        return (
-          <motion.button
-            key={n}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onChange(value === n ? 0 : n)}
-            className={`h-8 flex-1 rounded transition-colors duration-200 ${colorClass}`}
-            aria-label={`${n}점`}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 const SECTION_TITLE =
   'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-400';
@@ -119,13 +76,6 @@ export default function BeanFilterDrawer({
       ? localFilters.aromas.filter((a) => a !== aroma)
       : [...localFilters.aromas, aroma];
     setLocalFilters({ ...localFilters, aromas: next });
-  };
-
-  const toggleRoasting = (r: RoastingType) => {
-    const next = localFilters.roasting.includes(r)
-      ? localFilters.roasting.filter((x) => x !== r)
-      : [...localFilters.roasting, r];
-    setLocalFilters({ ...localFilters, roasting: next });
   };
 
   const handleApply = () => {
@@ -174,7 +124,7 @@ export default function BeanFilterDrawer({
             {/* Handle bar Area (Drag Trigger) */}
             <div
               onPointerDown={(e) => dragControls.start(e)}
-              className="flex cursor-grab justify-center pt-4 pb-2 active:cursor-grabbing"
+              className="flex cursor-grab touch-none justify-center pt-5 pb-3 select-none active:cursor-grabbing"
             >
               <div className="h-1.5 w-12 rounded-full bg-gray-200" />
             </div>
@@ -232,7 +182,8 @@ export default function BeanFilterDrawer({
                       <p className="mb-2 text-xs text-gray-500">
                         {key === 'bitterness' ? '쓴맛' : key === 'sweetness' ? '단맛' : '산미'}
                       </p>
-                      <RatingBar
+                      <RatingScale
+                        variant="sm"
                         max={5}
                         value={localFilters.flavor[key]}
                         onChange={(v) =>
@@ -249,17 +200,8 @@ export default function BeanFilterDrawer({
 
               {/* Body */}
               <div className="border-t border-gray-100 py-5">
-                <p className={SECTION_TITLE}>Body</p>
-                <div className="flex w-full items-center gap-3">
-                  <div className="flex-1">
-                    <RatingBar
-                      max={3}
-                      value={localFilters.body}
-                      onChange={(v) =>
-                        setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
-                      }
-                    />
-                  </div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className={SECTION_TITLE}>Body</p>
                   <span className="text-xs text-gray-400">
                     {localFilters.body === 1
                       ? '가벼움'
@@ -270,21 +212,38 @@ export default function BeanFilterDrawer({
                           : ''}
                   </span>
                 </div>
+                <RatingScale
+                  variant="sm"
+                  max={3}
+                  value={localFilters.body}
+                  onChange={(v) =>
+                    setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
+                  }
+                />
               </div>
 
               {/* Roasting */}
               <div className="border-t border-gray-100 py-5 pb-8">
-                <p className={SECTION_TITLE}>Roasting</p>
-                <div className="flex flex-wrap gap-2">
-                  {ROASTING_TYPES.map((r) => (
-                    <Chip
-                      key={r}
-                      label={r}
-                      active={localFilters.roasting.includes(r)}
-                      onClick={() => toggleRoasting(r)}
-                    />
-                  ))}
+                <div className="flex items-center justify-between mb-3">
+                  <p className={SECTION_TITLE}>Roasting</p>
+                  <span className="text-xs text-gray-400">
+                    {localFilters.roasting === 1
+                      ? 'Light'
+                      : localFilters.roasting === 2
+                        ? 'Medium'
+                        : localFilters.roasting === 3
+                          ? 'Dark'
+                          : ''}
+                  </span>
                 </div>
+                <RatingScale
+                  variant="sm"
+                  max={3}
+                  value={localFilters.roasting}
+                  onChange={(v) =>
+                    setLocalFilters({ ...localFilters, roasting: v as BeanFilterState['roasting'] })
+                  }
+                />
               </div>
             </div>
 

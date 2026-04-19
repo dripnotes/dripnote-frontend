@@ -2,9 +2,8 @@
 
 import { AnimatePresence } from 'framer-motion';
 
+import BeanCard from '@/components/common/cards/BeanCard';
 import { type BeanInfo } from '@/lib/api/beans';
-
-import BeanCard from './BeanCard';
 
 interface BeanCardListProps {
   beans: BeanInfo[];
@@ -42,16 +41,7 @@ export default function BeanCardList({ beans, isLoading }: BeanCardListProps) {
     >
       <AnimatePresence>
         {beans.map((bean, i) => (
-          <BeanCard
-            key={bean.id}
-            id={bean.id}
-            name={bean.name}
-            origin={bean.origin}
-            primaryAroma={bean.primaryAroma}
-            aromaImageUrl={bean.aromaImageUrl}
-            link={bean.link}
-            index={i}
-          />
+          <BeanCard key={bean.id} {...bean} index={i} />
         ))}
       </AnimatePresence>
     </div>

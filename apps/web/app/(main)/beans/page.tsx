@@ -2,7 +2,8 @@
 
 import { SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useMemo, useState } from 'react';
 
 import BeanCardList from '@/components/beans/BeanCardList';
 import BeanFilterDrawer from '@/components/beans/BeanFilterDrawer';
@@ -13,11 +14,20 @@ import {
   DEFAULT_FILTERS,
   type BeanFilterState,
   mockBeansData,
+  decodeParamsToFilters,
+  encodeFiltersToParams,
 } from '@/lib/api/beans';
 
-export default function BeansPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<BeanFilterState>(DEFAULT_FILTERS);
+function BeansPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // URL 파라미터를 기반으로 필터 및 검색어 상태 도출 (Single Source of Truth)
+  const { filters, searchQuery } = useMemo(
+    () => decodeParamsToFilters(searchParams),
+    [searchParams],
+  );
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const filteredBeans = useMemo(
@@ -25,7 +35,34 @@ export default function BeansPage() {
     [filters, searchQuery],
   );
 
-  const handleReset = () => setFilters(DEFAULT_FILTERS);
+  /** URL 쿼리 스트링 업데이트 공통 함수 */
+  const updateUrl = (
+    newFilters: BeanFilterState,
+    newSearch: string,
+    options: { replace?: boolean } = { replace: false },
+  ) => {
+    const params = encodeFiltersToParams(newFilters, newSearch);
+    const queryString = params.toString();
+    const url = `/beans${queryString ? '?' + queryString : ''}`;
+
+    if (options.replace) {
+      router.replace(url, { scroll: false });
+    } else {
+      router.push(url, { scroll: false });
+    }
+  };
+
+  const handleFilterChange = (newFilters: BeanFilterState) => {
+    updateUrl(newFilters, searchQuery, { replace: true });
+  };
+
+  const handleSearchChange = (newSearch: string) => {
+    updateUrl(filters, newSearch, { replace: true });
+  };
+
+  const handleReset = () => {
+    updateUrl(DEFAULT_FILTERS, '', { replace: false });
+  };
 
   return (
     <PageContainer>
@@ -35,10 +72,10 @@ export default function BeansPage() {
           {/* 좌측 필터 패널 (Desktop/Tablet) */}
           <BeanFilterPanel
             filters={filters}
-            onChange={setFilters}
+            onChange={handleFilterChange}
             onReset={handleReset}
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
           />
 
           {/* 우측 카드 목록 */}
@@ -49,7 +86,7 @@ export default function BeansPage() {
               <div className="flex flex-col gap-0.5">
                 <Link
                   href="/"
-                  className="font-playfair text-2xl font-bold tracking-tighter text-gray-900"
+                  className="font-playfair text-2xl font-bold tracking-tighter text-gray-900 md:hidden"
                 >
                   Dripnote
                 </Link>
@@ -77,12 +114,20 @@ export default function BeansPage() {
       <BeanFilterDrawer
         isOpen={isDrawerOpen}
         filters={filters}
-        onChange={setFilters}
+        onChange={handleFilterChange}
         onReset={handleReset}
         onClose={() => setIsDrawerOpen(false)}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={handleSearchChange}
       />
     </PageContainer>
+  );
+}
+
+export default function BeansPage() {
+  return (
+    <Suspense>
+      <BeansPageContent />
+    </Suspense>
   );
 }

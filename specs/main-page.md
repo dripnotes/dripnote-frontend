@@ -12,6 +12,15 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 **메인 무드: "Visual-First Landing"** — 공통 명세의 `Internal Coffee Lab` 무드를 적극 활용하여, 텍스트 설명 대신 고해상도 이미지와 공백(White Space)으로 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
 
+> **변경 사유 (Context)**:
+> - **2026-04-19 추천 섹션 고도화**:
+>   - (일관성) `RecommendedBeanCard`를 제거하고 원두 탐색 페이지와 동일한 `BeanCard` 컴포넌트로 일원화하여 브랜드 무드의 통일성을 확보함.
+>   - (기능) 추천 상품 카드에서도 원두의 향미 프로필(산미, 단맛, 쓴맛, 바디, 로스팅)을 호버 시 오버레이로 즉각 확인할 수 있도록 기능을 확장함.
+>   - (반응형) 디바이스별 보장되는 카드 노출 개수(모바일 2, 태블릿 3, 데스크톱 4)를 그리드 시스템으로 정밀하게 제어함.
+- **2026-04-20 아키텍처 정합성 및 공통화**:
+  - (컴포넌트) `BeanCard`를 공통 디렉토리(`apps/web/components/common/cards/`)로 이동하고, `beans-page.md`의 명세로 SSOT를 단일화함.
+  - (구현 패턴) `ui-library`의 `VisualCard` 기반 Compound Component 패턴 적용 사항 반영.
+
 ---
 
 ## 3. 컴포넌트 명세 (Component Specs)
@@ -310,12 +319,21 @@ interface FlavorCardProps {
 **Props**:
 
 ```ts
-interface BeanItem {
-  bean_name: string; // 원두 이름
-  bean_tasting: string[]; // 향미 노트 배열
-  bean_image_link: string; // 썸네일 이미지 URL
-  bean_link: string; // 원두 상세 페이지 링크
-}
+interface BeanItem
+  extends Pick<
+    BeanInfo,
+    | 'id'
+    | 'name'
+    | 'origin'
+    | 'primaryAroma'
+    | 'aromaImageUrl'
+    | 'link'
+    | 'bitterness'
+    | 'sweetness'
+    | 'acidity'
+    | 'body'
+    | 'roasting'
+  > {}
 
 interface RecommendedBeansProps {
   beans: BeanItem[];
@@ -362,65 +380,9 @@ interface RecommendedBeansProps {
 
 ### BeanCard
 
-#### 1. Overview (맥락)
-
-- **목적**: 단일 추천 원두의 썸네일, 이름, 향미 노트를 카드 형태로 표시하고 상세 페이지로 연결하는 컴포넌트
-- **위치**: `apps/web/components/main/BeanCard.tsx`
-- **부모 컴포넌트**: `RecommendedBeans`
-
-#### 2. Tech Stack & Constraints (기술 및 제약)
-
-- **주요 도구**: `next/image`, `next/link`, `framer-motion`, Tailwind CSS v4
-
-#### 3. Data Interface (I/O)
-
-**Props**:
-
-```ts
-interface BeanCardProps {
-  bean_name: string; // 원두 이름
-  bean_tasting: string[]; // 향미 노트 배열
-  bean_image_link: string; // 썸네일 이미지 URL
-  bean_link: string; // 원두 상세 페이지 링크
-}
-```
-
-**State**: 없음
-
-**Events / Callbacks**: 없음 (`next/link`로 직접 라우팅)
-
-#### 4. UI States (상태 명세)
-
-| 상태        | 트리거 조건 | UI 표현                        |
-| ----------- | ----------- | ------------------------------ |
-| **Default** | 초기 렌더링 | 썸네일 + 원두명 + 향미 태그    |
-| **Hover**   | 마우스 오버 | 카드 부유 효과 (`shadow` 강조) |
-
-#### 5. Functional Requirements (단계별 요구사항)
-
-1. `bean_image_link` 썸네일 이미지를 카드 상단에 표시한다
-2. `bean_name` 원두 이름을 카드 중앙에 표시한다
-3. `bean_tasting` 배열의 향미 노트를 태그 형태로 나열한다
-4. 카드 클릭 시 `bean_link`로 라우팅한다
-
-#### 6. Design Spec (디자인 명세)
-
-- **Layout**: `Secondary-Surface #2A2522` 배경, `rounded-xl`, padding 적용
-- **Animation** (`framer-motion`):
-  - 트리거: 마우스 호버
-  - 효과: `y: 0 → -4`, `shadow` 강조
-  - Duration: `0.2s`, Easing: `ease-out`
-- **Typography**:
-  - 원두명: `Outfit`, SemiBold
-  - 향미 태그: `Inter`, Small, `Brand-Amber #D97706`
-- **Responsive**: 부모 그리드에 따라 크기 자동 조절
-
-#### 7. Definition of Done (검증 기준)
-
-- [ ] (기능) 썸네일, 원두명, 향미 태그가 모두 정상 렌더링된다
-- [ ] (기능) 카드 클릭 시 `bean_link`로 라우팅된다
-- [ ] (인터랙션) 호버 시 카드 부유 효과가 `0.2s ease-out`으로 동작한다
-- [ ] (디자인) 향미 태그 색상이 `Brand-Amber #D97706`이다
+- **명세**: [원두 정보 페이지 명세서(beans-page.md) - BeanCard](beans-page.md#beancard) 항목을 참조하십시오.
+- **위치**: `apps/web/components/common/cards/BeanCard.tsx`
+- **특이사항**: 메인 페이지에서는 `RecommendedBeans` 그리드 내에서 동일한 컴포넌트를 사용하며, 모든 인터랙션(프로필 오버레이 등)이 동일하게 지원됩니다.
 
 ---
 
