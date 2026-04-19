@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { VisualCard } from '@coffee-service/ui-library';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,6 +26,7 @@ export default function AromaCard({
 }: AromaCardProps) {
   return (
     <VisualCard.Root
+      asChild
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -33,9 +35,9 @@ export default function AromaCard({
         duration: 0.5,
         ease: 'easeOut',
       }}
-      className={className}
+      className={cn('h-full w-full', className)}
     >
-      <Link href={link} className="h-full w-full">
+      <Link href={link}>
         <VisualCard.ImageContainer>
           {/* 이미지만 확대 */}
           <VisualCard.Image src={imageUrl} alt={name} asChild hoverScale={1.1}>

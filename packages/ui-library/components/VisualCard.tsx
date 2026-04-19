@@ -14,12 +14,14 @@ interface VisualCardRootProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   children?: React.ReactNode;
 }
 
+const MotionSlot = motion(Slot);
+
 const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
   ({ className, asChild, hoverEffect = 'none', children, ...props }, ref) => {
-    const Component = asChild ? Slot : 'div';
+    const Component = asChild ? MotionSlot : motion.div;
 
     return (
-      <motion.div
+      <Component
         ref={ref}
         className={cn(
           'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300',
@@ -28,8 +30,8 @@ const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
         )}
         {...props}
       >
-        <Component className="h-full w-full">{children}</Component>
-      </motion.div>
+        {children}
+      </Component>
     );
   },
 );

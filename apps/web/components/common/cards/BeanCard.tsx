@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { AROMA_BG_CLASS, type BeanInfo } from '@/lib/api/beans';
+import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanCardProps
   extends Pick<
@@ -29,47 +30,28 @@ interface BeanCardProps
 /**
  * 맛 지표를 표시하는 내부 컴포넌트
  */
-function ProfileIndicator({ label, value, max = 5 }: { label: string; value: number; max?: number }) {
-  // BeanFilterPanel.tsx와 동일한 농도 차등 적용을 위한 색상 매핑 (Hex)
-  const getIndicatorColor = (n: number, max: number) => {
-    if (max === 5) {
-      // amber-200, 300, 400, 500, 600
-      const colors = ['#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706'];
-      return colors[n - 1] ?? colors[4];
-    }
-    if (max === 3) {
-      // amber-300, 500, 600
-      const colors = ['#fcd34d', '#f59e0b', '#d97706'];
-      return colors[n - 1] ?? colors[2];
-    }
-    return '#f59e0b';
-  };
-
+function ProfileIndicator({
+  label,
+  value,
+  max = 5,
+}: {
+  label: string;
+  value: number;
+  max?: number;
+}) {
   return (
     <div className="flex w-[140px] items-center justify-between">
       <span className="font-outfit text-left text-[10px] font-medium tracking-wider text-white/50 uppercase">
         {label === 'Roast' ? 'Roasting' : label}
       </span>
-      {/* 고정 너비(60px) 내에서 그리드로 분할하여 3도트와 5도트의 전체 너비를 일치시킴 */}
-      <div className={`grid w-[60px] gap-1 ${max === 5 ? 'grid-cols-5' : 'grid-cols-3'}`}>
-        {Array.from({ length: max }).map((_, i) => {
-          const n = i + 1;
-          const isActive = n <= value;
-          const activeColor = getIndicatorColor(n, max);
-
-          return (
-            <motion.div
-              key={i}
-              initial={false}
-              animate={{
-                backgroundColor: isActive ? activeColor : 'rgba(255, 255, 255, 0.1)',
-                boxShadow: isActive ? `0 0 8px ${activeColor}66` : 'none',
-              }}
-              className="h-1 w-full rounded-full"
-            />
-          );
-        })}
-      </div>
+      {/* RatingScale 공통 컴포넌트 사용 (Drawer/Mobile용 사이즈인 'sm' 적용하여 콤팩트하게 표현) */}
+      <RatingScale
+        max={max}
+        value={value}
+        onChange={() => {}}
+        variant="sm"
+        className="w-[60px] pointer-events-none"
+      />
     </div>
   );
 }
@@ -94,6 +76,7 @@ export default function BeanCard({
 
   return (
     <VisualCard.Root
+      asChild
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
@@ -103,7 +86,7 @@ export default function BeanCard({
       hoverEffect="translate"
       className={bgClass}
     >
-      <Link href={link} className="group relative block h-full w-full overflow-hidden">
+      <Link href={link}>
         <VisualCard.ImageContainer aspectRatio="3/4">
           <VisualCard.Image src={aromaImageUrl} alt={name} asChild hoverScale={1.1}>
             <Image
