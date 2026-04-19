@@ -44,11 +44,12 @@ function ProfileIndicator({
       <span className="font-outfit text-left text-[10px] font-medium tracking-wider text-white/50 uppercase">
         {label === 'Roast' ? 'Roasting' : label}
       </span>
-      {/* RatingScale 공통 컴포넌트의 'indicator' 변체를 사용하여 슬림한 글로우 지표 구현 */}
+      {/* RatingScale 공통 컴포넌트의 'indicator' 변체와 readOnly 속성을 사용하여 접근성 보강 */}
       <RatingScale
         max={max}
         value={value}
         variant="indicator"
+        readOnly
         className="w-[60px]"
       />
     </div>
@@ -85,20 +86,20 @@ export default function BeanCard({
       hoverEffect="translate"
       className={bgClass}
     >
-      <Link href={link}>
+      <Link href={link} aria-label={`${name} 원두 상세 정보 보기`}>
         <VisualCard.ImageContainer aspectRatio="3/4">
           <VisualCard.Image asChild hoverScale={1.1}>
             <Image
               src={aromaImageUrl}
-              alt={`${primaryAroma} — ${name}`}
+              alt={`${primaryAroma} 향미의 ${name} 원두 이미지`}
               fill
               className="object-cover transition-transform duration-700"
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </VisualCard.Image>
 
-          {/* 호버 시 나타나는 프로필 정보 오버레이 */}
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100">
+          {/* 호버 및 포커스 시 나타나는 프로필 정보 오버레이 (접근성: group-focus-within 추가) */}
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100 group-focus-within:opacity-100">
             <div className="flex flex-col items-center space-y-4">
               {/* 로스터리 마크 (임의의 플레이스홀더) */}
               <div className="flex justify-center">
@@ -117,16 +118,16 @@ export default function BeanCard({
             </div>
           </div>
 
-          {/* 텍스트 가독성을 위한 기본 그라데이션 오버레이 (비호버 시) */}
+          {/* 텍스트 가독성을 위한 기본 그라데이션 오버레이 (비호버 및 비포커스 시) */}
           <VisualCard.Overlay
             variant="bottom"
-            className="z-10 transition-opacity duration-300 group-hover:opacity-0"
+            className="z-10 transition-opacity duration-300 group-hover:opacity-0 group-focus-within:opacity-0"
           />
 
-          {/* 텍스트 영역 (비호버 시 노출) */}
+          {/* 텍스트 영역 (비호버 및 비포커스 시 노출) */}
           <VisualCard.Content
             position="bottom-left"
-            className="z-20 transition-all duration-300 group-hover:translate-y-2 group-hover:opacity-0"
+            className="z-20 transition-all duration-300 group-hover:translate-y-2 group-hover:opacity-0 group-focus-within:translate-y-2 group-focus-within:opacity-0"
           >
             <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
               {origin}

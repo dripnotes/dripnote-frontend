@@ -17,6 +17,8 @@ export interface RatingScaleProps {
    * 'indicator': 정보 표시용 슬림 지표 (h-1, Glow 효과)
    */
   variant?: 'sm' | 'md' | 'indicator';
+  /** 읽기 전용 여부 (포커스 및 클릭 비활성화) */
+  readOnly?: boolean;
   /** 추가 클래스 */
   className?: string;
 }
@@ -24,9 +26,9 @@ export interface RatingScaleProps {
 /**
  * 5단계 평점 보정: 단계별로 Amber-Scale의 농도를 다르게 적용
  */
-const getAmberColor = (n: number, max: number, isIndicator: boolean = false) => {
-  if (isIndicator) {
-    // indicator 모드에서는 Hex 값 반환 (boxShadow와 색상 정합성을 위해)
+const getAmberColor = (n: number, max: number, isPremium: boolean = false) => {
+  if (isPremium) {
+    // Premium 모드(Indicator 또는 ReadOnly)에서는 Hex 값 반환
     if (max === 5) {
       const colors = ['#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706'];
       return colors[n - 1] ?? colors[4];
@@ -64,32 +66,41 @@ const RatingScale = ({
   value,
   onChange,
   variant = 'md',
+  readOnly = false,
   className,
 }: RatingScaleProps) => {
   const isIndicator = variant === 'indicator';
+  const isReadOnly = readOnly || isIndicator;
 
   return (
     <div
       className={cn(
         'flex w-full gap-1 rounded-md bg-transparent',
-        isIndicator && 'pointer-events-none',
+        isReadOnly && 'pointer-events-none',
         className
       )}
+      aria-label={isReadOnly ? `평점: ${value} / ${max}` : undefined}
+      role={isReadOnly ? 'img' : undefined}
     >
       {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
         const isActive = n <= value;
-        const color = getAmberColor(n, max, isIndicator);
+        const color = getAmberColor(n, max, isReadOnly);
 
-        if (isIndicator) {
+        // 읽기 전용이나 인디케이터 모드일 때는 div로 렌더링하여 포커스 방지
+        if (isReadOnly) {
           return (
             <motion.div
               key={n}
               initial={false}
               animate={{
                 backgroundColor: isActive ? color : 'rgba(255, 255, 255, 0.1)',
-                boxShadow: isActive ? `0 0 8px ${color}66` : 'none',
+                boxShadow: (isActive && isIndicator) ? `0 0 8px ${color}66` : 'none',
               }}
-              className="h-1 w-full rounded-full"
+              className={cn(
+                'flex-1 rounded transition-colors duration-200',
+                isIndicator ? 'h-1 rounded-full' : (variant === 'md' ? 'h-7' : 'h-8'),
+                !isIndicator && (isActive ? color : 'bg-gray-100')
+              )}
             />
           );
         }
@@ -109,7 +120,7 @@ const RatingScale = ({
                   : 'bg-gray-100 hover:bg-gray-200',
               variant === 'md' ? 'h-7' : 'h-8'
             )}
-            aria-label={`${n}점`}
+            aria-label={`${n}점 선택`}
           />
         );
       })}
