@@ -12,6 +12,7 @@
 
 | 고유 번호       | 분류   | 작업 명세 (Task)                                                                                     |
 | :-------------- | :----- | :--------------------------------------------------------------------------------------------------- |
+| `CHG-260420-11` | `feat` | [원두 상세 페이지(Detail) 신규 UI 구현](docs/history/CHG-260420-11.md) |
 | `CHG-260420-10` | `feat` | [BeanCard 및 RatingScale 접근성(A11y) 고도화](docs/history/CHG-260420-10.md) |
 | `CHG-260420-09` | `feat` | [VisualCard 라이브러리 인터랙션 고도화 및 버그 수정](docs/history/CHG-260420-09.md) |
 | `CHG-260420-08` | `feat` | [BeanCard 호버 디자인 복원 및 RatingScale 고도화](docs/history/CHG-260420-08.md) |
