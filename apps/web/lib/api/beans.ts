@@ -369,7 +369,11 @@ export function decodeParamsToFilters(params: URLSearchParams): {
   searchQuery: string;
 } {
   // 깊은 복사로 기본값 가져오기
-  const filters: BeanFilterState = JSON.parse(JSON.stringify(DEFAULT_FILTERS));
+  const filters: BeanFilterState = {
+    ...DEFAULT_FILTERS,
+    aromas: [...DEFAULT_FILTERS.aromas],
+    flavor: { ...DEFAULT_FILTERS.flavor },
+  };
 
   // aromas 파라미터 처리
   const aromasParam = params.get('aromas');
