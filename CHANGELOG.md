@@ -12,6 +12,7 @@
 
 | 고유 번호       | 분류   | 작업 명세 (Task)                                                                                     |
 | :-------------- | :----- | :--------------------------------------------------------------------------------------------------- |
+| `CHG-260420-08` | `feat` | [BeanCard 호버 디자인 복원 및 RatingScale 고도화](docs/history/CHG-260420-08.md) |
 | `CHG-260420-07` | `docs` | [원두 상세 페이지(Detail) 명세 작성 및 데이터 확장](docs/history/CHG-260420-07.md) |
 | `CHG-260420-06` | `fix`  | [VisualCard.Image asChild 사용 시 중복 Props 제거](docs/history/CHG-260420-06.md)      |
 | `CHG-260420-05` | `docs` | [명세서(Specs) 최신화 및 아키텍처 정합성 정비](docs/history/CHG-260420-05.md)    |

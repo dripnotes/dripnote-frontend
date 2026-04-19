@@ -44,13 +44,12 @@ function ProfileIndicator({
       <span className="font-outfit text-left text-[10px] font-medium tracking-wider text-white/50 uppercase">
         {label === 'Roast' ? 'Roasting' : label}
       </span>
-      {/* RatingScale 공통 컴포넌트 사용 (Drawer/Mobile용 사이즈인 'sm' 적용하여 콤팩트하게 표현) */}
+      {/* RatingScale 공통 컴포넌트의 'indicator' 변체를 사용하여 슬림한 글로우 지표 구현 */}
       <RatingScale
         max={max}
         value={value}
-        onChange={() => {}}
-        variant="sm"
-        className="w-[60px] pointer-events-none"
+        variant="indicator"
+        className="w-[60px]"
       />
     </div>
   );
