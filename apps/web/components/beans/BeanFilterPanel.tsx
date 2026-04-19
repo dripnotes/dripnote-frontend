@@ -12,6 +12,7 @@ import {
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
+import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanFilterPanelProps {
   filters: BeanFilterState;
@@ -50,51 +51,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
   );
 }
 
-/** N등분 Rating Bar */
-function RatingBar({
-  max,
-  value,
-  onChange,
-}: {
-  max: number;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  const getActiveColor = (n: number, max: number) => {
-    if (max === 5) {
-      if (n === 1) return 'bg-amber-200';
-      if (n === 2) return 'bg-amber-300';
-      if (n === 3) return 'bg-amber-400';
-      if (n === 4) return 'bg-amber-500';
-      return 'bg-amber-600';
-    } else if (max === 3) {
-      if (n === 1) return 'bg-amber-300';
-      if (n === 2) return 'bg-amber-500';
-      return 'bg-amber-600';
-    }
-    return 'bg-amber-500';
-  };
-
-  return (
-    <div className="flex w-full gap-1 rounded-md bg-transparent">
-      {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
-        const isActive = n <= value;
-        const colorClass = isActive
-          ? `${getActiveColor(n, max)} border-transparent`
-          : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300';
-        return (
-          <motion.button
-            key={n}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onChange(value === n ? 0 : n)}
-            className={`h-7 flex-1 rounded border text-xs transition-colors duration-200 ${colorClass}`}
-            aria-label={`${n}점`}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 export default function BeanFilterPanel({
   filters,
@@ -170,7 +126,7 @@ export default function BeanFilterPanel({
           <div className="space-y-3">
             <div>
               <p className="mb-1.5 text-xs text-gray-500">쓴맛</p>
-              <RatingBar
+              <RatingScale
                 max={5}
                 value={localFilters.flavor.bitterness}
                 onChange={(v) =>
@@ -183,7 +139,7 @@ export default function BeanFilterPanel({
             </div>
             <div>
               <p className="mb-1.5 text-xs text-gray-500">단맛</p>
-              <RatingBar
+              <RatingScale
                 max={5}
                 value={localFilters.flavor.sweetness}
                 onChange={(v) =>
@@ -196,7 +152,7 @@ export default function BeanFilterPanel({
             </div>
             <div>
               <p className="mb-1.5 text-xs text-gray-500">산미</p>
-              <RatingBar
+              <RatingScale
                 max={5}
                 value={localFilters.flavor.acidity}
                 onChange={(v) =>
@@ -224,7 +180,7 @@ export default function BeanFilterPanel({
                     : ''}
             </p>
           </div>
-          <RatingBar
+          <RatingScale
             max={3}
             value={localFilters.body}
             onChange={(v) =>
@@ -247,7 +203,7 @@ export default function BeanFilterPanel({
                     : ''}
             </p>
           </div>
-          <RatingBar
+          <RatingScale
             max={3}
             value={localFilters.roasting}
             onChange={(v) =>

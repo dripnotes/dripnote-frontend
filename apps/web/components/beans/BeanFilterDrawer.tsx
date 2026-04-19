@@ -10,6 +10,7 @@ import {
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
+import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanFilterDrawerProps {
   isOpen: boolean;
@@ -38,48 +39,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
   );
 }
 
-function RatingBar({
-  max,
-  value,
-  onChange,
-}: {
-  max: number;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  const getActiveColor = (n: number, max: number) => {
-    if (max === 5) {
-      if (n === 1) return 'bg-amber-200';
-      if (n === 2) return 'bg-amber-300';
-      if (n === 3) return 'bg-amber-400';
-      if (n === 4) return 'bg-amber-500';
-      return 'bg-amber-600';
-    } else if (max === 3) {
-      if (n === 1) return 'bg-amber-300';
-      if (n === 2) return 'bg-amber-500';
-      return 'bg-amber-600';
-    }
-    return 'bg-amber-500';
-  };
-
-  return (
-    <div className="flex w-full gap-1.5 rounded-md bg-transparent">
-      {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
-        const isActive = n <= value;
-        const colorClass = isActive ? getActiveColor(n, max) : 'bg-gray-100 hover:bg-gray-200';
-        return (
-          <motion.button
-            key={n}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onChange(value === n ? 0 : n)}
-            className={`h-8 flex-1 rounded transition-colors duration-200 ${colorClass}`}
-            aria-label={`${n}점`}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 const SECTION_TITLE =
   'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-400';
@@ -223,7 +182,8 @@ export default function BeanFilterDrawer({
                       <p className="mb-2 text-xs text-gray-500">
                         {key === 'bitterness' ? '쓴맛' : key === 'sweetness' ? '단맛' : '산미'}
                       </p>
-                      <RatingBar
+                      <RatingScale
+                        variant="sm"
                         max={5}
                         value={localFilters.flavor[key]}
                         onChange={(v) =>
@@ -252,7 +212,8 @@ export default function BeanFilterDrawer({
                           : ''}
                   </span>
                 </div>
-                <RatingBar
+                <RatingScale
+                  variant="sm"
                   max={3}
                   value={localFilters.body}
                   onChange={(v) =>
@@ -275,7 +236,8 @@ export default function BeanFilterDrawer({
                           : ''}
                   </span>
                 </div>
-                <RatingBar
+                <RatingScale
+                  variant="sm"
                   max={3}
                   value={localFilters.roasting}
                   onChange={(v) =>
