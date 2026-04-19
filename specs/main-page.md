@@ -17,9 +17,9 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 >   - (일관성) `RecommendedBeanCard`를 제거하고 원두 탐색 페이지와 동일한 `BeanCard` 컴포넌트로 일원화하여 브랜드 무드의 통일성을 확보함.
 >   - (기능) 추천 상품 카드에서도 원두의 향미 프로필(산미, 단맛, 쓴맛, 바디, 로스팅)을 호버 시 오버레이로 즉각 확인할 수 있도록 기능을 확장함.
 >   - (반응형) 디바이스별 보장되는 카드 노출 개수(모바일 2, 태블릿 3, 데스크톱 4)를 그리드 시스템으로 정밀하게 제어함.
-- **2026-04-20 아키텍처 정합성 및 공통화**:
-  - (컴포넌트) `BeanCard`를 공통 디렉토리(`apps/web/components/common/cards/`)로 이동하고, `beans-page.md`의 명세로 SSOT를 단일화함.
-  - (구현 패턴) `ui-library`의 `VisualCard` 기반 Compound Component 패턴 적용 사항 반영.
+> - **2026-04-20 아키텍처 정합성 및 공통화**:
+>   - (컴포넌트) `BeanCard`를 공통 디렉토리(`apps/web/components/common/cards/`)로 이동하고, `beans-page.md`의 명세로 SSOT를 단일화함.
+>   - (구현 패턴) `ui-library`의 `VisualCard` 기반 Compound Component 패턴 적용 사항 반영.
 
 ---
 

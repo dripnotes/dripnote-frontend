@@ -32,7 +32,8 @@ const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
         className={cn(
           'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300',
           // Glow는 Transform이 아니므로 CSS 클래스로 처리 (심미적 접근)
-          hoverEffect === 'glow' && 'hover:shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-shadow',
+          hoverEffect === 'glow' &&
+            'transition-shadow hover:shadow-[0_0_20px_rgba(245,158,11,0.35)]',
           className,
         )}
         whileHover={mergedWhileHover}
@@ -100,10 +101,7 @@ const VisualImage = ({
 
   return (
     <MotionComponent
-      className={cn(
-        'h-full w-full object-cover transition-transform duration-500',
-        className,
-      )}
+      className={cn('h-full w-full object-cover transition-transform duration-500', className)}
       whileHover={mergedWhileHover}
       {...(props as any)}
     >
@@ -147,6 +145,7 @@ const Content = ({ className, position = 'bottom-left', children, ...props }: Co
         'absolute z-20 w-full p-6',
         position === 'bottom-left' && 'bottom-0 left-0',
         position === 'center' && 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center',
+        position === 'top-right' && 'right-0 top-0 text-right',
         className,
       )}
       {...props}
