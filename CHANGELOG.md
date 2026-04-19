@@ -12,6 +12,8 @@
 
 | 고유 번호       | 분류   | 작업 명세 (Task)                                                                                     |
 | :-------------- | :----- | :--------------------------------------------------------------------------------------------------- |
+| `CHG-260420-07` | `docs` | [원두 상세 페이지(Detail) 명세 작성 및 데이터 확장](docs/history/CHG-260420-07.md) |
+| `CHG-260420-06` | `fix`  | [VisualCard.Image asChild 사용 시 중복 Props 제거](docs/history/CHG-260420-06.md)      |
 | `CHG-260420-05` | `docs` | [명세서(Specs) 최신화 및 아키텍처 정합성 정비](docs/history/CHG-260420-05.md)    |
 | `CHG-260420-04` | `perf` | [URL 업데이트 로직 최적화 (replace vs push)](docs/history/CHG-260420-04.md)      |
 | `CHG-260420-03` | `feat` | [VisualCard asChild 패턴 개선 및 카드 컴포넌트 표준화](docs/history/CHG-260420-03.md)  |

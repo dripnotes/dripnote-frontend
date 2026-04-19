@@ -91,6 +91,19 @@ export interface BeanInfo {
   /** 산미 1~5 */
   acidity: number;
   link: string;
+  /** 상세 추가 정보 */
+  description?: string; // 원두 소개
+  roastery?: string; // 로스터리 명
+  processing?: string; // 가공 방식 (Natural, Washed 등)
+  variety?: string; // 품종
+  altitude?: string; // 재배 고도
+  recipe?: {
+    method: string; // 추출 기구 (V60, Chemex 등)
+    ratio: string; // 비율 (예: 1:15)
+    temp: string; // 물 온도
+    grind: string; // 분쇄도
+    notes: string; // 추출 팁
+  };
 }
 
 export interface BeanFilterState {
@@ -145,10 +158,21 @@ export const mockBeansData: BeanInfo[] = [
       'https://images.unsplash.com/photo-1568815783141-792f9dcc32fd?q=80&w=600&auto=format&fit=crop',
     roasting: 1,
     body: 1,
-    bitterness: 1,
-    sweetness: 4,
     acidity: 5,
     link: '/beans/1',
+    description:
+      '안티오키아의 풍부한 화산재 토양에서 자란 이 원두는 복숭아와 리치의 화사한 산미가 특징입니다.',
+    roastery: 'Dripnote Lab',
+    processing: 'Washed',
+    variety: 'Caturra',
+    altitude: '1,850m',
+    recipe: {
+      method: 'Hario V60',
+      ratio: '20g coffee : 300g water',
+      temp: '93°C',
+      grind: 'Medium-Fine',
+      notes: '초반 뜸들이기 시간을 충분히 가져가면 복숭아의 단맛을 극대화할 수 있습니다.',
+    },
   },
   {
     id: 2,
@@ -159,10 +183,21 @@ export const mockBeansData: BeanInfo[] = [
       'https://images.unsplash.com/photo-1612380635121-411eda9ecbb9?q=80&w=600&auto=format&fit=crop',
     roasting: 1,
     body: 1,
-    bitterness: 1,
-    sweetness: 3,
     acidity: 4,
     link: '/beans/2',
+    description:
+      '에티오피아 최고 고도에서 자란 이가체프 아리차는 베리류의 달콤함과 자스민의 향긋함이 어우러진 원두입니다.',
+    roastery: 'Aroma Roasters',
+    processing: 'Natural',
+    variety: 'Heirloom',
+    altitude: '2,100m',
+    recipe: {
+      method: 'Kalita Wave',
+      ratio: '18g coffee : 280g water',
+      temp: '91°C',
+      grind: 'Medium',
+      notes: '빠른 추출 속도를 유지하여 자스민의 섬세한 향을 살려보세요.',
+    },
   },
   {
     id: 3,

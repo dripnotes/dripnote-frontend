@@ -590,13 +590,13 @@ HTTP/1.1 400
         "bean_name": "콜롬비아 엘 파라이소",
         "bean_tasting": ["리치", "요거트", "복숭아"],
         "bean_image_link": "이미지 링크",
-        "bean_link": "/beans/detail/12"
+        "bean_link": "/beans/12"
       },
       {
         "bean_name": "케냐 AA 타투 N",
         "bean_tasting": ["자몽", "블랙커런트", "와이니"],
         "bean_image_link": "이미지 링크",
-        "bean_link": "/beans/detail/11"
+        "bean_link": "/beans/11"
       }
     ]
   }

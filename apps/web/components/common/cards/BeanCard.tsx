@@ -88,7 +88,7 @@ export default function BeanCard({
     >
       <Link href={link}>
         <VisualCard.ImageContainer aspectRatio="3/4">
-          <VisualCard.Image src={aromaImageUrl} alt={name} asChild hoverScale={1.1}>
+          <VisualCard.Image asChild hoverScale={1.1}>
             <Image
               src={aromaImageUrl}
               alt={`${primaryAroma} — ${name}`}

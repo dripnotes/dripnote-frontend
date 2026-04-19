@@ -40,7 +40,7 @@ export default function AromaCard({
       <Link href={link}>
         <VisualCard.ImageContainer>
           {/* 이미지만 확대 */}
-          <VisualCard.Image src={imageUrl} alt={name} asChild hoverScale={1.1}>
+          <VisualCard.Image asChild hoverScale={1.1}>
             <Image
               src={imageUrl}
               alt={name}
