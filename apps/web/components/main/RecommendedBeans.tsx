@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-import RecommendedBeanCard from '@/components/common/cards/RecommendedBeanCard';
+import BeanCard from '@/components/common/cards/BeanCard';
 import { RecommendedBean } from '@/lib/api/main';
 
 interface RecommendedBeansProps {
@@ -32,9 +32,16 @@ export default function RecommendedBeans({ beans }: RecommendedBeansProps) {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8">
           {beans.map((bean, idx) => (
-            <RecommendedBeanCard key={bean.id} bean={bean} index={idx} />
+            <div
+              key={bean.id}
+              className={`${idx >= 4 ? 'hidden' : ''} ${idx === 3 ? 'hidden lg:block' : ''} ${
+                idx === 2 ? 'hidden md:block' : ''
+              }`}
+            >
+              <BeanCard {...bean} index={idx} />
+            </div>
           ))}
         </div>
       </div>

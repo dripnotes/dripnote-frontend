@@ -9,8 +9,6 @@ import {
   type AromaType,
   DEFAULT_FILTERS,
   type BeanFilterState,
-  ROASTING_TYPES,
-  type RoastingType,
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
@@ -29,12 +27,12 @@ const isFiltered = (filters: BeanFilterState) =>
   filters.flavor.sweetness > 0 ||
   filters.flavor.acidity > 0 ||
   filters.body > 0 ||
-  filters.roasting.length > 0;
+  filters.roasting > 0;
 
 const SECTION_TITLE =
   'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-500';
 
-/** 아로마·로스팅 Chip */
+/** 아로마 Chip */
 function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <motion.button
@@ -118,13 +116,6 @@ export default function BeanFilterPanel({
       ? localFilters.aromas.filter((a) => a !== aroma)
       : [...localFilters.aromas, aroma];
     setLocalFilters({ ...localFilters, aromas: next });
-  };
-
-  const toggleRoasting = (r: RoastingType) => {
-    const next = localFilters.roasting.includes(r)
-      ? localFilters.roasting.filter((x) => x !== r)
-      : [...localFilters.roasting, r];
-    setLocalFilters({ ...localFilters, roasting: next });
   };
 
   const handleApply = () => {
@@ -233,32 +224,36 @@ export default function BeanFilterPanel({
                     : ''}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex w-full flex-1 flex-col gap-1.5">
-              <RatingBar
-                max={3}
-                value={localFilters.body}
-                onChange={(v) =>
-                  setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
-                }
-              />
-            </div>
-          </div>
+          <RatingBar
+            max={3}
+            value={localFilters.body}
+            onChange={(v) =>
+              setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
+            }
+          />
         </div>
 
         {/* Roasting */}
         <div className="pt-5 pb-5">
-          <p className={SECTION_TITLE}>Roasting</p>
-          <div className="flex flex-wrap gap-2">
-            {ROASTING_TYPES.map((r) => (
-              <Chip
-                key={r}
-                label={r}
-                active={localFilters.roasting.includes(r)}
-                onClick={() => toggleRoasting(r)}
-              />
-            ))}
+          <div className="flex items-center justify-between">
+            <p className={SECTION_TITLE}>Roasting</p>
+            <p className="text-xs text-gray-400">
+              {localFilters.roasting === 1
+                ? 'Light'
+                : localFilters.roasting === 2
+                  ? 'Medium'
+                  : localFilters.roasting === 3
+                    ? 'Dark'
+                    : ''}
+            </p>
           </div>
+          <RatingBar
+            max={3}
+            value={localFilters.roasting}
+            onChange={(v) =>
+              setLocalFilters({ ...localFilters, roasting: v as BeanFilterState['roasting'] })
+            }
+          />
         </div>
       </div>
 

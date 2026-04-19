@@ -74,7 +74,7 @@ export type AromaType =
   | '꽃'
   | '스모키';
 
-export type RoastingType = 'Light' | 'Medium' | 'Dark';
+export type RoastingType = 1 | 2 | 3; // 1: Light, 2: Medium, 3: Dark
 
 export interface BeanInfo {
   id: number;
@@ -101,14 +101,14 @@ export interface BeanFilterState {
     acidity: number;
   };
   body: 0 | 1 | 2 | 3; // 0 = 미선택
-  roasting: RoastingType[];
+  roasting: 0 | 1 | 2 | 3; // 0 = 미선택
 }
 
 export const DEFAULT_FILTERS: BeanFilterState = {
   aromas: [],
   flavor: { bitterness: 0, sweetness: 0, acidity: 0 },
   body: 0,
-  roasting: [],
+  roasting: 0,
 };
 
 /** AromaType → Tailwind 배경 클래스 매핑 */
@@ -125,7 +125,7 @@ export const AROMA_BG_CLASS: Record<AromaType, string> = {
 };
 
 export const AROMA_TYPES: AromaType[] = AROMA_DEFINITIONS.map((def) => def.ko as AromaType);
-export const ROASTING_TYPES: RoastingType[] = ['Light', 'Medium', 'Dark'];
+export const ROASTING_TYPES: RoastingType[] = [1, 2, 3];
 
 export function getAromaById(id: string) {
   return AROMA_DEFINITIONS.find((def) => def.id === id);
@@ -143,7 +143,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '과일',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1568815783141-792f9dcc32fd?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Light',
+    roasting: 1,
     body: 1,
     bitterness: 1,
     sweetness: 4,
@@ -157,7 +157,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '꽃',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1612380635121-411eda9ecbb9?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Light',
+    roasting: 1,
     body: 1,
     bitterness: 1,
     sweetness: 3,
@@ -171,7 +171,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '과일',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1639588473831-dd9d014646ae?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Medium',
+    roasting: 2,
     body: 2,
     bitterness: 2,
     sweetness: 3,
@@ -185,7 +185,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '초콜릿',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1571091799989-e88304d6aed3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    roasting: 'Medium',
+    roasting: 2,
     body: 2,
     bitterness: 3,
     sweetness: 4,
@@ -199,7 +199,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '캐러멜',
     aromaImageUrl:
       'https://plus.unsplash.com/premium_photo-1695865411429-fc175f8d408d?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    roasting: 'Medium',
+    roasting: 2,
     body: 3,
     bitterness: 3,
     sweetness: 5,
@@ -213,7 +213,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '스모키',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1621460244277-7038c21f2f32?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Dark',
+    roasting: 3,
     body: 3,
     bitterness: 5,
     sweetness: 2,
@@ -227,7 +227,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '꽃',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Light',
+    roasting: 1,
     body: 1,
     bitterness: 1,
     sweetness: 4,
@@ -241,7 +241,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '와인',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1474722883778-792e7990302f?q=80&w=691&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    roasting: 'Medium',
+    roasting: 2,
     body: 2,
     bitterness: 3,
     sweetness: 3,
@@ -255,7 +255,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '허브',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Medium',
+    roasting: 2,
     body: 2,
     bitterness: 2,
     sweetness: 3,
@@ -269,7 +269,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '맥아',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1733276478182-4cc629dadd39?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    roasting: 'Medium',
+    roasting: 2,
     body: 2,
     bitterness: 3,
     sweetness: 3,
@@ -283,7 +283,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '견과',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1508779018996-601e37fa274e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    roasting: 'Light',
+    roasting: 1,
     body: 2,
     bitterness: 2,
     sweetness: 4,
@@ -297,7 +297,7 @@ export const mockBeansData: BeanInfo[] = [
     primaryAroma: '초콜릿',
     aromaImageUrl:
       'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?q=80&w=600&auto=format&fit=crop',
-    roasting: 'Dark',
+    roasting: 3,
     body: 3,
     bitterness: 4,
     sweetness: 3,
@@ -332,7 +332,7 @@ export function applyBeanFilters(
     // 바디감 필터
     if (filters.body > 0 && bean.body !== filters.body) return false;
     // 로스팅 필터
-    if (filters.roasting.length > 0 && !filters.roasting.includes(bean.roasting)) return false;
+    if (filters.roasting > 0 && bean.roasting !== filters.roasting) return false;
     return true;
   });
 }
@@ -356,10 +356,7 @@ export function encodeFiltersToParams(
   if (filters.flavor.sweetness > 0) params.set('sweetness', filters.flavor.sweetness.toString());
   if (filters.flavor.acidity > 0) params.set('acidity', filters.flavor.acidity.toString());
   if (filters.body > 0) params.set('body', filters.body.toString());
-
-  if (filters.roasting.length > 0) {
-    params.set('roasting', filters.roasting.join(','));
-  }
+  if (filters.roasting > 0) params.set('roasting', filters.roasting.toString());
 
   if (searchQuery.trim()) params.set('q', searchQuery.trim());
 
@@ -394,9 +391,7 @@ export function decodeParamsToFilters(params: URLSearchParams): {
   if (body) filters.body = parseInt(body, 10) as BeanFilterState['body'];
 
   const roasting = params.get('roasting');
-  if (roasting) {
-    filters.roasting = roasting.split(',') as RoastingType[];
-  }
+  if (roasting) filters.roasting = parseInt(roasting, 10) as BeanFilterState['roasting'];
 
   const searchQuery = params.get('q') || '';
 

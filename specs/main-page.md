@@ -12,6 +12,12 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 **메인 무드: "Visual-First Landing"** — 공통 명세의 `Internal Coffee Lab` 무드를 적극 활용하여, 텍스트 설명 대신 고해상도 이미지와 공백(White Space)으로 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
 
+> **변경 사유 (Context)**:
+> - **2026-04-19 추천 섹션 고도화**:
+>   - (일관성) `RecommendedBeanCard`를 제거하고 원두 탐색 페이지와 동일한 `BeanCard` 컴포넌트로 일원화하여 브랜드 무드의 통일성을 확보함.
+>   - (기능) 추천 상품 카드에서도 원두의 향미 프로필(산미, 단맛, 쓴맛, 바디, 로스팅)을 호버 시 오버레이로 즉각 확인할 수 있도록 기능을 확장함.
+>   - (반응형) 디바이스별 보장되는 카드 노출 개수(모바일 2, 태블릿 3, 데스크톱 4)를 그리드 시스템으로 정밀하게 제어함.
+
 ---
 
 ## 3. 컴포넌트 명세 (Component Specs)
@@ -310,12 +316,21 @@ interface FlavorCardProps {
 **Props**:
 
 ```ts
-interface BeanItem {
-  bean_name: string; // 원두 이름
-  bean_tasting: string[]; // 향미 노트 배열
-  bean_image_link: string; // 썸네일 이미지 URL
-  bean_link: string; // 원두 상세 페이지 링크
-}
+interface BeanItem
+  extends Pick<
+    BeanInfo,
+    | 'id'
+    | 'name'
+    | 'origin'
+    | 'primaryAroma'
+    | 'aromaImageUrl'
+    | 'link'
+    | 'bitterness'
+    | 'sweetness'
+    | 'acidity'
+    | 'body'
+    | 'roasting'
+  > {}
 
 interface RecommendedBeansProps {
   beans: BeanItem[];
@@ -377,11 +392,22 @@ interface RecommendedBeansProps {
 **Props**:
 
 ```ts
-interface BeanCardProps {
-  bean_name: string; // 원두 이름
-  bean_tasting: string[]; // 향미 노트 배열
-  bean_image_link: string; // 썸네일 이미지 URL
-  bean_link: string; // 원두 상세 페이지 링크
+interface BeanCardProps
+  extends Pick<
+    BeanInfo,
+    | 'id'
+    | 'name'
+    | 'origin'
+    | 'primaryAroma'
+    | 'aromaImageUrl'
+    | 'link'
+    | 'bitterness'
+    | 'sweetness'
+    | 'acidity'
+    | 'body'
+    | 'roasting'
+  > {
+  index?: number;
 }
 ```
 
@@ -393,15 +419,16 @@ interface BeanCardProps {
 
 | 상태        | 트리거 조건 | UI 표현                        |
 | ----------- | ----------- | ------------------------------ |
-| **Default** | 초기 렌더링 | 썸네일 + 원두명 + 향미 태그    |
-| **Hover**   | 마우스 오버 | 카드 부유 효과 (`shadow` 강조) |
+| **Default** | 초기 렌더링 | 풀-사이즈 배경 이미지 + 하단 그라데이션 + 화이트 텍스트 |
+| **Hover**   | 마우스 오버 | 카드 부유 + 배경 이미지 확대 + **향미 프로필 오버레이** 노출 |
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `bean_image_link` 썸네일 이미지를 카드 상단에 표시한다
-2. `bean_name` 원두 이름을 카드 중앙에 표시한다
-3. `bean_tasting` 배열의 향미 노트를 태그 형태로 나열한다
-4. 카드 클릭 시 `bean_link`로 라우팅한다
+1. `aromaImageUrl`을 카드 전체 배경으로 사용한다 (`fill`, `object-cover`)
+2. 하단 60% 영역에 선형 그라데이션을 적용하여 텍스트 가독성을 확보한다
+3. 호버 시 카드가 부유하며 **커피 프로필(Acidity, Sweetness, Bitterness, Body, Roasting) 정보가 오버레이와 Backdrop Blur 효과와 함께 나타난다.**
+4. 오버레이 상단에 **로스터리 마크**를 표시한다.
+5. 클릭 시 `link`로 라우팅한다.
 
 #### 6. Design Spec (디자인 명세)
 

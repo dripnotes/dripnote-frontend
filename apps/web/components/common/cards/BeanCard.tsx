@@ -1,27 +1,94 @@
 'use client';
 
 import { VisualCard } from '@coffee-service/ui-library';
+import { motion } from 'framer-motion';
+import { Coffee } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AROMA_BG_CLASS, type BeanInfo } from '@/lib/api/beans';
 
 interface BeanCardProps
-  extends Omit<BeanInfo, 'bitterness' | 'sweetness' | 'acidity' | 'roasting' | 'body'> {
+  extends Pick<
+    BeanInfo,
+    | 'id'
+    | 'name'
+    | 'origin'
+    | 'primaryAroma'
+    | 'aromaImageUrl'
+    | 'link'
+    | 'bitterness'
+    | 'sweetness'
+    | 'acidity'
+    | 'roasting'
+    | 'body'
+  > {
   index?: number;
 }
 
 /**
+ * 맛 지표를 표시하는 내부 컴포넌트
+ */
+function ProfileIndicator({ label, value, max = 5 }: { label: string; value: number; max?: number }) {
+  // BeanFilterPanel.tsx와 동일한 농도 차등 적용을 위한 색상 매핑 (Hex)
+  const getIndicatorColor = (n: number, max: number) => {
+    if (max === 5) {
+      // amber-200, 300, 400, 500, 600
+      const colors = ['#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706'];
+      return colors[n - 1] ?? colors[4];
+    }
+    if (max === 3) {
+      // amber-300, 500, 600
+      const colors = ['#fcd34d', '#f59e0b', '#d97706'];
+      return colors[n - 1] ?? colors[2];
+    }
+    return '#f59e0b';
+  };
+
+  return (
+    <div className="flex w-[140px] items-center justify-between">
+      <span className="font-outfit text-left text-[10px] font-medium tracking-wider text-white/50 uppercase">
+        {label === 'Roast' ? 'Roasting' : label}
+      </span>
+      {/* 고정 너비(60px) 내에서 그리드로 분할하여 3도트와 5도트의 전체 너비를 일치시킴 */}
+      <div className={`grid w-[60px] gap-1 ${max === 5 ? 'grid-cols-5' : 'grid-cols-3'}`}>
+        {Array.from({ length: max }).map((_, i) => {
+          const n = i + 1;
+          const isActive = n <= value;
+          const activeColor = getIndicatorColor(n, max);
+
+          return (
+            <motion.div
+              key={i}
+              initial={false}
+              animate={{
+                backgroundColor: isActive ? activeColor : 'rgba(255, 255, 255, 0.1)',
+                boxShadow: isActive ? `0 0 8px ${activeColor}66` : 'none',
+              }}
+              className="h-1 w-full rounded-full"
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/**
  * BeanCard - 원두 상품 이미지 카드 (VisualCard Compound Pattern 적용)
+ * 디자인 고도화: 호버 시 원두 프로필(맛, 바디, 로스팅) 정보를 오버레이로 표시
  */
 export default function BeanCard({
-  id,
   name,
   origin,
   primaryAroma,
   aromaImageUrl,
   link,
-  index = 0,
+  bitterness,
+  sweetness,
+  acidity,
+  roasting,
+  body,
 }: BeanCardProps) {
   const bgClass = AROMA_BG_CLASS[primaryAroma] ?? 'bg-gray-100';
 
@@ -36,23 +103,49 @@ export default function BeanCard({
       hoverEffect="translate"
       className={bgClass}
     >
-      <Link href={link} className="h-full w-full">
+      <Link href={link} className="group relative block h-full w-full overflow-hidden">
         <VisualCard.ImageContainer aspectRatio="3/4">
           <VisualCard.Image src={aromaImageUrl} alt={name} asChild hoverScale={1.1}>
             <Image
               src={aromaImageUrl}
               alt={`${primaryAroma} — ${name}`}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-700"
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </VisualCard.Image>
 
-          {/* 텍스트 가독성을 위한 그라데이션 오버레이 */}
-          <VisualCard.Overlay variant="bottom" />
+          {/* 호버 시 나타나는 프로필 정보 오버레이 */}
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100">
+            <div className="flex flex-col items-center space-y-4">
+              {/* 로스터리 마크 (임의의 플레이스홀더) */}
+              <div className="flex justify-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">
+                  <Coffee className="h-5 w-5 text-white/80" />
+                </div>
+              </div>
 
-          {/* 텍스트 영역 */}
-          <VisualCard.Content position="bottom-left">
+              <div className="space-y-3">
+                <ProfileIndicator label="Acidity" value={acidity} />
+                <ProfileIndicator label="Sweetness" value={sweetness} />
+                <ProfileIndicator label="Bitterness" value={bitterness} />
+                <ProfileIndicator label="Body" value={body} max={3} />
+                <ProfileIndicator label="Roast" value={roasting} max={3} />
+              </div>
+            </div>
+          </div>
+
+          {/* 텍스트 가독성을 위한 기본 그라데이션 오버레이 (비호버 시) */}
+          <VisualCard.Overlay
+            variant="bottom"
+            className="z-10 transition-opacity duration-300 group-hover:opacity-0"
+          />
+
+          {/* 텍스트 영역 (비호버 시 노출) */}
+          <VisualCard.Content
+            position="bottom-left"
+            className="z-20 transition-all duration-300 group-hover:translate-y-2 group-hover:opacity-0"
+          >
             <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
               {origin}
             </p>
