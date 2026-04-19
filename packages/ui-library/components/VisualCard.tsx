@@ -99,7 +99,7 @@ const VisualImage = ({
       )}
       {...props}
     >
-      {children}
+      {asChild && children}
     </Component>
   );
 };
