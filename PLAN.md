@@ -64,3 +64,4 @@
 - [x] Phase 8.1: `beans.ts` 내 `JSON.parse(JSON.stringify)` 복사 로직 최적화 ✅
 - [x] Phase 8.2: `RatingScale` 공통 컴포넌트 추출 및 중복 제거 ✅
 - [x] Phase 8.3: `VisualCard.Root` asChild 패턴 개선 및 카드 컴포넌트 리팩토링 ✅
+- [x] Phase 8.4: URL 업데이트 로직 최적화 (replace vs push) ✅

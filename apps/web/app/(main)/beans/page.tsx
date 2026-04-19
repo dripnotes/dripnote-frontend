@@ -36,22 +36,32 @@ function BeansPageContent() {
   );
 
   /** URL 쿼리 스트링 업데이트 공통 함수 */
-  const updateUrl = (newFilters: BeanFilterState, newSearch: string) => {
+  const updateUrl = (
+    newFilters: BeanFilterState,
+    newSearch: string,
+    options: { replace?: boolean } = { replace: false },
+  ) => {
     const params = encodeFiltersToParams(newFilters, newSearch);
     const queryString = params.toString();
-    router.push(`/beans${queryString ? '?' + queryString : ''}`, { scroll: false });
+    const url = `/beans${queryString ? '?' + queryString : ''}`;
+
+    if (options.replace) {
+      router.replace(url, { scroll: false });
+    } else {
+      router.push(url, { scroll: false });
+    }
   };
 
   const handleFilterChange = (newFilters: BeanFilterState) => {
-    updateUrl(newFilters, searchQuery);
+    updateUrl(newFilters, searchQuery, { replace: true });
   };
 
   const handleSearchChange = (newSearch: string) => {
-    updateUrl(filters, newSearch);
+    updateUrl(filters, newSearch, { replace: true });
   };
 
   const handleReset = () => {
-    updateUrl(DEFAULT_FILTERS, '');
+    updateUrl(DEFAULT_FILTERS, '', { replace: false });
   };
 
   return (
