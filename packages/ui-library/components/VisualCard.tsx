@@ -17,17 +17,25 @@ interface VisualCardRootProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
 const MotionSlot = motion(Slot);
 
 const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
-  ({ className, asChild, hoverEffect = 'none', children, ...props }, ref) => {
+  ({ className, asChild, hoverEffect = 'none', children, whileHover, ...props }, ref) => {
     const Component = asChild ? MotionSlot : motion.div;
+
+    // Framer Motion을 이용한 트랜스포름 제어 (CSS와 충돌 방지)
+    const mergedWhileHover = {
+      ...(hoverEffect === 'translate' && { y: -8 }),
+      ...(typeof whileHover === 'object' ? whileHover : {}),
+    };
 
     return (
       <Component
         ref={ref}
         className={cn(
           'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300',
-          hoverEffect === 'translate' && 'hover:-translate-y-2',
+          // Glow는 Transform이 아니므로 CSS 클래스로 처리 (심미적 접근)
+          hoverEffect === 'glow' && 'hover:shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-shadow',
           className,
         )}
+        whileHover={mergedWhileHover}
         {...props}
       >
         {children}
@@ -66,8 +74,8 @@ const ImageContainer = ({
 };
 ImageContainer.displayName = 'VisualCard.ImageContainer';
 
-interface VisualCardImageProps extends React.HTMLAttributes<HTMLElement> {
-  hoverScale?: 1.05 | 1.1 | 1.15 | number;
+interface VisualCardImageProps extends Omit<HTMLMotionProps<'img'>, 'src' | 'alt'> {
+  hoverScale?: number;
   asChild?: boolean;
   src?: string;
   alt?: string;
@@ -78,29 +86,29 @@ const VisualImage = ({
   hoverScale = 1.1,
   asChild,
   children,
+  whileHover,
   ...props
 }: VisualCardImageProps) => {
   const Component = asChild ? Slot : 'img';
+  const MotionComponent = asChild ? MotionSlot : motion.img;
 
-  // Tailwind JIT를 위해 하드코딩된 클래스 매핑 사용
-  const scaleClass =
-    hoverScale === 1.05
-      ? 'group-hover:scale-105'
-      : hoverScale === 1.15
-        ? 'group-hover:scale-115'
-        : 'group-hover:scale-110'; // Default to 1.1
+  // Transform 충돌 방지를 위해 whileHover로 scale 제어
+  const mergedWhileHover = {
+    scale: hoverScale,
+    ...(typeof whileHover === 'object' ? whileHover : {}),
+  };
 
   return (
-    <Component
+    <MotionComponent
       className={cn(
         'h-full w-full object-cover transition-transform duration-500',
-        scaleClass,
         className,
       )}
-      {...props}
+      whileHover={mergedWhileHover}
+      {...(props as any)}
     >
       {asChild && children}
-    </Component>
+    </MotionComponent>
   );
 };
 VisualImage.displayName = 'VisualCard.Image';
