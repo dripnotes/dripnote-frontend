@@ -1,10 +1,13 @@
-import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import PageContainer from '@/components/layout/PageContainer';
 import { mockBeansData } from '@/lib/api/beans';
+
 import { BeanDetailHero } from './_components/BeanDetailHero';
-import { FlavorProfileSection } from './_components/FlavorProfileSection';
 import { BeanInfoTable } from './_components/BeanInfoTable';
 import { BrewingGuide } from './_components/BrewingGuide';
+import { FlavorProfileSection } from './_components/FlavorProfileSection';
 
 interface Props {
   params: {
@@ -25,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const title = `${bean.name} - ${bean.roastery || 'Dripnote'}`;
-  const description = bean.description || `${bean.origin}에서 온 ${bean.primaryAroma} 향미의 매력적인 원두입니다.`;
+  const description =
+    bean.description || `${bean.origin}에서 온 ${bean.primaryAroma} 향미의 매력적인 원두입니다.`;
 
   return {
     title,
@@ -52,7 +56,7 @@ export default function BeanDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-white min-h-screen">
+    <PageContainer>
       <BeanDetailHero
         name={bean.name}
         origin={bean.origin}
@@ -75,6 +79,6 @@ export default function BeanDetailPage({ params }: Props) {
         description={bean.description}
       />
       <BrewingGuide recipe={bean.recipe} />
-    </div>
+    </PageContainer>
   );
 }

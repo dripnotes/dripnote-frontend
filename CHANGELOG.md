@@ -12,18 +12,19 @@
 
 | 고유 번호       | 분류   | 작업 명세 (Task)                                                                                     |
 | :-------------- | :----- | :--------------------------------------------------------------------------------------------------- |
-| `CHG-260420-11` | `feat` | [원두 상세 페이지(Detail) 신규 UI 구현](docs/history/CHG-260420-11.md) |
-| `CHG-260420-10` | `feat` | [BeanCard 및 RatingScale 접근성(A11y) 고도화](docs/history/CHG-260420-10.md) |
-| `CHG-260420-09` | `feat` | [VisualCard 라이브러리 인터랙션 고도화 및 버그 수정](docs/history/CHG-260420-09.md) |
-| `CHG-260420-08` | `feat` | [BeanCard 호버 디자인 복원 및 RatingScale 고도화](docs/history/CHG-260420-08.md) |
-| `CHG-260420-07` | `docs` | [원두 상세 페이지(Detail) 명세 작성 및 데이터 확장](docs/history/CHG-260420-07.md) |
-| `CHG-260420-06` | `fix`  | [VisualCard.Image asChild 사용 시 중복 Props 제거](docs/history/CHG-260420-06.md)      |
-| `CHG-260420-05` | `docs` | [명세서(Specs) 최신화 및 아키텍처 정합성 정비](docs/history/CHG-260420-05.md)    |
-| `CHG-260420-04` | `perf` | [URL 업데이트 로직 최적화 (replace vs push)](docs/history/CHG-260420-04.md)      |
-| `CHG-260420-03` | `feat` | [VisualCard asChild 패턴 개선 및 카드 컴포넌트 표준화](docs/history/CHG-260420-03.md)  |
-| `CHG-260420-02` | `feat` | [RatingScale 공통 컴포넌트 추출 및 중복 제거](docs/history/CHG-260420-02.md)         |
-| `CHG-260420-01` | `perf` | [beans.ts 내 필터 데이터 복사 로직 최적화](docs/history/CHG-260420-01.md)                     |
-| `CHG-260419-01` | `feat` | [BeanCard 디자인 통합 및 로스팅 지표 숫자형 전환 고도화](docs/history/CHG-260419-01.md)         |
+| `CHG-260420-12` | `docs` | [원두 상세 페이지 명세 고도화 및 레이아웃 래퍼/링크 버그 수정](docs/history/CHG-260420-12.md)        |
+| `CHG-260420-11` | `feat` | [원두 상세 페이지(Detail) 신규 UI 구현](docs/history/CHG-260420-11.md)                               |
+| `CHG-260420-10` | `feat` | [BeanCard 및 RatingScale 접근성(A11y) 고도화](docs/history/CHG-260420-10.md)                         |
+| `CHG-260420-09` | `feat` | [VisualCard 라이브러리 인터랙션 고도화 및 버그 수정](docs/history/CHG-260420-09.md)                  |
+| `CHG-260420-08` | `feat` | [BeanCard 호버 디자인 복원 및 RatingScale 고도화](docs/history/CHG-260420-08.md)                     |
+| `CHG-260420-07` | `docs` | [원두 상세 페이지(Detail) 명세 작성 및 데이터 확장](docs/history/CHG-260420-07.md)                   |
+| `CHG-260420-06` | `fix`  | [VisualCard.Image asChild 사용 시 중복 Props 제거](docs/history/CHG-260420-06.md)                    |
+| `CHG-260420-05` | `docs` | [명세서(Specs) 최신화 및 아키텍처 정합성 정비](docs/history/CHG-260420-05.md)                        |
+| `CHG-260420-04` | `perf` | [URL 업데이트 로직 최적화 (replace vs push)](docs/history/CHG-260420-04.md)                          |
+| `CHG-260420-03` | `feat` | [VisualCard asChild 패턴 개선 및 카드 컴포넌트 표준화](docs/history/CHG-260420-03.md)                |
+| `CHG-260420-02` | `feat` | [RatingScale 공통 컴포넌트 추출 및 중복 제거](docs/history/CHG-260420-02.md)                         |
+| `CHG-260420-01` | `perf` | [beans.ts 내 필터 데이터 복사 로직 최적화](docs/history/CHG-260420-01.md)                            |
+| `CHG-260419-01` | `feat` | [BeanCard 디자인 통합 및 로스팅 지표 숫자형 전환 고도화](docs/history/CHG-260419-01.md)              |
 | `CHG-260417-05` | `fix`  | [원두 탐색 페이지 로고 노출 반응형 제어](docs/history/CHG-260417-05.md)                              |
 | `CHG-260417-04` | `fix`  | [BeanFilterDrawer 모바일 핸들 터치 이슈 수정](docs/history/CHG-260417-04.md)                         |
 | `CHG-260417-03` | `feat` | [VisualCard 공통 컴포넌트화 및 카드 UI 리팩토링](docs/history/CHG-260417-03.md)                      |

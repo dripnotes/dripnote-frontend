@@ -45,7 +45,7 @@ export const mockMainData: MainData = {
     origin: bean.origin,
     primaryAroma: bean.primaryAroma,
     aromaImageUrl: bean.aromaImageUrl,
-    link: `/beans/detail/${bean.id}`,
+    link: `/beans/${bean.id}`,
     bitterness: bean.bitterness,
     sweetness: bean.sweetness,
     acidity: bean.acidity,
