@@ -21,7 +21,6 @@ function AuthCallbackContent() {
 
     if (token) {
       authUtils.setToken(token);
-      console.log('인증 성공: 토큰 저장 완료');
       router.replace('/');
     } else {
       console.warn('인증 실패: 토큰이 누락되었습니다.');

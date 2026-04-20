@@ -1,5 +1,6 @@
 'use client';
 
+import { RatingScale } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -12,7 +13,6 @@ import {
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
-import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanFilterPanelProps {
   filters: BeanFilterState;
@@ -50,7 +50,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
     </motion.button>
   );
 }
-
 
 export default function BeanFilterPanel({
   filters,

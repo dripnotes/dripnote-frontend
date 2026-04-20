@@ -1,10 +1,11 @@
 'use client';
 
-import { cn } from '@/lib/utils';
 import { VisualCard } from '@coffee-service/ui-library';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+
+import { cn } from '@/lib/utils';
 
 interface AromaCardProps {
   name: string;

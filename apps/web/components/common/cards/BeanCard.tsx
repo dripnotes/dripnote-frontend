@@ -1,13 +1,11 @@
 'use client';
 
-import { VisualCard } from '@coffee-service/ui-library';
-import { motion } from 'framer-motion';
+import { RatingScale, VisualCard } from '@coffee-service/ui-library';
 import { Coffee } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AROMA_BG_CLASS, type BeanInfo } from '@/lib/api/beans';
-import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanCardProps
   extends Pick<
@@ -45,13 +43,7 @@ function ProfileIndicator({
         {label === 'Roast' ? 'Roasting' : label}
       </span>
       {/* RatingScale 공통 컴포넌트의 'indicator' 변체와 readOnly 속성을 사용하여 접근성 보강 */}
-      <RatingScale
-        max={max}
-        value={value}
-        variant="indicator"
-        readOnly
-        className="w-[60px]"
-      />
+      <RatingScale max={max} value={value} variant="indicator" readOnly className="w-[60px]" />
     </div>
   );
 }
@@ -99,7 +91,7 @@ export default function BeanCard({
           </VisualCard.Image>
 
           {/* 호버 및 포커스 시 나타나는 프로필 정보 오버레이 (접근성: group-focus-within 추가) */}
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100 group-focus-within:opacity-100">
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-focus-within:opacity-100 group-hover:opacity-100">
             <div className="flex flex-col items-center space-y-4">
               {/* 로스터리 마크 (임의의 플레이스홀더) */}
               <div className="flex justify-center">
@@ -121,13 +113,13 @@ export default function BeanCard({
           {/* 텍스트 가독성을 위한 기본 그라데이션 오버레이 (비호버 및 비포커스 시) */}
           <VisualCard.Overlay
             variant="bottom"
-            className="z-10 transition-opacity duration-300 group-hover:opacity-0 group-focus-within:opacity-0"
+            className="z-10 transition-opacity duration-300 group-focus-within:opacity-0 group-hover:opacity-0"
           />
 
           {/* 텍스트 영역 (비호버 및 비포커스 시 노출) */}
           <VisualCard.Content
             position="bottom-left"
-            className="z-20 transition-all duration-300 group-hover:translate-y-2 group-hover:opacity-0 group-focus-within:translate-y-2 group-focus-within:opacity-0"
+            className="z-20 transition-all duration-300 group-focus-within:translate-y-2 group-focus-within:opacity-0 group-hover:translate-y-2 group-hover:opacity-0"
           >
             <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
               {origin}
