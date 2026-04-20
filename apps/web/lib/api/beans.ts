@@ -179,6 +179,8 @@ export const mockBeansData: BeanInfo[] = [
       grind: 'Medium-Fine',
       notes: '초반 뜸들이기 시간을 충분히 가져가면 복숭아의 단맛을 극대화할 수 있습니다.',
     },
+    bitterness: 1,
+    sweetness: 2,
   },
   {
     id: 2,
@@ -204,6 +206,8 @@ export const mockBeansData: BeanInfo[] = [
       grind: 'Medium',
       notes: '빠른 추출 속도를 유지하여 자스민의 섬세한 향을 살려보세요.',
     },
+    bitterness: 2,
+    sweetness: 1,
   },
   {
     id: 3,

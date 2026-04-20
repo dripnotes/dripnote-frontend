@@ -43,19 +43,29 @@ const getAmberColor = (n: number, max: number, isPremium: boolean = false) => {
   // 기본 바 차트 모드에서는 Tailwind 클래스 반환
   if (max === 5) {
     switch (n) {
-      case 1: return 'bg-amber-200';
-      case 2: return 'bg-amber-300';
-      case 3: return 'bg-amber-400';
-      case 4: return 'bg-amber-500';
-      case 5: return 'bg-amber-600';
-      default: return 'bg-amber-500';
+      case 1:
+        return 'bg-amber-200';
+      case 2:
+        return 'bg-amber-300';
+      case 3:
+        return 'bg-amber-400';
+      case 4:
+        return 'bg-amber-500';
+      case 5:
+        return 'bg-amber-600';
+      default:
+        return 'bg-amber-500';
     }
   } else if (max === 3) {
     switch (n) {
-      case 1: return 'bg-amber-300';
-      case 2: return 'bg-amber-500';
-      case 3: return 'bg-amber-600';
-      default: return 'bg-amber-500';
+      case 1:
+        return 'bg-amber-300';
+      case 2:
+        return 'bg-amber-500';
+      case 3:
+        return 'bg-amber-600';
+      default:
+        return 'bg-amber-500';
     }
   }
   return 'bg-amber-500';
@@ -77,7 +87,7 @@ const RatingScale = ({
       className={cn(
         'flex w-full gap-1 rounded-md bg-transparent',
         isReadOnly && 'pointer-events-none',
-        className
+        className,
       )}
       aria-label={isReadOnly ? `평점: ${value} / ${max}` : undefined}
       role={isReadOnly ? 'img' : undefined}
@@ -93,13 +103,13 @@ const RatingScale = ({
               key={n}
               initial={false}
               animate={{
-                backgroundColor: isActive ? color : 'rgba(255, 255, 255, 0.1)',
-                boxShadow: (isActive && isIndicator) ? `0 0 8px ${color}66` : 'none',
+                backgroundColor: isActive ? color : 'rgba(156, 163, 175, 0.2)',
+                boxShadow: isActive && isIndicator ? `0 0 8px ${color}66` : 'none',
               }}
               className={cn(
                 'flex-1 rounded transition-colors duration-200',
-                isIndicator ? 'h-1 rounded-full' : (variant === 'md' ? 'h-7' : 'h-8'),
-                !isIndicator && (isActive ? color : 'bg-gray-100')
+                isIndicator ? 'h-1 rounded-full' : variant === 'md' ? 'h-7' : 'h-8',
+                !isIndicator && (isActive ? color : 'bg-gray-100'),
               )}
             />
           );
@@ -112,13 +122,13 @@ const RatingScale = ({
             whileTap={{ scale: 0.95 }}
             onClick={() => onChange?.(value === n ? 0 : n)}
             className={cn(
-              'flex-1 rounded transition-colors duration-200 cursor-pointer',
+              'flex-1 cursor-pointer rounded transition-colors duration-200',
               isActive
                 ? cn(color, 'border-transparent')
                 : variant === 'md'
-                  ? 'bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+                  ? 'border border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100'
                   : 'bg-gray-100 hover:bg-gray-200',
-              variant === 'md' ? 'h-7' : 'h-8'
+              variant === 'md' ? 'h-7' : 'h-8',
             )}
             aria-label={`${n}점 선택`}
           />

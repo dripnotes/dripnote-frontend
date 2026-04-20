@@ -13,13 +13,13 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 **메인 무드: "Visual-First Landing"** — 공통 명세의 `Internal Coffee Lab` 무드를 적극 활용하여, 텍스트 설명 대신 고해상도 이미지와 공백(White Space)으로 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
 
 > **변경 사유 (Context)**:
+>
 > - **2026-04-19 추천 섹션 고도화**:
 >   - (일관성) `RecommendedBeanCard`를 제거하고 원두 탐색 페이지와 동일한 `BeanCard` 컴포넌트로 일원화하여 브랜드 무드의 통일성을 확보함.
 >   - (기능) 추천 상품 카드에서도 원두의 향미 프로필(산미, 단맛, 쓴맛, 바디, 로스팅)을 호버 시 오버레이로 즉각 확인할 수 있도록 기능을 확장함.
->   - (반응형) 디바이스별 보장되는 카드 노출 개수(모바일 2, 태블릿 3, 데스크톱 4)를 그리드 시스템으로 정밀하게 제어함.
-> - **2026-04-20 아키텍처 정합성 및 공통화**:
->   - (컴포넌트) `BeanCard`를 공통 디렉토리(`apps/web/components/common/cards/`)로 이동하고, `beans-page.md`의 명세로 SSOT를 단일화함.
->   - (구현 패턴) `ui-library`의 `VisualCard` 기반 Compound Component 패턴 적용 사항 반영.
+>   - (반응형) 디바이스별 보장되는 카드 노출 개수(모바일 4, 태블릿 3, 데스크톱 4)를 그리드 시스템으로 정밀하게 제어함.
+> - **2026-04-20 (2차 개편)**: 아키텍처 정합성 및 공통화 작업을 위해 `SectionContainer` 도입 및 레이아웃 표준화 반영.
+> - **2026-04-20 (3차 개편)**: 모바일 사용성 강화를 위해 '오늘의 추천 원두' 섹션을 2x2 그리드(4개 노출)로 확장하고, `BeanCard`의 모바일 텍스트 및 간격을 최적화함. (사용자 피드백 반영)
 
 ---
 
@@ -366,8 +366,9 @@ interface RecommendedBeansProps {
   - 효과: `y: 20 → 0`, `opacity: 0 → 1`, 카드별 순차 딜레이
   - Duration: `0.3s`, Easing: `ease-out`
 - **Responsive**:
-  - Mobile: 1열 또는 가로 스크롤
-  - Desktop: 다열 그리드
+  - Mobile (< 768px): **2x2 그리드 (총 4개 노출)** - `grid-cols-2`
+  - Tablet (768px-1024px): 3개 노출 - `md:grid-cols-3`
+  - Desktop (> 1024px): 4개 노출 - `lg:grid-cols-4`
 
 #### 7. Definition of Done (검증 기준)
 

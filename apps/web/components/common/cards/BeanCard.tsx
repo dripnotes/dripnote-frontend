@@ -38,12 +38,18 @@ function ProfileIndicator({
   max?: number;
 }) {
   return (
-    <div className="flex w-[140px] items-center justify-between">
-      <span className="font-outfit text-left text-[10px] font-medium tracking-wider text-white/50 uppercase">
+    <div className="flex w-[100px] items-center justify-between md:w-[140px]">
+      <span className="font-outfit text-left text-[8px] font-medium tracking-wider text-white/50 uppercase md:text-[10px]">
         {label === 'Roast' ? 'Roasting' : label}
       </span>
       {/* RatingScale 공통 컴포넌트의 'indicator' 변체와 readOnly 속성을 사용하여 접근성 보강 */}
-      <RatingScale max={max} value={value} variant="indicator" readOnly className="w-[60px]" />
+      <RatingScale
+        max={max}
+        value={value}
+        variant="indicator"
+        readOnly
+        className="w-[40px] md:w-[60px]"
+      />
     </div>
   );
 }
@@ -93,15 +99,15 @@ export default function BeanCard({
           {/* 호버 및 포커스 시 나타나는 프로필 정보 오버레이 (접근성: group-focus-within 추가) */}
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 ease-out group-focus-within:opacity-100 group-hover:opacity-100">
             {/* 내부 콘텐츠가 아래에서 위로 부드럽게 올라오는 애니메이션 추가 */}
-            <div className="flex translate-y-8 flex-col items-center space-y-4 transition-all duration-500 ease-out group-focus-within:translate-y-0 group-hover:translate-y-0">
+            <div className="flex translate-y-8 flex-col items-center space-y-2 transition-all duration-500 ease-out group-focus-within:translate-y-0 group-hover:translate-y-0 md:space-y-4">
               {/* 로스터리 마크 (임의의 플레이스홀더) */}
               <div className="flex justify-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">
-                  <Coffee className="h-5 w-5 text-white/80" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm md:h-10 md:w-10">
+                  <Coffee className="h-4 w-4 text-white/80 md:h-5 md:w-5" />
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2 md:space-y-3">
                 <ProfileIndicator label="Acidity" value={acidity} />
                 <ProfileIndicator label="Sweetness" value={sweetness} />
                 <ProfileIndicator label="Bitterness" value={bitterness} />
@@ -122,10 +128,10 @@ export default function BeanCard({
             position="bottom-left"
             className="z-20 transition-all duration-500 ease-out group-focus-within:-translate-y-2 group-focus-within:opacity-0 group-hover:-translate-y-2 group-hover:opacity-0"
           >
-            <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
+            <p className="font-outfit mb-1 text-[8px] font-medium tracking-[0.2em] text-white/70 uppercase md:mb-2 md:text-[10px]">
               {origin}
             </p>
-            <VisualCard.Title className="font-playfair text-2xl leading-tight font-bold tracking-tight text-white">
+            <VisualCard.Title className="font-playfair text-lg leading-tight font-bold tracking-tight text-white md:text-2xl">
               {name}
             </VisualCard.Title>
           </VisualCard.Content>

@@ -3,6 +3,8 @@
 import { RatingScale } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
 
+import SectionContainer from '@/components/layout/SectionContainer';
+
 interface FlavorProfileProps {
   bitterness: number;
   sweetness: number;
@@ -43,7 +45,7 @@ export function FlavorProfileSection({
   roasting,
 }: FlavorProfileProps) {
   return (
-    <section className="mx-auto w-full px-4 py-16 md:px-8">
+    <SectionContainer className="py-12 md:py-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -72,6 +74,6 @@ export function FlavorProfileSection({
           <ProfileIndicator label="Roast" value={roasting} max={3} />
         </div>
       </motion.div>
-    </section>
+    </SectionContainer>
   );
 }

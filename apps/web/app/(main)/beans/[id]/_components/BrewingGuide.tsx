@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { Beaker, Thermometer, Droplets, ArrowDownToLine, Info } from 'lucide-react';
 
+import SectionContainer from '@/components/layout/SectionContainer';
+
 interface BrewingGuideProps {
   recipe?: {
     method: string;
@@ -17,13 +19,13 @@ export function BrewingGuide({ recipe }: BrewingGuideProps) {
   if (!recipe) return null;
 
   return (
-    <section className="mx-auto mb-20 w-full px-4 py-16 md:px-8">
+    <SectionContainer className="mb-10 py-10 md:py-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#2A2522] p-8 text-white shadow-2xl md:p-12"
+        className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#2A2522] p-5 text-white shadow-2xl md:p-12"
       >
         {/* Lab aesthetic subtle grid background */}
         <div
@@ -35,7 +37,7 @@ export function BrewingGuide({ recipe }: BrewingGuideProps) {
         />
 
         <div className="relative z-10">
-          <div className="mb-10 flex flex-col justify-between text-center md:flex-row md:items-center md:text-left">
+          <div className="mb-6 flex flex-col justify-between text-center md:mb-10 md:flex-row md:items-center md:text-left">
             <div>
               <h2 className="font-playfair text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-[#F5E6D3]">
                 Lab Recipe
@@ -46,65 +48,65 @@ export function BrewingGuide({ recipe }: BrewingGuideProps) {
             </div>
           </div>
 
-          <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-6">
-              <div className="mb-4 flex items-center space-x-3">
-                <div className="rounded-lg bg-amber-500/20 p-2 text-amber-500">
-                  <Beaker className="h-5 w-5" />
+          <div className="mb-6 grid grid-cols-1 gap-3 md:mb-10 md:gap-6 lg:grid-cols-4">
+            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-3 md:p-6">
+              <div className="mb-2 flex items-center space-x-2 md:mb-4 md:space-x-3">
+                <div className="rounded-lg bg-amber-500/20 p-1.5 text-amber-500 md:p-2">
+                  <Beaker className="h-4 w-4 md:h-5 md:w-5" />
                 </div>
-                <span className="font-outfit text-xs font-semibold tracking-widest text-white/60 uppercase">
+                <span className="font-outfit text-[10px] font-semibold tracking-widest text-white/60 uppercase md:text-xs">
                   Method
                 </span>
               </div>
-              <span className="text-xl font-medium text-white/90">{recipe.method}</span>
+              <span className="text-sm font-medium text-white/90 md:text-xl">{recipe.method}</span>
             </div>
 
-            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-6">
-              <div className="mb-4 flex items-center space-x-3">
-                <div className="rounded-lg bg-amber-500/20 p-2 text-amber-500">
-                  <Droplets className="h-5 w-5" />
+            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-3 md:p-6">
+              <div className="mb-2 flex items-center space-x-2 md:mb-4 md:space-x-3">
+                <div className="rounded-lg bg-amber-500/20 p-1.5 text-amber-500 md:p-2">
+                  <Droplets className="h-4 w-4 md:h-5 md:w-5" />
                 </div>
-                <span className="font-outfit text-xs font-semibold tracking-widest text-white/60 uppercase">
+                <span className="font-outfit text-[10px] font-semibold tracking-widest text-white/60 uppercase md:text-xs">
                   Ratio
                 </span>
               </div>
-              <span className="text-xl font-medium text-white/90">{recipe.ratio}</span>
+              <span className="text-sm font-medium text-white/90 md:text-xl">{recipe.ratio}</span>
             </div>
 
-            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-6">
-              <div className="mb-4 flex items-center space-x-3">
-                <div className="rounded-lg bg-amber-500/20 p-2 text-amber-500">
-                  <Thermometer className="h-5 w-5" />
+            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-3 md:p-6">
+              <div className="mb-2 flex items-center space-x-2 md:mb-4 md:space-x-3">
+                <div className="rounded-lg bg-amber-500/20 p-1.5 text-amber-500 md:p-2">
+                  <Thermometer className="h-4 w-4 md:h-5 md:w-5" />
                 </div>
-                <span className="font-outfit text-xs font-semibold tracking-widest text-white/60 uppercase">
+                <span className="font-outfit text-[10px] font-semibold tracking-widest text-white/60 uppercase md:text-xs">
                   Temp
                 </span>
               </div>
-              <span className="text-xl font-medium text-white/90">{recipe.temp}</span>
+              <span className="text-sm font-medium text-white/90 md:text-xl">{recipe.temp}</span>
             </div>
 
-            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-6">
-              <div className="mb-4 flex items-center space-x-3">
-                <div className="rounded-lg bg-amber-500/20 p-2 text-amber-500">
-                  <ArrowDownToLine className="h-5 w-5" />
+            <div className="flex flex-col rounded-2xl border border-white/5 bg-white/5 p-3 md:p-6">
+              <div className="mb-2 flex items-center space-x-2 md:mb-4 md:space-x-3">
+                <div className="rounded-lg bg-amber-500/20 p-1.5 text-amber-500 md:p-2">
+                  <ArrowDownToLine className="h-4 w-4 md:h-5 md:w-5" />
                 </div>
-                <span className="font-outfit text-xs font-semibold tracking-widest text-white/60 uppercase">
+                <span className="font-outfit text-[10px] font-semibold tracking-widest text-white/60 uppercase md:text-xs">
                   Grind
                 </span>
               </div>
-              <span className="text-xl font-medium text-white/90">{recipe.grind}</span>
+              <span className="text-sm font-medium text-white/90 md:text-xl">{recipe.grind}</span>
             </div>
           </div>
 
-          <div className="flex items-start space-x-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-6 md:items-center">
-            <Info className="mt-0.5 h-6 w-6 shrink-0 text-amber-500 md:mt-0" />
-            <p className="leading-relaxed text-[#F5E6D3]/90">
+          <div className="flex items-start space-x-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 md:items-center md:p-6">
+            <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-500 md:mt-0 md:h-6 md:w-6" />
+            <p className="text-sm leading-relaxed text-[#F5E6D3]/90 md:text-base">
               <span className="mr-2 font-semibold text-amber-500">Tip:</span>
               {recipe.notes}
             </p>
           </div>
         </div>
       </motion.div>
-    </section>
+    </SectionContainer>
   );
 }

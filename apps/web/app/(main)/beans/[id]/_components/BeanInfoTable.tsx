@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 
+import SectionContainer from '@/components/layout/SectionContainer';
+
 interface BeanInfoTableProps {
   origin: string;
   category?: string;
@@ -31,7 +33,7 @@ export function BeanInfoTable({
   ].filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
 
   return (
-    <section className="mx-auto w-full px-4 py-8 md:px-8">
+    <SectionContainer className="py-6 md:py-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -68,6 +70,6 @@ export function BeanInfoTable({
           </ul>
         </div>
       </motion.div>
-    </section>
+    </SectionContainer>
   );
 }

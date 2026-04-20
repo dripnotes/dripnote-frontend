@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import SectionContainer from '@/components/layout/SectionContainer';
 import { AROMA_BG_CLASS, AromaType } from '@/lib/api/beans';
 import { cn } from '@/lib/utils';
 
@@ -31,23 +32,26 @@ export function BeanDetailHero({
   const bgClass = AROMA_BG_CLASS[primaryAroma] ?? 'bg-gray-100';
 
   return (
-    <section className="relative mx-auto mt-0 max-w-7xl px-4 py-8 md:mt-24 md:px-8">
+    <SectionContainer className="mt-0 py-6 md:mt-4 md:py-8">
       <button
         onClick={() => router.back()}
-        className="group mb-8 flex items-center space-x-2 text-gray-500 transition-colors hover:text-gray-900"
+        className="group mb-4 flex items-center space-x-2 text-gray-500 transition-colors hover:text-gray-900"
         aria-label="뒤로 가기"
       >
         <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
         <span className="font-outfit text-sm font-medium tracking-wider uppercase">Back</span>
       </button>
 
-      <div className="relative grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-20">
+      <div className="relative grid grid-cols-1 items-start gap-4 md:grid-cols-2 md:gap-12 lg:gap-20">
         {/* Left: Image Container + Mobile Text Overlay */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className={cn('relative aspect-square w-full overflow-hidden rounded-2xl', bgClass)}
+          className={cn(
+            'relative mx-auto aspect-square w-full max-w-[600px] overflow-hidden rounded-2xl',
+            bgClass,
+          )}
         >
           <Image
             src={aromaImageUrl}
@@ -97,7 +101,7 @@ export function BeanDetailHero({
             </div>
 
             {/* Action Bar (Always below image on mobile, right column on md+) */}
-            <div className="flex items-center space-x-4 pt-4 md:border-t md:border-gray-100 md:pt-8">
+            <div className="flex items-center justify-end space-x-4 pt-4 md:border-t md:border-gray-100 md:pt-8">
               <button
                 onClick={() => setIsBookmarked(!isBookmarked)}
                 className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 transition-colors hover:border-amber-500 hover:bg-amber-50"
@@ -136,6 +140,6 @@ export function BeanDetailHero({
           </motion.div>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }
