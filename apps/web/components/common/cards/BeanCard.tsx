@@ -1,13 +1,11 @@
 'use client';
 
-import { VisualCard } from '@coffee-service/ui-library';
-import { motion } from 'framer-motion';
+import { RatingScale, VisualCard } from '@coffee-service/ui-library';
 import { Coffee } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AROMA_BG_CLASS, type BeanInfo } from '@/lib/api/beans';
-import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanCardProps
   extends Pick<
@@ -50,7 +48,7 @@ function ProfileIndicator({
         value={value}
         onChange={() => {}}
         variant="sm"
-        className="w-[60px] pointer-events-none"
+        className="pointer-events-none w-[60px]"
       />
     </div>
   );

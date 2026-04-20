@@ -1,3 +1,4 @@
+import { RatingScale } from '@coffee-service/ui-library';
 import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,6 @@ import {
 } from '@/lib/api/beans';
 
 import BeanSearchBar from './BeanSearchBar';
-import { RatingScale } from '@coffee-service/ui-library';
 
 interface BeanFilterDrawerProps {
   isOpen: boolean;
@@ -38,7 +38,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
     </motion.button>
   );
 }
-
 
 const SECTION_TITLE =
   'font-outfit mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-400';
@@ -200,7 +199,7 @@ export default function BeanFilterDrawer({
 
               {/* Body */}
               <div className="border-t border-gray-100 py-5">
-                <div className="flex items-center justify-between mb-3">
+                <div className="mb-3 flex items-center justify-between">
                   <p className={SECTION_TITLE}>Body</p>
                   <span className="text-xs text-gray-400">
                     {localFilters.body === 1
@@ -224,7 +223,7 @@ export default function BeanFilterDrawer({
 
               {/* Roasting */}
               <div className="border-t border-gray-100 py-5 pb-8">
-                <div className="flex items-center justify-between mb-3">
+                <div className="mb-3 flex items-center justify-between">
                   <p className={SECTION_TITLE}>Roasting</p>
                   <span className="text-xs text-gray-400">
                     {localFilters.roasting === 1
