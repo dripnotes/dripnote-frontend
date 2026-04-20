@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { RatingScale } from '@coffee-service/ui-library';
+import { motion } from 'framer-motion';
 
 interface FlavorProfileProps {
   bitterness: number;
@@ -43,7 +43,7 @@ export function FlavorProfileSection({
   roasting,
 }: FlavorProfileProps) {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
+    <section className="mx-auto w-full px-4 py-16 md:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -51,11 +51,15 @@ export function FlavorProfileSection({
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
         <div className="mb-12">
-          <h2 className="font-playfair text-3xl font-bold text-gray-900">Flavor Profile</h2>
-          <p className="mt-2 text-gray-500">원두가 가진 고유의 향미 특성</p>
+          <h2 className="font-playfair text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-gray-900">
+            Flavor Profile
+          </h2>
+          <p className="mt-2 text-[clamp(0.875rem,2vw,1.125rem)] text-gray-500">
+            원두가 가진 고유의 향미 특성
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           <ProfileIndicator label="Acidity" value={acidity} />
           <ProfileIndicator label="Sweetness" value={sweetness} />
           <ProfileIndicator label="Bitterness" value={bitterness} />
@@ -63,7 +67,7 @@ export function FlavorProfileSection({
 
         <div className="mt-12 mb-12 h-px w-full bg-gray-100" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           <ProfileIndicator label="Body" value={body} max={3} />
           <ProfileIndicator label="Roast" value={roasting} max={3} />
         </div>

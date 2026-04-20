@@ -31,7 +31,7 @@ export function BeanDetailHero({
   const bgClass = AROMA_BG_CLASS[primaryAroma] ?? 'bg-gray-100';
 
   return (
-    <section className="relative mx-auto mt-16 max-w-7xl px-4 py-8 md:mt-24 md:px-8">
+    <section className="relative mx-auto mt-0 max-w-7xl px-4 py-8 md:mt-24 md:px-8">
       <button
         onClick={() => router.back()}
         className="group mb-8 flex items-center space-x-2 text-gray-500 transition-colors hover:text-gray-900"
@@ -72,7 +72,7 @@ export function BeanDetailHero({
                 {roastery}
               </p>
             )}
-            <h1 className="font-playfair mb-4 text-4xl leading-tight font-bold text-gray-900 md:text-5xl lg:text-6xl">
+            <h1 className="font-playfair mb-4 text-[clamp(1.75rem,5vw,3.75rem)] leading-tight font-bold text-gray-900">
               {name}
             </h1>
             <p className="font-outfit mb-8 text-sm font-medium tracking-[0.2em] text-gray-500 uppercase">

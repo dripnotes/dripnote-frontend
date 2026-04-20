@@ -31,7 +31,7 @@ export function BeanInfoTable({
   ].filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+    <section className="mx-auto w-full px-4 py-8 md:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -40,9 +40,13 @@ export function BeanInfoTable({
         className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16"
       >
         <div className="flex flex-col justify-center lg:col-span-8">
-          <h2 className="font-playfair mb-6 text-3xl font-bold text-gray-900">About the Bean</h2>
+          <h2 className="font-playfair mb-6 text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-gray-900">
+            About the Bean
+          </h2>
           {description ? (
-            <p className="text-lg leading-relaxed text-gray-600">{description}</p>
+            <p className="text-[clamp(1rem,2vw,1.125rem)] leading-relaxed text-gray-600">
+              {description}
+            </p>
           ) : (
             <p className="text-gray-400 italic">상세 설명이 준비되지 않았습니다.</p>
           )}
