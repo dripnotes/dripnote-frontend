@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Bookmark, Share, ChevronLeft, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -32,7 +33,46 @@ export function BeanDetailHero({
   const bgClass = AROMA_BG_CLASS[primaryAroma] ?? 'bg-gray-100';
 
   return (
-    <SectionContainer className="mt-0 py-6 md:mt-4 md:py-8">
+    <SectionContainer className="mt-0 pt-4 pb-6 md:mt-4 md:py-8">
+      {/* Mobile Top Header: Logo + Actions (Matches list page pattern) */}
+      <div className="mb-6 flex items-center justify-between md:hidden">
+        <Link href="/" className="font-playfair text-2xl font-bold tracking-tighter text-gray-900">
+          Dripnote
+        </Link>
+        <div className="flex items-center space-x-1">
+          <button
+            onClick={() => setIsBookmarked(!isBookmarked)}
+            className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100"
+            aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+          >
+            <Bookmark
+              className={cn(
+                'h-5 w-5 transition-colors',
+                isBookmarked ? 'fill-amber-500 text-amber-500' : 'text-gray-400',
+              )}
+            />
+          </button>
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100"
+            aria-label="공유하기"
+          >
+            <Share className="h-5 w-5 text-gray-400" />
+          </button>
+          {purchaseUrl && (
+            <a
+              href={purchaseUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100"
+              aria-label="결제 페이지로 이동"
+            >
+              <ExternalLink className="h-5 w-5 text-gray-400" />
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Back Button */}
       <button
         onClick={() => router.back()}
         className="group mb-4 flex items-center space-x-2 text-gray-500 transition-colors hover:text-gray-900"
@@ -100,8 +140,8 @@ export function BeanDetailHero({
               </p>
             </div>
 
-            {/* Action Bar (Always below image on mobile, right column on md+) */}
-            <div className="flex items-center justify-end space-x-4 pt-4 md:border-t md:border-gray-100 md:pt-8">
+            {/* Action Bar (Only visible on md+) */}
+            <div className="hidden items-center justify-end space-x-4 pt-4 md:flex md:border-t md:border-gray-100 md:pt-8">
               <button
                 onClick={() => setIsBookmarked(!isBookmarked)}
                 className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 transition-colors hover:border-amber-500 hover:bg-amber-50"
