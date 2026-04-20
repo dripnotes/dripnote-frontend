@@ -129,8 +129,9 @@ const RatingScale = ({
                 backgroundColor: isActive ? color : 'rgba(156, 163, 175, 0.15)',
                 boxShadow: isActive && isIndicator ? `0 0 10px ${glow}` : 'none',
               }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
               className={cn(
-                'flex-1 rounded transition-shadow duration-200',
+                'flex-1 rounded',
                 isIndicator ? 'h-1.5 rounded-full' : variant === 'md' ? 'h-7' : 'h-8',
                 isActive && isIndicator && 'border border-white/10 saturate-[1.2]',
               )}
@@ -148,12 +149,17 @@ const RatingScale = ({
             type="button"
             whileTap={{ scale: 0.95 }}
             onClick={() => onChange?.(value === n ? 0 : n)}
+            initial={{
+              backgroundColor: 'rgb(255, 255, 255)',
+              borderColor: 'rgba(229, 231, 235, 0.5)',
+            }}
             animate={{
               backgroundColor: isActive ? color : 'rgb(249, 250, 251)', // bg-gray-50
-              borderColor: isActive ? 'transparent' : 'rgb(229, 231, 235)', // border-gray-200
+              borderColor: isActive ? 'transparent' : 'rgba(229, 231, 235, 0.8)', // border-gray-200
             }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
             className={cn(
-              'flex-1 cursor-pointer rounded border transition-colors duration-200',
+              'flex-1 cursor-pointer rounded border transition-colors',
               isActive ? 'shadow-sm' : 'hover:bg-gray-100',
               variant === 'md' ? 'h-7' : 'h-8',
             )}
