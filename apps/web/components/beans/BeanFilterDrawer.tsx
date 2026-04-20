@@ -1,6 +1,6 @@
 import { RatingScale } from '@coffee-service/ui-library';
 import { AnimatePresence, motion, useDragControls } from 'framer-motion';
-import { RotateCcw } from 'lucide-react';
+import { Droplets, Flame, Layers, RotateCcw, Scale, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import {
@@ -172,77 +172,137 @@ export default function BeanFilterDrawer({
                 </div>
               </div>
 
-              {/* Flavor */}
-              <div className="border-t border-gray-100 py-5">
-                <p className={SECTION_TITLE}>Flavor</p>
-                <div className="space-y-4">
-                  {(['bitterness', 'sweetness', 'acidity'] as const).map((key) => (
-                    <div key={key}>
-                      <p className="mb-2 text-xs text-gray-500">
-                        {key === 'bitterness' ? '쓴맛' : key === 'sweetness' ? '단맛' : '산미'}
-                      </p>
-                      <RatingScale
-                        variant="sm"
-                        max={5}
-                        value={localFilters.flavor[key]}
-                        onChange={(v) =>
-                          setLocalFilters({
-                            ...localFilters,
-                            flavor: { ...localFilters.flavor, [key]: v },
-                          })
-                        }
-                      />
-                    </div>
-                  ))}
+              {/* Metric Sections (Ungrouped) */}
+              <div className="space-y-1">
+                {/* Acidity */}
+                <div className="border-t border-gray-100 py-2.5">
+                  <p className="font-outfit mb-1.5 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-400 uppercase">
+                    <Droplets className="h-3 w-3" />
+                    Acidity
+                  </p>
+                  <RatingScale
+                    variant="sm"
+                    max={5}
+                    value={localFilters.flavor.acidity}
+                    onChange={(v) =>
+                      setLocalFilters({
+                        ...localFilters,
+                        flavor: { ...localFilters.flavor, acidity: v },
+                      })
+                    }
+                  />
                 </div>
-              </div>
 
-              {/* Body */}
-              <div className="border-t border-gray-100 py-5">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className={SECTION_TITLE}>Body</p>
-                  <span className="text-xs text-gray-400">
-                    {localFilters.body === 1
-                      ? '가벼움'
-                      : localFilters.body === 2
-                        ? '보통'
-                        : localFilters.body === 3
-                          ? '묵직함'
-                          : ''}
-                  </span>
+                {/* Sweetness */}
+                <div className="border-t border-gray-100 py-2.5">
+                  <p className="font-outfit mb-1.5 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-400 uppercase">
+                    <Sparkles className="h-3 w-3" />
+                    Sweetness
+                  </p>
+                  <RatingScale
+                    variant="sm"
+                    max={5}
+                    value={localFilters.flavor.sweetness}
+                    onChange={(v) =>
+                      setLocalFilters({
+                        ...localFilters,
+                        flavor: { ...localFilters.flavor, sweetness: v },
+                      })
+                    }
+                  />
                 </div>
-                <RatingScale
-                  variant="sm"
-                  max={3}
-                  value={localFilters.body}
-                  onChange={(v) =>
-                    setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
-                  }
-                />
-              </div>
 
-              {/* Roasting */}
-              <div className="border-t border-gray-100 py-5 pb-8">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className={SECTION_TITLE}>Roasting</p>
-                  <span className="text-xs text-gray-400">
-                    {localFilters.roasting === 1
-                      ? 'Light'
-                      : localFilters.roasting === 2
-                        ? 'Medium'
-                        : localFilters.roasting === 3
-                          ? 'Dark'
-                          : ''}
-                  </span>
+                {/* Body */}
+                <div className="border-t border-gray-100 py-2.5">
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <p className="font-outfit flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-400 uppercase">
+                      <Layers className="h-3 w-3" />
+                      Body
+                    </p>
+                    <span className="text-xs text-gray-400">
+                      {localFilters.body === 1
+                        ? 'Very Light'
+                        : localFilters.body === 2
+                          ? 'Light'
+                          : localFilters.body === 3
+                            ? 'Medium'
+                            : localFilters.body === 4
+                              ? 'Full'
+                              : localFilters.body === 5
+                                ? 'Extra Bold'
+                                : ''}
+                    </span>
+                  </div>
+                  <RatingScale
+                    variant="sm"
+                    max={5}
+                    value={localFilters.body}
+                    onChange={(v) =>
+                      setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
+                    }
+                  />
                 </div>
-                <RatingScale
-                  variant="sm"
-                  max={3}
-                  value={localFilters.roasting}
-                  onChange={(v) =>
-                    setLocalFilters({ ...localFilters, roasting: v as BeanFilterState['roasting'] })
-                  }
-                />
+
+                {/* Balance */}
+                <div className="border-t border-gray-100 py-2.5">
+                  <p className="font-outfit mb-1.5 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-400 uppercase">
+                    <Scale className="h-3 w-3" />
+                    Balance
+                  </p>
+                  <RatingScale
+                    variant="sm"
+                    max={5}
+                    value={localFilters.flavor.balance}
+                    colorPalette={
+                      localFilters.flavor.balance <= 2
+                        ? 'red'
+                        : localFilters.flavor.balance === 3
+                          ? 'blue'
+                          : 'green'
+                    }
+                    onChange={(v) =>
+                      setLocalFilters({
+                        ...localFilters,
+                        flavor: { ...localFilters.flavor, balance: v },
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Roasting */}
+                <div className="border-t border-gray-100 py-2.5 pb-2.5">
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <p className="font-outfit flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-400 uppercase">
+                      <Flame className="h-3 w-3" />
+                      Roasting
+                    </p>
+                    <span className="text-xs text-gray-400">
+                      {localFilters.roasting === 1
+                        ? 'Light'
+                        : localFilters.roasting === 2
+                          ? 'Light Medium'
+                          : localFilters.roasting === 3
+                            ? 'Medium'
+                            : localFilters.roasting === 4
+                              ? 'Medium Dark'
+                              : localFilters.roasting === 5
+                                ? 'Dark'
+                                : ''}
+                    </span>
+                  </div>
+                  <RatingScale
+                    variant="sm"
+                    max={5}
+                    value={localFilters.roasting}
+                    colorPalette="espresso"
+                    onChange={(v) =>
+                      setLocalFilters({
+                        ...localFilters,
+                        roasting: v as BeanFilterState['roasting'],
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
 

@@ -1,12 +1,13 @@
 'use client';
 
-import { RatingScale } from '@coffee-service/ui-library';
+import { RatingScale, type ColorPalette } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
+import { Droplets, Flame, Layers, Scale, Sparkles } from 'lucide-react';
 
 import SectionContainer from '@/components/layout/SectionContainer';
 
 interface FlavorProfileProps {
-  bitterness: number;
+  balance: number;
   sweetness: number;
   acidity: number;
   body: number;
@@ -17,28 +18,50 @@ function ProfileIndicator({
   label,
   value,
   max = 5,
+  colorPalette = 'amber',
 }: {
   label: string;
   value: number;
   max?: number;
+  colorPalette?: ColorPalette;
 }) {
+  const Icon =
+    label === 'Acidity'
+      ? Droplets
+      : label === 'Sweetness'
+        ? Sparkles
+        : label === 'Body'
+          ? Layers
+          : label === 'Balance'
+            ? Scale
+            : Flame;
+
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex items-center justify-between">
-        <span className="font-outfit text-sm font-semibold tracking-wider text-gray-900 uppercase">
-          {label === 'Roast' ? 'Roasting' : label}
-        </span>
+        <div className="flex items-center gap-2">
+          <Icon className="h-3.5 w-3.5 text-gray-400" />
+          <span className="font-outfit text-sm font-semibold tracking-wider text-gray-900 uppercase">
+            {label === 'Roast' ? 'Roasting' : label}
+          </span>
+        </div>
         <span className="font-outfit text-xs font-medium text-gray-500">
           {value} / {max}
         </span>
       </div>
-      <RatingScale max={max} value={value} readOnly className="w-full" />
+      <RatingScale
+        max={max}
+        value={value}
+        readOnly
+        colorPalette={colorPalette}
+        className="w-full"
+      />
     </div>
   );
 }
 
 export function FlavorProfileSection({
-  bitterness,
+  balance,
   sweetness,
   acidity,
   body,
@@ -64,14 +87,18 @@ export function FlavorProfileSection({
         <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           <ProfileIndicator label="Acidity" value={acidity} />
           <ProfileIndicator label="Sweetness" value={sweetness} />
-          <ProfileIndicator label="Bitterness" value={bitterness} />
+          <ProfileIndicator label="Body" value={body} />
         </div>
 
         <div className="mt-12 mb-12 h-px w-full bg-gray-100" />
 
         <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-          <ProfileIndicator label="Body" value={body} max={3} />
-          <ProfileIndicator label="Roast" value={roasting} max={3} />
+          <ProfileIndicator
+            label="Balance"
+            value={balance}
+            colorPalette={balance <= 2 ? 'red' : balance === 3 ? 'blue' : 'green'}
+          />
+          <ProfileIndicator label="Roast" value={roasting} colorPalette="espresso" />
         </div>
       </motion.div>
     </SectionContainer>

@@ -77,7 +77,7 @@ export default function BeanDetailPage({ params }: Props) {
         description={bean.description}
       />
       <FlavorProfileSection
-        bitterness={bean.bitterness || 0}
+        balance={bean.balance || 0}
         sweetness={bean.sweetness || 0}
         acidity={bean.acidity || 0}
         body={bean.body || 0}

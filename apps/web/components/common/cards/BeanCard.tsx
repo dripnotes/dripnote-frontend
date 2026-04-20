@@ -1,7 +1,7 @@
 'use client';
 
-import { RatingScale, VisualCard } from '@coffee-service/ui-library';
-import { Coffee } from 'lucide-react';
+import { RatingScale, VisualCard, type ColorPalette } from '@coffee-service/ui-library';
+import { Coffee, Droplets, Flame, Layers, Scale, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,7 +16,7 @@ interface BeanCardProps
     | 'primaryAroma'
     | 'aromaImageUrl'
     | 'link'
-    | 'bitterness'
+    | 'balance'
     | 'sweetness'
     | 'acidity'
     | 'roasting'
@@ -32,22 +32,39 @@ function ProfileIndicator({
   label,
   value,
   max = 5,
+  colorPalette = 'amber',
 }: {
   label: string;
   value: number;
   max?: number;
+  colorPalette?: ColorPalette;
 }) {
+  const Icon =
+    label === 'Acidity'
+      ? Droplets
+      : label === 'Sweetness'
+        ? Sparkles
+        : label === 'Body'
+          ? Layers
+          : label === 'Balance'
+            ? Scale
+            : Flame;
+
   return (
-    <div className="flex w-[100px] items-center justify-between md:w-[140px]">
-      <span className="font-outfit text-left text-[8px] font-medium tracking-wider text-white/50 uppercase md:text-[10px]">
-        {label === 'Roast' ? 'Roasting' : label}
-      </span>
+    <div className="flex w-[110px] items-center justify-between md:w-[150px]">
+      <div className="flex items-center gap-1.5 md:gap-2">
+        <Icon className="h-2.5 w-2.5 text-white/40 md:h-3 md:w-3" />
+        <span className="font-outfit text-left text-[8px] font-medium tracking-wider text-white/50 uppercase md:text-[10px]">
+          {label === 'Roast' ? 'Roasting' : label}
+        </span>
+      </div>
       {/* RatingScale 공통 컴포넌트의 'indicator' 변체와 readOnly 속성을 사용하여 접근성 보강 */}
       <RatingScale
         max={max}
         value={value}
         variant="indicator"
         readOnly
+        colorPalette={colorPalette}
         className="w-[40px] md:w-[60px]"
       />
     </div>
@@ -64,7 +81,7 @@ export default function BeanCard({
   primaryAroma,
   aromaImageUrl,
   link,
-  bitterness,
+  balance,
   sweetness,
   acidity,
   roasting,
@@ -110,9 +127,13 @@ export default function BeanCard({
               <div className="space-y-2 md:space-y-3">
                 <ProfileIndicator label="Acidity" value={acidity} />
                 <ProfileIndicator label="Sweetness" value={sweetness} />
-                <ProfileIndicator label="Bitterness" value={bitterness} />
-                <ProfileIndicator label="Body" value={body} max={3} />
-                <ProfileIndicator label="Roast" value={roasting} max={3} />
+                <ProfileIndicator label="Body" value={body} />
+                <ProfileIndicator
+                  label="Balance"
+                  value={balance}
+                  colorPalette={balance <= 2 ? 'red' : balance === 3 ? 'blue' : 'green'}
+                />
+                <ProfileIndicator label="Roast" value={roasting} colorPalette="espresso" />
               </div>
             </div>
           </div>

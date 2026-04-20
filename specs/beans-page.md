@@ -171,16 +171,16 @@ interface BeanSearchBarProps {
 interface BeanFilterState {
   aromas: AromaType[]; // 선택된 아로마 (다중 선택)
   flavor: {
-    bitterness: number; // 쓴맛 1~5 (0 = 미선택)
+    balance: number; // 밸런스 1~5 (0 = 미선택)
     sweetness: number; // 단맛 1~5 (0 = 미선택)
     acidity: number; // 산미 1~5 (0 = 미선택)
   };
-  body: 0 | 1 | 2 | 3; // 바디감 0 = 미선택, 1~3
-  roasting: 0 | 1 | 2 | 3; // 로스팅 0 = 미선택, 1~3
+  body: 0 | 1 | 2 | 3 | 4 | 5; // 바디감 0 = 미선택, 1~5
+  roasting: 0 | 1 | 2 | 3 | 4 | 5; // 로스팅 0 = 미선택, 1~5
 }
 
 type AromaType = '캐러멜' | '와인' | '초콜릿' | '과일' | '허브' | '맥아' | '견과' | '꽃' | '스모크';
-type RoastingType = 1 | 2 | 3;
+type RoastingType = 1 | 2 | 3 | 4 | 5;
 
 interface BeanFilterPanelProps {
   filters: BeanFilterState;
@@ -209,9 +209,9 @@ interface BeanFilterPanelProps {
 
 1. **Search** 구역: 패널 최상단에 `BeanSearchBar`를 포함하여 이름/원산지 검색 연동
 2. **Aroma (향)** 섹션: 9개 아로마 타입을 Chip 형태로 나열, 다중 선택 가능
-3. **Flavor (맛)** 섹션: 쓴맛·단맛·산미를 각 연속된 N등분 막대 형태(Rating Bar) 1~5단계로 표시
-4. **Body (바디감)** 섹션: 1(가벼움) ~ 3(묵직함) Rating Bar 3단계로 표시
-5. **Roasting** 섹션: 1(Light) ~ 3(Dark) Rating Bar 3단계로 표시
+3. **Flavor (맛)** 섹션: **밸런스·단맛·산미**를 각 연속된 N등분 막대 형태(Rating Bar) 1~5단계로 표시
+4. **Body (바디감)** 섹션: 1(매우 가벼움) ~ 5(매우 묵직함) Rating Bar 5단계로 확장 표시
+5. **Roasting** 섹션: 1(Light) ~ 5(Dark) Rating Bar 5단계로 확장 표시 (단계: Light, Light Medium, Medium, Medium Dark, Dark)
 6. 모든 필터링 조작은 즉시 반영되지 않고 `localFilters` 상태만 갱신한다
 7. 하단에 스티키(Sticky)하게 자리잡은 "적용하기" 버튼을 클릭할 때 `onChange(localFilters)`를 호출하여 상위 컨텍스트에 반영한다
 8. 하나 이상의 필터가 선택되면 상단에 "초기화" 버튼이 노출된다
@@ -231,8 +231,8 @@ interface BeanFilterPanelProps {
 
 - [ ] (기능) Aroma Chip 다중 선택 및 해제가 정상 동작한다
 - [ ] (기능) Flavor Rating Bar가 1~5 단계 선택을 처리하며 점차 진한 색으로 표기된다
-- [ ] (기능) Body Rating Bar가 1~3 단계 선택을 처리하며 점차 진한 색으로 표기된다
-- [ ] (기능) Roasting Chip 다중 선택 및 해제가 정상 동작한다
+- [ ] (기능) Body Rating Bar가 1~5 단계 선택을 처리하며 점차 진한 색으로 표기된다
+- [ ] (기능) Roasting Rating Bar가 1~5 단계 선택을 처리하며 점차 진한 색으로 표기된다
 - [ ] (기능) 초기화 버튼 클릭 시 모든 필터가 해제된다
 - [ ] (기능) "적용하기" 버튼 클릭 시에만 필터 변경 사항이 부모로 전달된다
 - [ ] (디자인) "적용하기" 버튼이 스크롤 시에도 패널 최하단에 스티키하게 고정된다
@@ -342,8 +342,8 @@ interface BeanInfo {
   origin: string; // 원산지 (예: "HUILA, COLOMBIA")
   primaryAroma: AromaType; // 대표 아로마 (배경 색상 결정에 사용)
   aromaImageUrl: string; // 대표 아로마 식재료 이미지 URL
-  roasting: RoastingType; // 1, 2, 3
-  body: 1 | 2 | 3;
+  roasting: RoastingType; // 1~5
+  body: 1 | 2 | 3 | 4 | 5;
   link: string; // 원두 상세 페이지 경로
 }
 
@@ -421,20 +421,20 @@ interface BeanCardProps {
   primaryAroma: AromaType;
   aromaImageUrl: string;
   link: string;
-  bitterness: number; // 1~5
+  balance: number; // 1~5
   sweetness: number; // 1~5
   acidity: number; // 1~5
-  roasting: 1 | 2 | 3;
-  body: 1 | 2 | 3;
+  roasting: 1 | 2 | 3 | 4 | 5;
+  body: 1 | 2 | 3 | 4 | 5;
   index?: number;
 }
 ```
 
 #### 4. UI States (상태 명세)
 
-| 상태        | 트리거 조건 | UI 표현                                                 |
-| ----------- | ----------- | ------------------------------------------------------- |
-| **Default** | 초기 렌더링 | 풀-사이즈 배경 이미지 + 하단 그라데이션 + 화이트 텍스트 |
+| 상태        | 트리거 조건 | UI 표현                                                                 |
+| ----------- | ----------- | ----------------------------------------------------------------------- |
+| **Default** | 초기 렌더링 | 풀-사이즈 배경 이미지 + 하단 그라데이션 + 화이트 텍스트                 |
 | **Hover**   | 마우스 오버 | 카드 부유(`y: -6px`) + 배경 이미지 확대 + **향미 프로필 오버레이** 노출 |
 
 #### 5. Functional Requirements (단계별 요구사항)
@@ -442,9 +442,11 @@ interface BeanCardProps {
 1. `aromaImageUrl`을 카드 전체 배경으로 사용한다 (`fill`, `object-cover`)
 2. 하단 60% 영역에 선형 그라데이션(`black/90` → `transparent`)을 적용하여 텍스트 가독성을 확보한다
 3. 텍스트는 좌측 하단에 정렬하며, 원산지 → 원두명 순서로 배치한다
-4. 호버 시 카드가 위로 떠오르며 배경 이미지가 확대되는 동시에 **커피 프로필(Acidity, Sweetness, Bitterness, Body, Roasting) 정보가 60% 투명도의 블랙 오버레이와 Backdrop Blur(`2px`) 효과와 함께 나타난다.**
+4. 호버 시 카드가 위로 떠오르며 배경 이미지가 확대되는 동시에 **커피 프로필(Acidity, Sweetness, Balance, Body, Roasting) 정보가 60% 투명도의 블랙 오버레이와 Backdrop Blur(`2px`) 효과와 함께 나타난다.**
 5. 오버레이 내부 상단에는 **로스터리 마크(Coffee 아이콘)**가 표시된다.
-  - (심미성) 인디케이터 도트에 강도에 비례한 점진적 색상 농도(Amber scale)를 적용하고, 로스팅 배지를 로스터리 마크(아이콘)로 교체하여 프리미엄 브랜드 이미지를 구축함.
+
+- (심미성) 인디케이터 도트에 강도에 비례한 점진적 색상 농도(Amber scale)를 적용하고, 로스팅 배지를 로스터리 마크(아이콘)로 교체하여 프리미엄 브랜드 이미지를 구축함.
+
 6. 클릭 시 `link` (예: `/beans/{id}`)로 라우팅한다. 상세 명세는 [원두 상세 페이지 명세서(bean-detail-page.md)](bean-detail-page.md)를 참조하십시오.
 
 #### 6. Design Spec (디자인 명세)
@@ -506,14 +508,14 @@ const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
 > 스펙 작성 중 결정이 필요한 항목입니다.
 
-| #   | 항목                   | 현재 가정                       | 확인 필요                                                  |
-| --- | ---------------------- | ------------------------------- | ---------------------------------------------------------- |
-| 1   | **가격 표시 여부**     | 비표시 (결정됨)                 | (완료) 정보 탐색 중심 서비스로 가격 정보 제외 확정         |
-| 2   | **필터링 방식**        | 클라이언트 사이드 필터링 (Mock) | API 연동 시 서버 사이드 필터링으로 전환 여부               |
+| #   | 항목                   | 현재 가정                       | 확인 필요                                                     |
+| --- | ---------------------- | ------------------------------- | ------------------------------------------------------------- |
+| 1   | **가격 표시 여부**     | 비표시 (결정됨)                 | (완료) 정보 탐색 중심 서비스로 가격 정보 제외 확정            |
+| 2   | **필터링 방식**        | 클라이언트 사이드 필터링 (Mock) | API 연동 시 서버 사이드 필터링으로 전환 여부                  |
 | 3   | **카드 클릭 목적지**   | `/beans/{id}` 원두 상세 페이지  | (완료) [bean-detail-page.md](bean-detail-page.md) 명세 작성됨 |
-| 4   | **Flavor 필터 표현**   | Rating Bar (연속된 막대)        | (완료) 이전 Step Selector에서 레이팅 바 형태로 스펙 개선됨 |
-| 5   | **아로마 대표 이미지** | Unsplash 식재료 이미지 URL      | 자체 에셋 또는 외부 이미지 출처 결정                       |
-| 6   | **페이지네이션**       | 없음 (전체 목록)                | 무한 스크롤 또는 페이지네이션 적용 여부                    |
+| 4   | **Flavor 필터 표현**   | Rating Bar (연속된 막대)        | (완료) 이전 Step Selector에서 레이팅 바 형태로 스펙 개선됨    |
+| 5   | **아로마 대표 이미지** | Unsplash 식재료 이미지 URL      | 자체 에셋 또는 외부 이미지 출처 결정                          |
+| 6   | **페이지네이션**       | 없음 (전체 목록)                | 무한 스크롤 또는 페이지네이션 적용 여부                       |
 
 ---
 
@@ -526,18 +528,18 @@ const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 ### Request
 
 ```http
-GET /api/beans?search={keyword}&aromas={}&bitterness={1-5}&sweetness={1-5}&acidity={1-5}&body={1-3}&roasting={}
+GET /api/beans?search={keyword}&aromas={}&balance={1-5}&sweetness={1-5}&acidity={1-5}&body={1-5}&roasting={1-5}
 ```
 
 | Query Parameter | Type       | Description        | 필수 |
 | --------------- | ---------- | ------------------ | ---- |
 | `search`        | `string`   | 검색 키워드        | ✗    |
 | `aromas`        | `string[]` | 아로마 필터 (다중) | ✗    |
-| `bitterness`    | `number`   | 쓴맛 1~5           | ✗    |
+| `balance`       | `number`   | 밸런스 1~5         | ✗    |
 | `sweetness`     | `number`   | 단맛 1~5           | ✗    |
 | `acidity`       | `number`   | 산미 1~5           | ✗    |
-| `body`          | `number`   | 바디감 1~3         | ✗    |
-| `roasting`      | `number`   | 로스팅 1~3         | ✗    |
+| `body`          | `number`   | 바디감 1~5         | ✗    |
+| `roasting`      | `number`   | 로스팅 1~5         | ✗    |
 
 ### Response Body
 

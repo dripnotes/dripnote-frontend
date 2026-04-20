@@ -20,7 +20,7 @@ export interface RecommendedBean
     | 'primaryAroma'
     | 'aromaImageUrl'
     | 'link'
-    | 'bitterness'
+    | 'balance'
     | 'sweetness'
     | 'acidity'
     | 'body'
@@ -46,7 +46,7 @@ export const mockMainData: MainData = {
     primaryAroma: bean.primaryAroma,
     aromaImageUrl: bean.aromaImageUrl,
     link: `/beans/${bean.id}`,
-    bitterness: bean.bitterness,
+    balance: bean.balance,
     sweetness: bean.sweetness,
     acidity: bean.acidity,
     body: bean.body,

@@ -14,6 +14,7 @@
 
 - **2026-04-20 (3차 개편)**: 레이아웃 아키텍처 표준화(`SectionContainer`) 반영. 모바일 최적화를 위해 히어로 영역 이미지 중앙 정렬, Flavor Profile 시인성 개선, Brewing Guide 2열 그리드(모바일) 및 텍스트/여백 축소 스펙을 추가함.
 - **2026-04-20 (4차 개편)**: 모바일 전용 상단 헤더(로고 및 액션 버튼) 구조 추가. 원두 목록 페이지와 디자인 일관성을 맞추기 위해 로고 배치 및 액션 버튼 상단 우측 정렬 명세를 반영함.
+- **2026-04-20 (5차 개편)**: 향미 지표 체계 현대화. 쓴맛 제거 및 **밸런스** 지표 추가, 모든 지표(산미, 단맛, 밸런스, 바디감, 로스팅)의 **5단계 척도** 표준화 반영.
 
 ---
 
@@ -169,11 +170,29 @@ interface BeanInfoTableProps {
 
 #### 1. Overview (맥락)
 
-- **목적**: 원두의 감각적 특성(산미, 단맛, 쓴맛, 바디, 로스팅)을 정량적 지표로 시각화하여 사용자가 직관적으로 맛의 프로파일을 유추할 수 있도록 함.
+- **목적**: 원두의 감각적 특성을 정량적 지표로 시각화하여 사용자가 직관적으로 맛의 프로파일을 유추할 수 있도록 함.
 - **위치**: `apps/web/app/(main)/beans/[id]/_components/FlavorProfileSection.tsx`
 - **부모 컴포넌트**: `BeanDetailPage`
 
-**(이하 상세 스펙은 기존과 동일)**
+#### 2. Data Interface (I/O)
+
+**Props**:
+
+```ts
+interface FlavorProfileProps {
+  acidity: number; // 1~5
+  sweetness: number; // 1~5
+  balance: number; // 1~5 (신규)
+  body: number; // 1~5 (기존 3단계에서 확장)
+  roasting: number; // 1~5 (기존 3단계에서 확장)
+}
+```
+
+#### 3. Functional Requirements (단계별 요구사항)
+
+1. 모든 지표는 `RatingScale` 컴포넌트를 사용하여 **5단계 표준 척도**로 표시한다.
+2. 지표 배치 순서는 **산미(Acidity) -> 단맛(Sweetness) -> 바디감(Body)** (상단 그리드), **밸런스(Balance) -> 로스팅(Roast)** (하단 그리드) 순으로 정렬한다.
+3. 로스팅 단계는 5단계를 지원하며, 툴팁이나 가이드 상에서 **Light, Light Medium, Medium, Medium Dark, Dark**로 구분한다.
 
 ---
 
