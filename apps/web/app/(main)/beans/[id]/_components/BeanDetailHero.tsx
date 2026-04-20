@@ -41,8 +41,8 @@ export function BeanDetailHero({
         <span className="font-outfit text-sm font-medium tracking-wider uppercase">Back</span>
       </button>
 
-      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
-        {/* Left: Image Container */}
+      <div className="relative grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-20">
+        {/* Left: Image Container + Mobile Text Overlay */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -57,30 +57,47 @@ export function BeanDetailHero({
             sizes="(max-width: 1024px) 100vw, 50vw"
             priority
           />
-          <div className="pointer-events-none absolute inset-0 bg-black/10" />
+          {/* Mobile Overlay Gradient for readability */}
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent md:hidden" />
+
+          {/* Mobile-only Text Overlay */}
+          <div className="absolute bottom-0 left-0 z-10 w-full p-6 md:hidden">
+            {roastery && (
+              <p className="font-outfit mb-2 text-xs font-medium tracking-[0.2em] text-white/80 uppercase">
+                {roastery}
+              </p>
+            )}
+            <h1 className="font-playfair mb-2 text-3xl font-bold text-white">{name}</h1>
+            <p className="font-outfit text-xs font-medium tracking-[0.2em] text-white/60 uppercase">
+              {origin}
+            </p>
+          </div>
         </motion.div>
 
-        {/* Right: Header Info */}
+        {/* Right: Info & Actions */}
         <div className="flex flex-col">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
           >
-            {roastery && (
-              <p className="font-outfit mb-3 text-sm font-medium tracking-[0.2em] text-amber-600 uppercase">
-                {roastery}
+            {/* Tablet/Desktop Text Content */}
+            <div className="hidden md:block">
+              {roastery && (
+                <p className="font-outfit mb-3 text-sm font-medium tracking-[0.2em] text-amber-600 uppercase">
+                  {roastery}
+                </p>
+              )}
+              <h1 className="font-playfair mb-4 text-[clamp(1.75rem,5vw,3.75rem)] leading-tight font-bold text-gray-900">
+                {name}
+              </h1>
+              <p className="font-outfit mb-8 text-sm font-medium tracking-[0.2em] text-gray-500 uppercase">
+                {origin}
               </p>
-            )}
-            <h1 className="font-playfair mb-4 text-[clamp(1.75rem,5vw,3.75rem)] leading-tight font-bold text-gray-900">
-              {name}
-            </h1>
-            <p className="font-outfit mb-8 text-sm font-medium tracking-[0.2em] text-gray-500 uppercase">
-              {origin}
-            </p>
+            </div>
 
-            {/* Action Bar */}
-            <div className="flex items-center space-x-4 border-t border-gray-100 pt-8">
+            {/* Action Bar (Always below image on mobile, right column on md+) */}
+            <div className="flex items-center space-x-4 pt-4 md:border-t md:border-gray-100 md:pt-8">
               <button
                 onClick={() => setIsBookmarked(!isBookmarked)}
                 className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 transition-colors hover:border-amber-500 hover:bg-amber-50"
