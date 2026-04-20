@@ -72,8 +72,8 @@ export default function BeanCard({
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
-        duration: 0.3,
-        ease: 'easeOut',
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1], // Quintic Out - very smooth & premium feel
       }}
       hoverEffect="translate"
       className={bgClass}
@@ -91,8 +91,9 @@ export default function BeanCard({
           </VisualCard.Image>
 
           {/* 호버 및 포커스 시 나타나는 프로필 정보 오버레이 (접근성: group-focus-within 추가) */}
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-focus-within:opacity-100 group-hover:opacity-100">
-            <div className="flex flex-col items-center space-y-4">
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 ease-out group-focus-within:opacity-100 group-hover:opacity-100">
+            {/* 내부 콘텐츠가 아래에서 위로 부드럽게 올라오는 애니메이션 추가 */}
+            <div className="flex translate-y-8 flex-col items-center space-y-4 transition-all duration-500 ease-out group-focus-within:translate-y-0 group-hover:translate-y-0">
               {/* 로스터리 마크 (임의의 플레이스홀더) */}
               <div className="flex justify-center">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">
@@ -119,7 +120,7 @@ export default function BeanCard({
           {/* 텍스트 영역 (비호버 및 비포커스 시 노출) */}
           <VisualCard.Content
             position="bottom-left"
-            className="z-20 transition-all duration-300 group-focus-within:translate-y-2 group-focus-within:opacity-0 group-hover:translate-y-2 group-hover:opacity-0"
+            className="z-20 transition-all duration-500 ease-out group-focus-within:-translate-y-2 group-focus-within:opacity-0 group-hover:-translate-y-2 group-hover:opacity-0"
           >
             <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
               {origin}

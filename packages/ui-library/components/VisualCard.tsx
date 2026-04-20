@@ -32,7 +32,7 @@ const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
       <Component
         ref={ref}
         className={cn(
-          'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300',
+          'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-500 ease-out',
           // Glow는 Transform이 아니므로 CSS 클래스로 처리 (심미적 접근)
           hoverEffect === 'glow' &&
             'transition-shadow hover:shadow-[0_0_20px_rgba(245,158,11,0.35)]',
