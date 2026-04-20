@@ -97,6 +97,9 @@ export interface BeanInfo {
   processing?: string; // 가공 방식 (Natural, Washed 등)
   variety?: string; // 품종
   altitude?: string; // 재배 고도
+  category?: string; // 예: 'Single Origin', 'Decaf'
+  blend?: boolean; // 혼합 여부
+  purchaseUrl?: string; // 외부 구매 링크
   recipe?: {
     method: string; // 추출 기구 (V60, Chemex 등)
     ratio: string; // 비율 (예: 1:15)
@@ -166,6 +169,9 @@ export const mockBeansData: BeanInfo[] = [
     processing: 'Washed',
     variety: 'Caturra',
     altitude: '1,850m',
+    category: 'Single Origin',
+    blend: false,
+    purchaseUrl: 'https://example.com/buy',
     recipe: {
       method: 'Hario V60',
       ratio: '20g coffee : 300g water',

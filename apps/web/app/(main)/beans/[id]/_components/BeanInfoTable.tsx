@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 
 interface BeanInfoTableProps {
   origin: string;
+  category?: string;
+  blend?: boolean;
   processing?: string;
   variety?: string;
   altitude?: string;
@@ -12,6 +14,8 @@ interface BeanInfoTableProps {
 
 export function BeanInfoTable({
   origin,
+  category,
+  blend,
   processing,
   variety,
   altitude,
@@ -19,10 +23,12 @@ export function BeanInfoTable({
 }: BeanInfoTableProps) {
   const infoItems = [
     { label: 'Origin', value: origin },
+    { label: 'Category', value: category },
+    { label: 'Type', value: blend === undefined ? undefined : blend ? 'Blend' : 'Single Origin' },
     { label: 'Processing', value: processing },
     { label: 'Variety', value: variety },
     { label: 'Altitude', value: altitude },
-  ].filter(item => item.value);
+  ].filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 md:px-8">
@@ -31,27 +37,28 @@ export function BeanInfoTable({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16"
+        className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16"
       >
-        <div className="lg:col-span-8 flex flex-col justify-center">
-          <h2 className="font-playfair text-3xl font-bold text-gray-900 mb-6">About the Bean</h2>
+        <div className="flex flex-col justify-center lg:col-span-8">
+          <h2 className="font-playfair mb-6 text-3xl font-bold text-gray-900">About the Bean</h2>
           {description ? (
-            <p className="text-gray-600 leading-relaxed text-lg">
-              {description}
-            </p>
+            <p className="text-lg leading-relaxed text-gray-600">{description}</p>
           ) : (
             <p className="text-gray-400 italic">상세 설명이 준비되지 않았습니다.</p>
           )}
         </div>
 
-        <div className="lg:col-span-4 bg-gray-50 rounded-2xl p-8 border border-gray-100">
+        <div className="rounded-2xl border border-gray-100 bg-gray-50 p-8 lg:col-span-4">
           <ul className="space-y-6">
             {infoItems.map((item, i) => (
-              <li key={i} className="flex flex-col border-b border-gray-200 pb-4 last:border-0 last:pb-0">
-                <span className="font-outfit text-xs font-semibold tracking-widest text-amber-600 uppercase mb-1">
+              <li
+                key={i}
+                className="flex flex-col border-b border-gray-200 pb-4 last:border-0 last:pb-0"
+              >
+                <span className="font-outfit mb-1 text-xs font-semibold tracking-widest text-amber-600 uppercase">
                   {item.label}
                 </span>
-                <span className="text-gray-900 font-medium">{item.value}</span>
+                <span className="font-medium text-gray-900">{item.value}</span>
               </li>
             ))}
           </ul>

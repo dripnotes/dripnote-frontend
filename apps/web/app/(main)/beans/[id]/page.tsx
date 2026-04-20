@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import PageContainer from '@/components/layout/PageContainer';
+import RecommendedBeans from '@/components/main/RecommendedBeans';
 import { mockBeansData } from '@/lib/api/beans';
+import { mockMainData } from '@/lib/api/main';
 
 import { BeanDetailHero } from './_components/BeanDetailHero';
 import { BeanInfoTable } from './_components/BeanInfoTable';
@@ -63,6 +65,16 @@ export default function BeanDetailPage({ params }: Props) {
         roastery={bean.roastery}
         aromaImageUrl={bean.aromaImageUrl}
         primaryAroma={bean.primaryAroma}
+        purchaseUrl={bean.purchaseUrl}
+      />
+      <BeanInfoTable
+        origin={bean.origin}
+        category={bean.category}
+        blend={bean.blend}
+        processing={bean.processing}
+        variety={bean.variety}
+        altitude={bean.altitude}
+        description={bean.description}
       />
       <FlavorProfileSection
         bitterness={bean.bitterness || 0}
@@ -71,14 +83,8 @@ export default function BeanDetailPage({ params }: Props) {
         body={bean.body || 0}
         roasting={bean.roasting || 0}
       />
-      <BeanInfoTable
-        origin={bean.origin}
-        processing={bean.processing}
-        variety={bean.variety}
-        altitude={bean.altitude}
-        description={bean.description}
-      />
       <BrewingGuide recipe={bean.recipe} />
+      <RecommendedBeans beans={mockMainData.recommendedBeans} />
     </PageContainer>
   );
 }
