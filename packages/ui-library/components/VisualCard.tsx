@@ -1,3 +1,5 @@
+'use client';
+
 import { Slot } from '@radix-ui/react-slot';
 import { motion, HTMLMotionProps } from 'framer-motion';
 import * as React from 'react';
@@ -8,26 +10,30 @@ import { cn } from '../lib/utils';
  * - Root, ImageContainer, Image, Overlay, Content, Body, Title, Description, Footer
  */
 
-interface VisualCardRootProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
+interface VisualCardRootProps extends Omit<HTMLMotionProps<'div'>, 'children' | 'whileHover'> {
   asChild?: boolean;
   hoverEffect?: 'none' | 'translate' | 'glow';
   children?: React.ReactNode;
+  whileHover?: import('framer-motion').TargetAndTransition;
 }
 
 const MotionSlot = motion(Slot);
 
 const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
-  ({ className, asChild, hoverEffect = 'none', children, ...props }, ref) => {
+  ({ className, asChild, hoverEffect = 'none', children, whileHover, ...props }, ref) => {
     const Component = asChild ? MotionSlot : motion.div;
+
+    // Framer Motion을 이용한 트랜스포름 제어 (CSS와 충돌 방지)
+    const mergedWhileHover = {
+      ...(hoverEffect === 'translate' && { y: -8 }),
+      ...(whileHover || {}),
+    };
 
     return (
       <Component
         ref={ref}
-        className={cn(
-          'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300',
-          hoverEffect === 'translate' && 'hover:-translate-y-2',
-          className,
-        )}
+        className={cn('group relative flex h-full flex-col overflow-hidden rounded-2xl', className)}
+        whileHover={mergedWhileHover}
         {...props}
       >
         {children}
@@ -66,11 +72,12 @@ const ImageContainer = ({
 };
 ImageContainer.displayName = 'VisualCard.ImageContainer';
 
-interface VisualCardImageProps extends React.HTMLAttributes<HTMLElement> {
-  hoverScale?: 1.05 | 1.1 | 1.15 | number;
+interface VisualCardImageProps extends Omit<HTMLMotionProps<'img'>, 'src' | 'alt' | 'whileHover'> {
+  hoverScale?: number;
   asChild?: boolean;
   src?: string;
   alt?: string;
+  whileHover?: import('framer-motion').TargetAndTransition;
 }
 
 const VisualImage = ({
@@ -78,29 +85,25 @@ const VisualImage = ({
   hoverScale = 1.1,
   asChild,
   children,
+  whileHover,
+  src,
+  alt,
   ...props
 }: VisualCardImageProps) => {
-  const Component = asChild ? Slot : 'img';
-
-  // Tailwind JIT를 위해 하드코딩된 클래스 매핑 사용
-  const scaleClass =
-    hoverScale === 1.05
-      ? 'group-hover:scale-105'
-      : hoverScale === 1.15
-        ? 'group-hover:scale-115'
-        : 'group-hover:scale-110'; // Default to 1.1
+  const MotionComponent = asChild ? MotionSlot : motion.img;
 
   return (
-    <Component
+    <MotionComponent
       className={cn(
-        'h-full w-full object-cover transition-transform duration-500',
-        scaleClass,
+        'h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110',
         className,
       )}
+      src={src}
+      alt={alt}
       {...props}
     >
       {asChild && children}
-    </Component>
+    </MotionComponent>
   );
 };
 VisualImage.displayName = 'VisualCard.Image';
@@ -139,6 +142,7 @@ const Content = ({ className, position = 'bottom-left', children, ...props }: Co
         'absolute z-20 w-full p-6',
         position === 'bottom-left' && 'bottom-0 left-0',
         position === 'center' && 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center',
+        position === 'top-right' && 'right-0 top-0 text-right',
         className,
       )}
       {...props}

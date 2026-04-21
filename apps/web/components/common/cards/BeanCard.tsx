@@ -1,7 +1,7 @@
 'use client';
 
-import { RatingScale, VisualCard } from '@coffee-service/ui-library';
-import { Coffee } from 'lucide-react';
+import { RatingScale, VisualCard, type ColorPalette } from '@coffee-service/ui-library';
+import { Coffee, Droplets, Flame, Layers, Scale, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,8 +15,7 @@ interface BeanCardProps
     | 'origin'
     | 'primaryAroma'
     | 'aromaImageUrl'
-    | 'link'
-    | 'bitterness'
+    | 'balance'
     | 'sweetness'
     | 'acidity'
     | 'roasting'
@@ -32,23 +31,40 @@ function ProfileIndicator({
   label,
   value,
   max = 5,
+  colorPalette = 'amber',
 }: {
   label: string;
   value: number;
   max?: number;
+  colorPalette?: ColorPalette;
 }) {
+  const Icon =
+    label === 'Acidity'
+      ? Droplets
+      : label === 'Sweetness'
+        ? Sparkles
+        : label === 'Body'
+          ? Layers
+          : label === 'Balance'
+            ? Scale
+            : Flame;
+
   return (
-    <div className="flex w-[140px] items-center justify-between">
-      <span className="font-outfit text-left text-[10px] font-medium tracking-wider text-white/50 uppercase">
-        {label === 'Roast' ? 'Roasting' : label}
-      </span>
-      {/* RatingScale 공통 컴포넌트 사용 (Drawer/Mobile용 사이즈인 'sm' 적용하여 콤팩트하게 표현) */}
+    <div className="flex w-[110px] items-center justify-between md:w-[150px]">
+      <div className="flex items-center gap-1.5 md:gap-2">
+        <Icon className="h-2.5 w-2.5 text-white/40 md:h-3 md:w-3" />
+        <span className="font-outfit text-left text-[8px] font-medium tracking-wider text-white/50 uppercase md:text-[10px]">
+          {label === 'Roast' ? 'Roasting' : label}
+        </span>
+      </div>
+      {/* RatingScale 공통 컴포넌트의 'indicator' 변체와 readOnly 속성을 사용하여 접근성 보강 */}
       <RatingScale
         max={max}
         value={value}
-        onChange={() => {}}
-        variant="sm"
-        className="pointer-events-none w-[60px]"
+        variant="indicator"
+        readOnly
+        colorPalette={colorPalette}
+        className="w-[40px] md:w-[60px]"
       />
     </div>
   );
@@ -59,12 +75,12 @@ function ProfileIndicator({
  * 디자인 고도화: 호버 시 원두 프로필(맛, 바디, 로스팅) 정보를 오버레이로 표시
  */
 export default function BeanCard({
+  id,
   name,
   origin,
   primaryAroma,
   aromaImageUrl,
-  link,
-  bitterness,
+  balance,
   sweetness,
   acidity,
   roasting,
@@ -78,59 +94,64 @@ export default function BeanCard({
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
-        duration: 0.3,
-        ease: 'easeOut',
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1], // Quintic Out - very smooth & premium feel
       }}
       hoverEffect="translate"
       className={bgClass}
     >
-      <Link href={link}>
+      <Link href={`/beans/${id}`} aria-label={`${name} 원두 상세 정보 보기`}>
         <VisualCard.ImageContainer aspectRatio="3/4">
-          <VisualCard.Image src={aromaImageUrl} alt={name} asChild hoverScale={1.1}>
+          <VisualCard.Image asChild hoverScale={1.1}>
             <Image
               src={aromaImageUrl}
-              alt={`${primaryAroma} — ${name}`}
+              alt={`${primaryAroma} 향미의 ${name} 원두 이미지`}
               fill
               className="object-cover transition-transform duration-700"
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </VisualCard.Image>
 
-          {/* 호버 시 나타나는 프로필 정보 오버레이 */}
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100">
-            <div className="flex flex-col items-center space-y-4">
+          {/* 호버 및 포커스 시 나타나는 프로필 정보 오버레이 (접근성: group-focus-within 추가) */}
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 opacity-0 backdrop-blur-[2px] transition-all duration-500 ease-out group-focus-within:opacity-100 group-hover:opacity-100">
+            {/* 내부 콘텐츠가 아래에서 위로 부드럽게 올라오는 애니메이션 추가 */}
+            <div className="flex translate-y-8 flex-col items-center space-y-2 transition-all duration-500 ease-out group-focus-within:translate-y-0 group-hover:translate-y-0 md:space-y-4">
               {/* 로스터리 마크 (임의의 플레이스홀더) */}
               <div className="flex justify-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">
-                  <Coffee className="h-5 w-5 text-white/80" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-sm md:h-10 md:w-10">
+                  <Coffee className="h-4 w-4 text-white/80 md:h-5 md:w-5" />
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2 md:space-y-3">
                 <ProfileIndicator label="Acidity" value={acidity} />
                 <ProfileIndicator label="Sweetness" value={sweetness} />
-                <ProfileIndicator label="Bitterness" value={bitterness} />
-                <ProfileIndicator label="Body" value={body} max={3} />
-                <ProfileIndicator label="Roast" value={roasting} max={3} />
+                <ProfileIndicator label="Body" value={body} />
+                <ProfileIndicator
+                  label="Balance"
+                  value={balance}
+                  colorPalette={balance <= 2 ? 'red' : balance === 3 ? 'blue' : 'green'}
+                />
+                <ProfileIndicator label="Roast" value={roasting} colorPalette="espresso" />
               </div>
             </div>
           </div>
 
-          {/* 텍스트 가독성을 위한 기본 그라데이션 오버레이 (비호버 시) */}
+          {/* 텍스트 가독성을 위한 기본 그라데이션 오버레이 (비호버 및 비포커스 시) */}
           <VisualCard.Overlay
             variant="bottom"
-            className="z-10 transition-opacity duration-300 group-hover:opacity-0"
+            className="z-10 transition-opacity duration-300 group-focus-within:opacity-0 group-hover:opacity-0"
           />
 
-          {/* 텍스트 영역 (비호버 시 노출) */}
+          {/* 텍스트 영역 (비호버 및 비포커스 시 노출) */}
           <VisualCard.Content
             position="bottom-left"
-            className="z-20 transition-all duration-300 group-hover:translate-y-2 group-hover:opacity-0"
+            className="z-20 transition-all duration-500 ease-out group-focus-within:-translate-y-2 group-focus-within:opacity-0 group-hover:-translate-y-2 group-hover:opacity-0"
           >
-            <p className="font-outfit mb-2 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase">
+            <p className="font-outfit mb-1 text-[8px] font-medium tracking-[0.2em] text-white/70 uppercase md:mb-2 md:text-[10px]">
               {origin}
             </p>
-            <VisualCard.Title className="font-playfair text-2xl leading-tight font-bold tracking-tight text-white">
+            <VisualCard.Title className="font-playfair text-lg leading-tight font-bold tracking-tight text-white md:text-2xl">
               {name}
             </VisualCard.Title>
           </VisualCard.Content>

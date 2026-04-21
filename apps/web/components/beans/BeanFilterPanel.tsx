@@ -2,7 +2,7 @@
 
 import { RatingScale } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
-import { RotateCcw } from 'lucide-react';
+import { Droplets, Flame, Layers, RotateCcw, Scale, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import {
@@ -24,7 +24,7 @@ interface BeanFilterPanelProps {
 
 const isFiltered = (filters: BeanFilterState) =>
   filters.aromas.length > 0 ||
-  filters.flavor.bitterness > 0 ||
+  filters.flavor.balance > 0 ||
   filters.flavor.sweetness > 0 ||
   filters.flavor.acidity > 0 ||
   filters.body > 0 ||
@@ -119,96 +119,123 @@ export default function BeanFilterPanel({
           </div>
         </div>
 
-        {/* Flavor */}
-        <div className="border-b border-gray-100 py-5">
-          <p className={SECTION_TITLE}>Flavor</p>
-          <div className="space-y-3">
-            <div>
-              <p className="mb-1.5 text-xs text-gray-500">쓴맛</p>
-              <RatingScale
-                max={5}
-                value={localFilters.flavor.bitterness}
-                onChange={(v) =>
-                  setLocalFilters({
-                    ...localFilters,
-                    flavor: { ...localFilters.flavor, bitterness: v },
-                  })
-                }
-              />
-            </div>
-            <div>
-              <p className="mb-1.5 text-xs text-gray-500">단맛</p>
-              <RatingScale
-                max={5}
-                value={localFilters.flavor.sweetness}
-                onChange={(v) =>
-                  setLocalFilters({
-                    ...localFilters,
-                    flavor: { ...localFilters.flavor, sweetness: v },
-                  })
-                }
-              />
-            </div>
-            <div>
-              <p className="mb-1.5 text-xs text-gray-500">산미</p>
-              <RatingScale
-                max={5}
-                value={localFilters.flavor.acidity}
-                onChange={(v) =>
-                  setLocalFilters({
-                    ...localFilters,
-                    flavor: { ...localFilters.flavor, acidity: v },
-                  })
-                }
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Body */}
-        <div className="border-b border-gray-100 py-5">
-          <div className="flex items-center justify-between">
-            <p className={SECTION_TITLE}>Body</p>
-            <p className="text-xs text-gray-400">
-              {localFilters.body === 1
-                ? '가벼움'
-                : localFilters.body === 2
-                  ? '보통'
-                  : localFilters.body === 3
-                    ? '묵직함'
-                    : ''}
+        {/* Metrics Section */}
+        <div className="space-y-4 py-3">
+          {/* Acidity */}
+          <div className="border-b border-gray-100 pb-4">
+            <p className="font-outfit mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-500 uppercase">
+              <Droplets className="h-3 w-3" />
+              Acidity
             </p>
+            <RatingScale
+              max={5}
+              value={localFilters.flavor.acidity}
+              onChange={(v) =>
+                setLocalFilters({
+                  ...localFilters,
+                  flavor: { ...localFilters.flavor, acidity: v },
+                })
+              }
+            />
           </div>
-          <RatingScale
-            max={3}
-            value={localFilters.body}
-            onChange={(v) =>
-              setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
-            }
-          />
-        </div>
 
-        {/* Roasting */}
-        <div className="pt-5 pb-5">
-          <div className="flex items-center justify-between">
-            <p className={SECTION_TITLE}>Roasting</p>
-            <p className="text-xs text-gray-400">
-              {localFilters.roasting === 1
-                ? 'Light'
-                : localFilters.roasting === 2
-                  ? 'Medium'
-                  : localFilters.roasting === 3
-                    ? 'Dark'
-                    : ''}
+          {/* Sweetness */}
+          <div className="border-b border-gray-100 pb-4">
+            <p className="font-outfit mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-500 uppercase">
+              <Sparkles className="h-3 w-3" />
+              Sweetness
             </p>
+            <RatingScale
+              max={5}
+              value={localFilters.flavor.sweetness}
+              onChange={(v) =>
+                setLocalFilters({
+                  ...localFilters,
+                  flavor: { ...localFilters.flavor, sweetness: v },
+                })
+              }
+            />
           </div>
-          <RatingScale
-            max={3}
-            value={localFilters.roasting}
-            onChange={(v) =>
-              setLocalFilters({ ...localFilters, roasting: v as BeanFilterState['roasting'] })
-            }
-          />
+
+          {/* Body */}
+          <div className="border-b border-gray-100 pb-4">
+            <div className="flex items-center justify-between">
+              <p className="font-outfit mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-500 uppercase">
+                <Layers className="h-3 w-3" />
+                Body
+              </p>
+              <p className="text-xs text-gray-400">
+                {localFilters.body === 1
+                  ? 'Very Light'
+                  : localFilters.body === 2
+                    ? 'Light'
+                    : localFilters.body === 3
+                      ? 'Medium'
+                      : localFilters.body === 4
+                        ? 'Full'
+                        : localFilters.body === 5
+                          ? 'Extra Bold'
+                          : ''}
+              </p>
+            </div>
+            <RatingScale
+              max={5}
+              value={localFilters.body}
+              onChange={(v) =>
+                setLocalFilters({ ...localFilters, body: v as BeanFilterState['body'] })
+              }
+            />
+          </div>
+
+          {/* Balance */}
+          <div className="border-b border-gray-100 pb-4">
+            <p className="font-outfit mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-500 uppercase">
+              <Scale className="h-3 w-3" />
+              Balance
+            </p>
+            <RatingScale
+              max={5}
+              value={localFilters.flavor.balance}
+              colorPalette="teal"
+              onChange={(v) =>
+                setLocalFilters({
+                  ...localFilters,
+                  flavor: { ...localFilters.flavor, balance: v },
+                })
+              }
+            />
+          </div>
+
+          {/* Roasting */}
+          <div className="pb-4">
+            <div className="flex items-center justify-between">
+              <p className="font-outfit mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-widest text-gray-500 uppercase">
+                <Flame className="h-3 w-3" />
+                Roasting
+              </p>
+              <p className="text-xs text-gray-400">
+                {localFilters.roasting === 1
+                  ? 'Light'
+                  : localFilters.roasting === 2
+                    ? 'Light Medium'
+                    : localFilters.roasting === 3
+                      ? 'Medium'
+                      : localFilters.roasting === 4
+                        ? 'Medium Dark'
+                        : localFilters.roasting === 5
+                          ? 'Dark'
+                          : ''}
+              </p>
+            </div>
+            <RatingScale
+              max={5}
+              value={localFilters.roasting}
+              colorPalette="espresso"
+              onChange={(v) =>
+                setLocalFilters({ ...localFilters, roasting: v as BeanFilterState['roasting'] })
+              }
+            />
+          </div>
         </div>
       </div>
 
