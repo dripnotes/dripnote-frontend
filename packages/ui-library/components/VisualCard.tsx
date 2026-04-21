@@ -90,6 +90,8 @@ const VisualImage = ({
   asChild,
   children,
   whileHover,
+  src,
+  alt,
   ...props
 }: VisualCardImageProps) => {
   const Component = asChild ? Slot : 'img';
@@ -105,7 +107,9 @@ const VisualImage = ({
     <MotionComponent
       className={cn('h-full w-full object-cover transition-transform duration-500', className)}
       whileHover={mergedWhileHover}
-      {...(props as any)}
+      src={src}
+      alt={alt}
+      {...props}
     >
       {asChild && children}
     </MotionComponent>

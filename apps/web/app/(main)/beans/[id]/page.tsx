@@ -12,14 +12,15 @@ import { BrewingGuide } from './_components/BrewingGuide';
 import { FlavorProfileSection } from './_components/FlavorProfileSection';
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // 동적 메타데이터 생성 (SEO)
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = parseInt(params.id, 10);
+  const { id: idParam } = await params;
+  const id = parseInt(idParam, 10);
   const bean = mockBeansData.find((b) => b.id === id);
 
   if (!bean) {
@@ -49,8 +50,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function BeanDetailPage({ params }: Props) {
-  const id = parseInt(params.id, 10);
+export default async function BeanDetailPage({ params }: Props) {
+  const { id: idParam } = await params;
+  const id = parseInt(idParam, 10);
   const bean = mockBeansData.find((b) => b.id === id);
 
   if (!bean) {
