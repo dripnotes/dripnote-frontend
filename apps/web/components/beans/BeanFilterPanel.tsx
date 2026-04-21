@@ -196,13 +196,7 @@ export default function BeanFilterPanel({
             <RatingScale
               max={5}
               value={localFilters.flavor.balance}
-              colorPalette={
-                localFilters.flavor.balance <= 2
-                  ? 'red'
-                  : localFilters.flavor.balance === 3
-                    ? 'blue'
-                    : 'green'
-              }
+              colorPalette="teal"
               onChange={(v) =>
                 setLocalFilters({
                   ...localFilters,

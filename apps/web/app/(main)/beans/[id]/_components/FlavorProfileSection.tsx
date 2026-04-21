@@ -53,6 +53,7 @@ function ProfileIndicator({
         max={max}
         value={value}
         readOnly
+        variant="indicator"
         colorPalette={colorPalette}
         className="w-full"
       />

@@ -21,7 +21,8 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id: idParam } = await params;
   const id = parseInt(idParam, 10);
-  const bean = mockBeansData.find((b) => b.id === id);
+  const bean =
+    !isNaN(id) && idParam === id.toString() ? mockBeansData.find((b) => b.id === id) : null;
 
   if (!bean) {
     return {
@@ -53,6 +54,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BeanDetailPage({ params }: Props) {
   const { id: idParam } = await params;
   const id = parseInt(idParam, 10);
+
+  // ID가 숫자가 아니거나 유효하지 않은 정수인 경우 404 처리
+  if (isNaN(id) || idParam !== id.toString()) {
+    notFound();
+  }
+
   const bean = mockBeansData.find((b) => b.id === id);
 
   if (!bean) {
@@ -67,7 +74,6 @@ export default async function BeanDetailPage({ params }: Props) {
         roastery={bean.roastery}
         aromaImageUrl={bean.aromaImageUrl}
         primaryAroma={bean.primaryAroma}
-        purchaseUrl={bean.purchaseUrl}
       />
       <BeanInfoTable
         origin={bean.origin}

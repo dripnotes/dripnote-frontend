@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bookmark, Share, ChevronLeft, ExternalLink } from 'lucide-react';
+import { Bookmark, Share, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,6 @@ interface BeanDetailHeroProps {
   roastery?: string;
   aromaImageUrl: string;
   primaryAroma: AromaType;
-  purchaseUrl?: string;
 }
 
 export function BeanDetailHero({
@@ -26,7 +25,6 @@ export function BeanDetailHero({
   roastery,
   aromaImageUrl,
   primaryAroma,
-  purchaseUrl,
 }: BeanDetailHeroProps) {
   const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -53,22 +51,13 @@ export function BeanDetailHero({
             />
           </button>
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100"
-            aria-label="공유하기"
+            className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-300 transition-colors"
+            disabled
+            aria-disabled="true"
+            aria-label="공유하기 (준비 중)"
           >
-            <Share className="h-5 w-5 text-gray-400" />
+            <Share className="h-5 w-5" />
           </button>
-          {purchaseUrl && (
-            <a
-              href={purchaseUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100"
-              aria-label="결제 페이지로 이동"
-            >
-              <ExternalLink className="h-5 w-5 text-gray-400" />
-            </a>
-          )}
         </div>
       </div>
 
@@ -157,25 +146,13 @@ export function BeanDetailHero({
                 />
               </button>
               <button
-                className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 transition-colors hover:border-amber-500 hover:bg-amber-50"
-                aria-label="공유하기"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-100 bg-gray-50/50 text-gray-300 transition-colors"
+                disabled
+                aria-disabled="true"
+                aria-label="공유하기 (준비 중)"
               >
-                <Share className="h-5 w-5 text-gray-400 transition-colors group-hover:text-amber-500" />
+                <Share className="h-5 w-5" />
               </button>
-              {purchaseUrl && (
-                <a
-                  href={purchaseUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex h-12 items-center justify-center space-x-2 rounded-full border border-gray-200 px-6 transition-colors hover:border-amber-500 hover:bg-amber-50"
-                  aria-label="결제 페이지로 이동"
-                >
-                  <span className="font-outfit text-sm font-semibold tracking-wider text-gray-600 uppercase transition-colors group-hover:text-amber-600">
-                    Buy Beans
-                  </span>
-                  <ExternalLink className="h-4 w-4 text-gray-400 transition-colors group-hover:text-amber-500" />
-                </a>
-              )}
             </div>
           </motion.div>
         </div>

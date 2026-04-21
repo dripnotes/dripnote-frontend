@@ -103,7 +103,7 @@ const RatingScale = ({
   className,
 }: RatingScaleProps) => {
   const isIndicator = variant === 'indicator';
-  const isReadOnly = readOnly || isIndicator;
+  const isReadOnly = readOnly || isIndicator || !onChange;
   const theme = PALETTES[colorPalette];
 
   return (
@@ -114,7 +114,8 @@ const RatingScale = ({
         className,
       )}
       aria-label={isReadOnly ? `평점: ${value} / ${max}` : undefined}
-      role={isReadOnly ? 'img' : undefined}
+      role={isReadOnly ? 'img' : 'group'}
+      aria-roledescription={!isReadOnly ? '평점 선택기' : undefined}
     >
       {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
         const isActive = n <= value;
@@ -164,6 +165,7 @@ const RatingScale = ({
               variant === 'md' ? 'h-7' : 'h-8',
             )}
             aria-label={`${n}점 선택`}
+            aria-pressed={isActive}
           />
         );
       })}

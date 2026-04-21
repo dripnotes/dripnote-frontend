@@ -10,10 +10,11 @@ import { cn } from '../lib/utils';
  * - Root, ImageContainer, Image, Overlay, Content, Body, Title, Description, Footer
  */
 
-interface VisualCardRootProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
+interface VisualCardRootProps extends Omit<HTMLMotionProps<'div'>, 'children' | 'whileHover'> {
   asChild?: boolean;
   hoverEffect?: 'none' | 'translate' | 'glow';
   children?: React.ReactNode;
+  whileHover?: import('framer-motion').TargetAndTransition;
 }
 
 const MotionSlot = motion(Slot);
@@ -25,19 +26,13 @@ const Root = React.forwardRef<HTMLDivElement, VisualCardRootProps>(
     // Framer Motion을 이용한 트랜스포름 제어 (CSS와 충돌 방지)
     const mergedWhileHover = {
       ...(hoverEffect === 'translate' && { y: -8 }),
-      ...(typeof whileHover === 'object' ? whileHover : {}),
+      ...(whileHover || {}),
     };
 
     return (
       <Component
         ref={ref}
-        className={cn(
-          'group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-500 ease-out',
-          // Glow는 Transform이 아니므로 CSS 클래스로 처리 (심미적 접근)
-          hoverEffect === 'glow' &&
-            'transition-shadow hover:shadow-[0_0_20px_rgba(245,158,11,0.35)]',
-          className,
-        )}
+        className={cn('group relative flex h-full flex-col overflow-hidden rounded-2xl', className)}
         whileHover={mergedWhileHover}
         {...props}
       >
@@ -77,11 +72,12 @@ const ImageContainer = ({
 };
 ImageContainer.displayName = 'VisualCard.ImageContainer';
 
-interface VisualCardImageProps extends Omit<HTMLMotionProps<'img'>, 'src' | 'alt'> {
+interface VisualCardImageProps extends Omit<HTMLMotionProps<'img'>, 'src' | 'alt' | 'whileHover'> {
   hoverScale?: number;
   asChild?: boolean;
   src?: string;
   alt?: string;
+  whileHover?: import('framer-motion').TargetAndTransition;
 }
 
 const VisualImage = ({
@@ -94,18 +90,17 @@ const VisualImage = ({
   alt,
   ...props
 }: VisualCardImageProps) => {
-  const Component = asChild ? Slot : 'img';
   const MotionComponent = asChild ? MotionSlot : motion.img;
 
   // Transform 충돌 방지를 위해 whileHover로 scale 제어
   const mergedWhileHover = {
     scale: hoverScale,
-    ...(typeof whileHover === 'object' ? whileHover : {}),
+    ...(whileHover || {}),
   };
 
   return (
     <MotionComponent
-      className={cn('h-full w-full object-cover transition-transform duration-500', className)}
+      className={cn('h-full w-full object-cover', className)}
       whileHover={mergedWhileHover}
       src={src}
       alt={alt}

@@ -15,7 +15,6 @@ interface BeanCardProps
     | 'origin'
     | 'primaryAroma'
     | 'aromaImageUrl'
-    | 'link'
     | 'balance'
     | 'sweetness'
     | 'acidity'
@@ -76,11 +75,11 @@ function ProfileIndicator({
  * 디자인 고도화: 호버 시 원두 프로필(맛, 바디, 로스팅) 정보를 오버레이로 표시
  */
 export default function BeanCard({
+  id,
   name,
   origin,
   primaryAroma,
   aromaImageUrl,
-  link,
   balance,
   sweetness,
   acidity,
@@ -101,7 +100,7 @@ export default function BeanCard({
       hoverEffect="translate"
       className={bgClass}
     >
-      <Link href={link} aria-label={`${name} 원두 상세 정보 보기`}>
+      <Link href={`/beans/${id}`} aria-label={`${name} 원두 상세 정보 보기`}>
         <VisualCard.ImageContainer aspectRatio="3/4">
           <VisualCard.Image asChild hoverScale={1.1}>
             <Image
