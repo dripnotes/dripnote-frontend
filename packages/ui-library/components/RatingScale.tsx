@@ -150,10 +150,14 @@ const RatingScale = ({
             type="button"
             whileTap={{ scale: 0.95 }}
             onClick={() => onChange?.(value === n ? 0 : n)}
-            initial={{
-              backgroundColor: 'rgb(255, 255, 255)',
-              borderColor: 'rgba(229, 231, 235, 0.5)',
-            }}
+            initial={
+              isActive
+                ? false
+                : {
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    borderColor: 'rgba(229, 231, 235, 0.5)',
+                  }
+            }
             animate={{
               backgroundColor: isActive ? color : 'rgb(249, 250, 251)', // bg-gray-50
               borderColor: isActive ? 'transparent' : 'rgba(229, 231, 235, 0.8)', // border-gray-200

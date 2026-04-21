@@ -324,13 +324,12 @@ interface FlavorCardProps {
 interface BeanItem
   extends Pick<
     BeanInfo,
-    | 'id'
     | 'name'
     | 'origin'
     | 'primaryAroma'
     | 'aromaImageUrl'
     | 'link'
-    | 'bitterness'
+    | 'balance'
     | 'sweetness'
     | 'acidity'
     | 'body'
@@ -591,16 +590,24 @@ HTTP/1.1 400
     ],
     "beans": [
       {
-        "bean_name": "콜롬비아 엘 파라이소",
-        "bean_tasting": ["리치", "요거트", "복숭아"],
-        "bean_image_link": "이미지 링크",
-        "bean_link": "/beans/12"
+        "name": "콜롬비아 엘 파라이소",
+        "aromaImageUrl": "이미지 링크",
+        "balance": 4,
+        "sweetness": 5,
+        "acidity": 4,
+        "body": 3,
+        "roasting": 2,
+        "link": "/beans/12"
       },
       {
-        "bean_name": "케냐 AA 타투 N",
-        "bean_tasting": ["자몽", "블랙커런트", "와이니"],
-        "bean_image_link": "이미지 링크",
-        "bean_link": "/beans/11"
+        "name": "케냐 AA 타투 N",
+        "aromaImageUrl": "이미지 링크",
+        "balance": 3,
+        "sweetness": 3,
+        "acidity": 5,
+        "body": 4,
+        "roasting": 3,
+        "link": "/beans/11"
       }
     ]
   }

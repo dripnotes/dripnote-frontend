@@ -92,16 +92,12 @@ const VisualImage = ({
 }: VisualCardImageProps) => {
   const MotionComponent = asChild ? MotionSlot : motion.img;
 
-  // Transform 충돌 방지를 위해 whileHover로 scale 제어
-  const mergedWhileHover = {
-    scale: hoverScale,
-    ...(whileHover || {}),
-  };
-
   return (
     <MotionComponent
-      className={cn('h-full w-full object-cover', className)}
-      whileHover={mergedWhileHover}
+      className={cn(
+        'h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110',
+        className,
+      )}
       src={src}
       alt={alt}
       {...props}

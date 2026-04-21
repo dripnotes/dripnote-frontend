@@ -209,7 +209,7 @@ interface BeanFilterPanelProps {
 
 1. **Search** 구역: 패널 최상단에 `BeanSearchBar`를 포함하여 이름/원산지 검색 연동
 2. **Aroma (향)** 섹션: 9개 아로마 타입을 Chip 형태로 나열, 다중 선택 가능
-3. **Flavor (맛)** 섹션: **밸런스·단맛·산미**를 각 연속된 N등분 막대 형태(Rating Bar) 1~5단계로 표시
+3. **Flavor (맛)** 섹션: **산미·단맛·밸런스**를 각 연속된 N등분 막대 형태(Rating Bar) 1~5단계로 표시
 4. **Body (바디감)** 섹션: 1(매우 가벼움) ~ 5(매우 묵직함) Rating Bar 5단계로 확장 표시
 5. **Roasting** 섹션: 1(Light) ~ 5(Dark) Rating Bar 5단계로 확장 표시 (단계: Light, Light Medium, Medium, Medium Dark, Dark)
 6. 모든 필터링 조작은 즉시 반영되지 않고 `localFilters` 상태만 갱신한다
@@ -337,14 +337,14 @@ interface BeanFilterDrawerProps {
 
 ```ts
 interface BeanInfo {
-  id: number;
+  id: number; // 데이터베이스 식별자 (라우팅에 직접 사용하지 않음)
   name: string; // 원두 이름 (예: "Colombia Aristides Guarnizo")
   origin: string; // 원산지 (예: "HUILA, COLOMBIA")
   primaryAroma: AromaType; // 대표 아로마 (배경 색상 결정에 사용)
   aromaImageUrl: string; // 대표 아로마 식재료 이미지 URL
   roasting: RoastingType; // 1~5
   body: 1 | 2 | 3 | 4 | 5;
-  link: string; // 원두 상세 페이지 경로
+  link: string; // 캐노니컬 상세 페이지 경로 (라우팅의 기준)
 }
 
 // 가격 표시 안 함 (2026-04-15 결정: 정보 탐색 서비스 경험 제공을 위해 가격 정보 비노출 정책 유지)
@@ -415,12 +415,12 @@ interface BeanCardListProps {
 
 ```ts
 interface BeanCardProps {
-  id: number;
+  id: number; // 식별용
   name: string;
   origin: string;
   primaryAroma: AromaType;
   aromaImageUrl: string;
-  link: string;
+  link: string; // 상세 페이지로 이동할 캐노니컬 URL
   balance: number; // 1~5
   sweetness: number; // 1~5
   acidity: number; // 1~5
@@ -445,7 +445,7 @@ interface BeanCardProps {
 4. 호버 시 카드가 위로 떠오르며 배경 이미지가 확대되는 동시에 **커피 프로필(Acidity, Sweetness, Balance, Body, Roasting) 정보가 60% 투명도의 블랙 오버레이와 Backdrop Blur(`2px`) 효과와 함께 나타난다.**
 5. 오버레이 내부 상단에는 **로스터리 마크(Coffee 아이콘)**가 표시된다.
 
-6. 클릭 시 `id`를 기반으로 상세 페이지(`/beans/{id}`)로 라우팅한다. 상세 명세는 [원두 상세 페이지 명세서(bean-detail-page.md)](bean-detail-page.md)를 참조하십시오.
+6. 클릭 시 `link` 프로퍼티의 경로로 라우팅한다. 상세 명세는 [원두 상세 페이지 명세서(bean-detail-page.md)](bean-detail-page.md)를 참조하십시오. (id는 데이터베이스 식별용으로만 관리하며 라우팅은 link를 따름)
 
 #### 6. Design Spec (디자인 명세)
 

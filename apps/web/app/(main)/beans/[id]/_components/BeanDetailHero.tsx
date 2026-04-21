@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import { Bookmark, Share, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import SectionContainer from '@/components/layout/SectionContainer';
-import { AROMA_BG_CLASS, AromaType } from '@/lib/api/beans';
+import { AROMA_BG_CLASS } from '@/lib/api/beans';
+import type { AromaType } from '@/lib/api/beans';
 import { cn } from '@/lib/utils';
 
 interface BeanDetailHeroProps {
@@ -26,7 +26,6 @@ export function BeanDetailHero({
   aromaImageUrl,
   primaryAroma,
 }: BeanDetailHeroProps) {
-  const router = useRouter();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const bgClass = AROMA_BG_CLASS[primaryAroma] ?? 'bg-gray-100';
 
@@ -42,6 +41,7 @@ export function BeanDetailHero({
             onClick={() => setIsBookmarked(!isBookmarked)}
             className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100"
             aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+            aria-pressed={isBookmarked}
           >
             <Bookmark
               className={cn(
@@ -62,14 +62,14 @@ export function BeanDetailHero({
       </div>
 
       {/* Back Button */}
-      <button
-        onClick={() => router.back()}
-        className="group mb-4 flex items-center space-x-2 text-gray-500 transition-colors hover:text-gray-900"
-        aria-label="뒤로 가기"
+      <Link
+        href="/beans"
+        className="group mb-4 flex w-fit items-center space-x-2 text-gray-500 transition-colors hover:text-gray-900"
+        aria-label="원두 목록으로 돌아가기"
       >
         <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
         <span className="font-outfit text-sm font-medium tracking-wider uppercase">Back</span>
-      </button>
+      </Link>
 
       <div className="relative grid grid-cols-1 items-start gap-4 md:grid-cols-2 md:gap-12 lg:gap-20">
         {/* Left: Image Container + Mobile Text Overlay */}
@@ -135,6 +135,7 @@ export function BeanDetailHero({
                 onClick={() => setIsBookmarked(!isBookmarked)}
                 className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 transition-colors hover:border-amber-500 hover:bg-amber-50"
                 aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+                aria-pressed={isBookmarked}
               >
                 <Bookmark
                   className={cn(
