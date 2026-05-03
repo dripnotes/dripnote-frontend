@@ -6,15 +6,16 @@
 
 **핵심 설계 원칙**: "Laboratory Aesthetics" - 정제된 데이터(지표)와 감성적인 비주얼(이미지)의 조화를 통해 연구소에서 원두를 분석한 듯한 느낌을 전달합니다.
 
-> **변경 사유 (Context)**:
->
-> - **2026-04-20 최초 작성**: 원두 탐색 페이지에서 선택한 원두의 상세 정보를 전문적으로 전달하기 위해 신규 명세를 작성함.
-> - **2026-04-20 (1차 개편)**: 각 컴포넌트에 대한 표준 템플릿(상태 명세 및 DoD 추가 도입)을 적용하고, 기존에 누락되었던 `BeanInfoTable` 내용 및 `PageContainer` 도입 사실을 문서화함.
-> - **2026-04-20 (2차 개편)**: 사용성 향상을 위해 상세 렌더링 순서 변경(정보 표 -> 감각 지표), `BeanInfoTable`에 카테고리/블렌딩 여부 스펙 추가, 페이지 하단 '비슷한 원두 추천' 캐러셀 연동, 외부 구매용 아웃링크(External Link) 명세를 추가함.
+**변경 사유 (Context)**:
 
+- **2026-04-20 최초 작성**: 원두 탐색 페이지에서 선택한 원두의 상세 정보를 전문적으로 전달하기 위해 신규 명세를 작성함.
+- **2026-04-20 (1차 개편)**: 각 컴포넌트에 대한 표준 템플릿(상태 명세 및 DoD 추가 도입)을 적용하고, 기존에 누락되었던 `BeanInfoTable` 내용 및 `PageContainer` 도입 사실을 문서화함.
+- **2026-04-20 (2차 개편)**: 사용성 향상을 위해 상세 렌더링 순서 변경(정보 표 -> 감각 지표), `BeanInfoTable`에 카테고리/블렌딩 여부 스펙 추가, 페이지 하단 '비슷한 원두 추천' 캐러셀 연동, 외부 구매용 아웃링크(External Link) 명세를 추가함.
 - **2026-04-20 (3차 개편)**: 레이아웃 아키텍처 표준화(`SectionContainer`) 반영. 모바일 최적화를 위해 히어로 영역 이미지 중앙 정렬, Flavor Profile 시인성 개선, Brewing Guide 2열 그리드(모바일) 및 텍스트/여백 축소 스펙을 추가함.
 - **2026-04-20 (4차 개편)**: 모바일 전용 상단 헤더(로고 및 액션 버튼) 구조 추가. 원두 목록 페이지와 디자인 일관성을 맞추기 위해 로고 배치 및 액션 버튼 상단 우측 정렬 명세를 반영함.
 - **2026-04-20 (5차 개편)**: 향미 지표 체계 현대화. 쓴맛 제거 및 **밸런스** 지표 추가, 모든 지표(산미, 단맛, 밸런스, 바디감, 로스팅)의 **5단계 척도** 표준화 반영.
+- **2026-04-28 (6차 개편)**: 원두 상세 정보 집중도를 높이기 위해 추출 가이드(Brewing Guide) 섹션을 명세에서 제거함.
+- **2026-04-28 (7차 개편)**: 사용자 피드백 반영 (구매 버튼 상시 노출, 향미 지표 및 데이터 인터페이스 레이블 한국어화).
 
 ---
 
@@ -39,11 +40,14 @@
 │  │ (1:1 Aspect)      │ │ ├─ Icons     │ │
 │  │                   │ │ └─ [Purchase]│ │
 │  │                   │ │              │ │
-│  │                   │ │ [Info Table] │ │
-│  │                   │ │ [Profile]    │ │
+│  │                   │ │              │ │
 │  └───────────────────┘ └──────────────┘ │
 │  ┌────────────────────────────────────┐ │
-│  │ [Brewing Guide Section]            │ │
+│  │ [Bean Info Section]                │ │
+│  │ ├─ Description (Full Width)        │ │
+│  │ └─ Info Grid (2x3 Grid on Desktop) │ │
+│  │────────────────────────────────────│ │
+│  │ [Flavor Profile]                   │ │
 │  │────────────────────────────────────│ │
 │  │ [Recommended Beans]                │ │
 │  └────────────────────────────────────┘ │
@@ -80,12 +84,12 @@
 
 ```ts
 interface BeanDetailHeroProps {
-  name: string;
-  origin: string;
-  roastery?: string;
-  aromaImageUrl: string;
-  primaryAroma: AromaType;
-  purchaseUrl?: string; // 구매 외부 링크
+  name: string; // 원두명
+  origin: string; // 원산지
+  roastery?: string; // 로스터리
+  aromaImageUrl: string; // 아로마 이미지 URL
+  primaryAroma: AromaType; // 대표 아로마
+  purchaseUrl?: string; // 구매 외부 링크 (미존재 시에도 버튼은 유지)
 }
 ```
 
@@ -97,24 +101,27 @@ interface BeanDetailHeroProps {
 
 #### 4. UI States (상태 명세)
 
-| 상태            | 트리거 조건           | UI 표현                                                                      |
-| --------------- | --------------------- | ---------------------------------------------------------------------------- |
-| **Default**     | 초기 렌더링           | 이미지(좌) + 정보(우) 배치 (Desktop 기준)                                    |
-| **Bookmarked**  | 북마크 버튼 클릭      | 아이콘 채도 활성화 및 `Brand-Amber (#F59E0B 등)` 색상 적용                   |
-| **Purchasable** | `purchaseUrl` 존재 시 | 헤더 액션 바에 `ExternalLink` 아이콘을 포함한 '결제 사이트로 이동' 링크 노출 |
+| 상태            | 트리거 조건      | UI 표현                                                                              |
+| --------------- | ---------------- | ------------------------------------------------------------------------------------ |
+| **Default**     | 초기 렌더링      | 이미지(좌) + 정보(우) 배치 (Desktop 기준)                                            |
+| **Bookmarked**  | 북마크 버튼 클릭 | 아이콘 채도 활성화 및 `Gray-700` 색상 적용                                           |
+| **Purchasable** | 상시 노출        | 헤더 액션 바에 `ExternalLink` 아이콘을 포함한 '구매하기' 버튼(검은색 배경) 상시 노출 |
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. **모바일 전용 헤더**: 모바일 해상도에서 "Dripnote" 로고를 상단에 배치하고, 북마크/공유/구매 버튼을 상단 우측에 콤팩트하게 정렬하며, 원두 목록 페이지와 시각적 일관성을 유지한다.
+1. **모바일 전용 헤더 및 액션**:
+   - 모바일 해상도에서 "Dripnote" 로고를 좌측에, 북마크/공유 버튼을 우측 상단에 배치한다.
+   - 상단 버튼은 `bg-white/90` 및 `backdrop-blur`를 적용하여 배경에 상관없이 시인성을 확보한다.
+   - **'구매하기' 버튼은 모바일에서 우측 하단 플로팅 버튼(FAB)** 형태로 제공하여 접근성을 높인다.
 2. 원두의 대표 아로마 이미지를 고해상도(1:1 비율)로 렌더링하며, 모든 해상도에서 수평 중앙 정렬을 유지한다.
 3. 로스터리 명과 원두명을 명확한 위계(`Playfair Display`)로 표시한다.
-4. 북마크 및 구매 아웃링크 버튼을 우측 정렬하여 시각적 리듬을 부여한다. (데스크톱 기준)
+4. 데스크톱 기준, 북마크 및 공유 버튼은 우측 정렬하되 '구매하기' 버튼은 해당 영역의 좌측에 배치한다.
 5. 상단에 "Back" 버튼을 두어 브라우저 History 상 이전 라우트로 이동 가능케 하며, 헤더와의 간격을 최소화(`mt-0 md:mt-4`)한다.
-6. 모바일 해상도에서 이미지와 액션 버튼 사이의 간격을 좁게(`gap-4`) 조정하여 정보 밀도를 높인다.
+6. 모바일 해상도에서 이미지와 텍스트 오버레이 사이의 간격을 최적화한다.
 
 #### 6. Definition of Done (검증 기준)
 
-- [ ] (기능) 구매용 `purchaseUrl`이 없는 데이터에서는 아웃링크 버튼 자체가 보이지 않아야 한다.
+- [ ] (기능) 구매용 `purchaseUrl`이 없는 경우에도 버튼은 노출되어야 하며, 클릭 시 '준비 중' 피드백을 제공한다.
 - [ ] (디자인) 외부 링크 버튼은 사용자에게 다른 앱 영역으로 이동함을 아이콘 등으로 충분히 인지시켜야 한다.
 
 ---
@@ -137,13 +144,13 @@ interface BeanDetailHeroProps {
 
 ```ts
 interface BeanInfoTableProps {
-  origin: string;
-  category?: string; // 예: 'Single Origin', 'Decaf'
-  blend?: boolean; // 혼합 여부
-  processing?: string;
-  variety?: string;
-  altitude?: string;
-  description?: string;
+  origin: string; // 원산지
+  category?: string; // 카테고리 (예: 'Single Origin', 'Decaf')
+  blend?: boolean; // 블렌드여부 (혼합 여부)
+  processing?: string; // 가공방식
+  variety?: string; // 품종
+  altitude?: string; // 재배고도
+  description?: string; // 상세설명
 }
 ```
 
@@ -156,9 +163,10 @@ interface BeanInfoTableProps {
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. "About the Bean" 소개 문구를 상단(혹은 좌측)에 우선 배치하여 원두의 스토리를 전달한다.
-2. 부가 정보로서 원산지, 분류, 가공 방식 등의 테이블을 렌더링한다. `blend`가 true면 'Blend', false면 'Single Origin'을 표시한다.
-3. 내용이 없는 데이터(Undefined, Null)는 테이블 리스트에서 동적으로 제거한다.
+1. "원두 정보" 섹션 상단에 상세 설명을 배치하여 원두의 스토리를 전달한다. (최대 너비 제한으로 가독성 확보)
+2. 하단에 원산지, 분류, 가공 방식 등의 정보 항목을 **2행 3열 그리드(데스크톱/태블릿 기준)**로 렌더링한다. 모바일에서는 1열로 쌓는다.
+3. `blend`가 true면 '블렌드', false면 '싱글 오리진'을 표시한다.
+4. 내용이 없는 데이터(Undefined, Null)는 테이블 리스트에서 동적으로 제거한다.
 
 #### 6. Definition of Done (검증 기준)
 
@@ -181,44 +189,21 @@ interface BeanInfoTableProps {
 
 ```ts
 interface FlavorProfileProps {
-  acidity: number; // 1~5
-  sweetness: number; // 1~5
-  balance: number; // 1~5 (신규)
-  body: number; // 1~5 (기존 3단계에서 확장)
-  roasting: number; // 1~5 (기존 3단계에서 확장)
+  acidity: number; // 산미 (1~5)
+  sweetness: number; // 감미 (1~5)
+  balance: number; // 밸런스 (1~5)
+  body: number; // 바디감 (1~5)
+  roasting: number; // 로스팅 (1~5)
 }
 ```
 
 #### 3. Functional Requirements (단계별 요구사항)
 
 1. 모든 지표는 `RatingScale` 컴포넌트를 사용하여 **5단계 표준 척도**로 표시한다.
-2. 지표 배치 순서는 **산미(Acidity) -> 단맛(Sweetness) -> 바디감(Body)** (상단 그리드), **밸런스(Balance) -> 로스팅(Roast)** (하단 그리드) 순으로 정렬한다.
+2. 지표 배치 순서는 **산미(Acidity) -> 감미(Sweetness) -> 바디감(Body)** (상단 그리드), **밸런스(Balance) -> 로스팅(Roast)** (하단 그리드) 순으로 정렬한다.
 3. 로스팅 단계는 5단계를 지원하며, 툴팁이나 가이드 상에서 **Light, Light Medium, Medium, Medium Dark, Dark**로 구분한다.
 
 ---
-
-### BrewingGuide (추출 가이드)
-
-#### 1. Overview (맥락)
-
-- **목적**: 연구소의 추천 레시피를 전달하여 사용자가 최상의 커피 경험을 하도록 돕는 영역.
-- **위치**: `apps/web/app/(main)/beans/[id]/_components/BrewingGuide.tsx`
-- **부모 컴포넌트**: `BeanDetailPage`
-
-#### 2. Tech Stack & Constraints (기술 및 제약)
-
-- **그리드 시스템**:
-  - Desktop: 4열 배치 (`lg:grid-cols-4`)
-  - Tablet: 2열 배치 (`md:grid-cols-2`)
-  - Mobile: **1열 배치 (`grid-cols-1`)** - 원두별 연구소 가이드를 집중해서 읽을 수 있도록 세로로 쌓음
-- **스타일링**: 모바일 환경에서 텍스트 크기(`text-sm`) 및 카드 내부 패딩(`p-3`)을 축소하여 'Lab' 스타일의 촘촘한 레이아웃 구현
-
-#### 3. Functional Requirements (단계별 요구사항)
-
-1. 연구소 분위기의 전용 배경(암갈색, 미세 그리드)과 아이콘을 사용하여 가이드를 렌더링한다.
-2. 추출 도구/온도/배분율/분쇄도 정보를 카드 형태로 제공한다.
-3. 하단에 전문가 팁(`Info` 아이콘과 함께)을 배치하여 추가 조언을 전달한다.
-4. 섹션 하단 여백을 `mb-10`으로 조정하여 다음 콘텐츠와의 연결성을 강화한다.
 
 ---
 
@@ -229,7 +214,6 @@ beans/[id]/page.tsx (Detail Entry)  [ 래퍼 : <PageContainer> ]
   ├── BeanDetailHero        ← 상단 비주얼, 북마크, 구매 연결(ExternalLink)
   ├── BeanInfoTable         ← 설명 서술 및 기본 정보 제공(카테고리 등)
   ├── FlavorProfileSection  ← 맛 정보 분석 지표(차트화)
-  ├── BrewingGuide          ← 추출 레시피 카드
   └── RecommendedBeans      ← 페이지 하단의 "비슷한 맛의 원두 추천" 영역
 ```
 

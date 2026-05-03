@@ -8,7 +8,6 @@ import { mockMainData } from '@/lib/api/main';
 
 import { BeanDetailHero } from './_components/BeanDetailHero';
 import { BeanInfoTable } from './_components/BeanInfoTable';
-import { BrewingGuide } from './_components/BrewingGuide';
 import { FlavorProfileSection } from './_components/FlavorProfileSection';
 
 interface Props {
@@ -74,6 +73,7 @@ export default async function BeanDetailPage({ params }: Props) {
         roastery={bean.roastery}
         aromaImageUrl={bean.aromaImageUrl}
         primaryAroma={bean.primaryAroma}
+        purchaseUrl={bean.purchaseUrl}
       />
       <BeanInfoTable
         origin={bean.origin}
@@ -91,7 +91,6 @@ export default async function BeanDetailPage({ params }: Props) {
         body={bean.body || 0}
         roasting={bean.roasting || 0}
       />
-      <BrewingGuide recipe={bean.recipe} />
       <RecommendedBeans beans={mockMainData.recommendedBeans} />
     </PageContainer>
   );

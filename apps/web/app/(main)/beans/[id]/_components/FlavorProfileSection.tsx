@@ -25,16 +25,14 @@ function ProfileIndicator({
   max?: number;
   colorPalette?: ColorPalette;
 }) {
-  const Icon =
-    label === 'Acidity'
-      ? Droplets
-      : label === 'Sweetness'
-        ? Sparkles
-        : label === 'Body'
-          ? Layers
-          : label === 'Balance'
-            ? Scale
-            : Flame;
+  const ICONS: Record<string, typeof Droplets> = {
+    산미: Droplets,
+    감미: Sparkles,
+    바디감: Layers,
+    밸런스: Scale,
+    로스팅: Flame,
+  };
+  const Icon = ICONS[label] || Flame;
 
   return (
     <div className="flex flex-col space-y-3">
@@ -42,7 +40,7 @@ function ProfileIndicator({
         <div className="flex items-center gap-2">
           <Icon className="h-3.5 w-3.5 text-gray-400" />
           <span className="font-outfit text-sm font-semibold tracking-wider text-gray-900 uppercase">
-            {label === 'Roast' ? 'Roasting' : label}
+            {label}
           </span>
         </div>
         <span className="font-outfit text-xs font-medium text-gray-500">
@@ -86,20 +84,20 @@ export function FlavorProfileSection({
         </div>
 
         <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-          <ProfileIndicator label="Acidity" value={acidity} />
-          <ProfileIndicator label="Sweetness" value={sweetness} />
-          <ProfileIndicator label="Body" value={body} />
+          <ProfileIndicator label="산미" value={acidity} />
+          <ProfileIndicator label="감미" value={sweetness} />
+          <ProfileIndicator label="바디감" value={body} />
         </div>
 
         <div className="mt-12 mb-12 h-px w-full bg-gray-100" />
 
         <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           <ProfileIndicator
-            label="Balance"
+            label="밸런스"
             value={balance}
             colorPalette={balance <= 2 ? 'red' : balance === 3 ? 'blue' : 'green'}
           />
-          <ProfileIndicator label="Roast" value={roasting} colorPalette="espresso" />
+          <ProfileIndicator label="로스팅" value={roasting} colorPalette="espresso" />
         </div>
       </motion.div>
     </SectionContainer>

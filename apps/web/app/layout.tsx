@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Playfair_Display, Outfit, Inter } from 'next/font/google';
 
@@ -45,6 +46,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${outfit.variable} ${inter.variable} font-inter antialiased`}
       >
         <TanstackQueryLayout devTools={false}>{children}</TanstackQueryLayout>
+        {process.env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
       </body>
     </html>
   );

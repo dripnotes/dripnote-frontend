@@ -65,3 +65,9 @@
 - [x] Phase 8.2: `RatingScale` 공통 컴포넌트 추출 및 중복 제거 ✅
 - [x] Phase 8.3: `VisualCard.Root` asChild 패턴 개선 및 카드 컴포넌트 리팩토링 ✅
 - [x] Phase 8.4: URL 업데이트 로직 최적화 (replace vs push) ✅
+
+### Phase 9: Google Analytics Integration (Completed ✅)
+
+- [x] `@next/third-parties` 패키지 설치
+- [x] `apps/web/.env.local`에 `NEXT_PUBLIC_GA_ID` 설정
+- [x] `apps/web/app/layout.tsx`에 `<GoogleAnalytics>` 컴포넌트 연동

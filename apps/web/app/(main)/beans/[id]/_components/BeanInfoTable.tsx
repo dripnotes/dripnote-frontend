@@ -24,12 +24,12 @@ export function BeanInfoTable({
   description,
 }: BeanInfoTableProps) {
   const infoItems = [
-    { label: 'Origin', value: origin },
-    { label: 'Category', value: category },
-    { label: 'Type', value: blend === undefined ? undefined : blend ? 'Blend' : 'Single Origin' },
-    { label: 'Processing', value: processing },
-    { label: 'Variety', value: variety },
-    { label: 'Altitude', value: altitude },
+    { label: '원산지', value: origin },
+    { label: '카테고리', value: category },
+    { label: '분류', value: blend === undefined ? undefined : blend ? '블렌드' : '싱글 오리진' },
+    { label: '가공 방식', value: processing },
+    { label: '품종', value: variety },
+    { label: '재배 고도', value: altitude },
   ].filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
 
   return (
@@ -43,7 +43,7 @@ export function BeanInfoTable({
       >
         <div className="flex flex-col justify-center lg:col-span-8">
           <h2 className="font-playfair mb-6 text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-gray-900">
-            About the Bean
+            원두 정보
           </h2>
           {description ? (
             <p className="text-[clamp(1rem,2vw,1.125rem)] leading-relaxed text-gray-600">
