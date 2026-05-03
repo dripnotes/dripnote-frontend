@@ -33,9 +33,20 @@ export function BeanDetailHero({
   const bgClass = AROMA_BG_CLASS[primaryAroma] ?? 'bg-gray-100';
 
   const handlePurchaseClick = () => {
-    if (purchaseUrl) {
-      window.open(purchaseUrl, '_blank', 'noopener,noreferrer');
-    } else {
+    if (!purchaseUrl) {
+      alert('구매처 링크를 준비 중입니다.');
+      return;
+    }
+
+    try {
+      const url = new URL(purchaseUrl);
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        window.open(purchaseUrl, '_blank', 'noopener,noreferrer');
+      } else {
+        throw new Error('Invalid protocol');
+      }
+    } catch (error) {
+      console.error('Safe URL validation failed:', error);
       alert('구매처 링크를 준비 중입니다.');
     }
   };
@@ -77,7 +88,7 @@ export function BeanDetailHero({
       </div>
 
       {/* Floating Purchase Button for Mobile */}
-      <div className="fixed right-2 bottom-18 z-50 md:hidden">
+      <div className="bottom-mobile-fab fixed right-2 z-50 md:hidden">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -178,7 +189,7 @@ export function BeanDetailHero({
                   variant="outline"
                   size="icon"
                   onClick={() => setIsBookmarked(!isBookmarked)}
-                  className="h-12 w-12 border-gray-200 transition-colors hover:border-gray-700 hover:bg-gray-50"
+                  className="group h-12 w-12 border-gray-200 transition-colors hover:border-gray-700 hover:bg-gray-50"
                   aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
                   aria-pressed={isBookmarked}
                 >

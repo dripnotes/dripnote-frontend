@@ -61,6 +61,10 @@ html {
   --color-aroma-nutty: var(--aroma-nutty);
   --color-aroma-floral: var(--aroma-floral);
   --color-aroma-smoky: var(--aroma-smoky);
+
+  /* Spacing System */
+  --spacing-bottom-nav: 4rem;
+  --spacing-mobile-fab: 4.5rem;
 }
 
 body {

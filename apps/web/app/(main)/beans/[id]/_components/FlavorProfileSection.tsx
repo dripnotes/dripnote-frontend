@@ -25,16 +25,14 @@ function ProfileIndicator({
   max?: number;
   colorPalette?: ColorPalette;
 }) {
-  const Icon =
-    label === '산미'
-      ? Droplets
-      : label === '감미'
-        ? Sparkles
-        : label === '바디감'
-          ? Layers
-          : label === '밸런스'
-            ? Scale
-            : Flame;
+  const ICONS: Record<string, typeof Droplets> = {
+    산미: Droplets,
+    감미: Sparkles,
+    바디감: Layers,
+    밸런스: Scale,
+    로스팅: Flame,
+  };
+  const Icon = ICONS[label] || Flame;
 
   return (
     <div className="flex flex-col space-y-3">
