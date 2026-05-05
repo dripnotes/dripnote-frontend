@@ -96,11 +96,13 @@ export default function SocialButton({ provider }: SocialButtonProps) {
   const { label, icon, variant } = PROVIDER_MAP[provider];
 
   const handleLogin = () => {
-    // [Production] 실제 OAuth2 Authorization 경로로 리다이렉트
-    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
-    // [Harness/Dev] 백엔드 미연동 시 Mock 리다이렉션
-    // const mockToken = `mock_jwt_token_${provider}_${Date.now()}`;
-    // window.location.href = `/login/callback?token=${mockToken}`;
+    // 1. 현재 페이지 혹은 이전 페이지 정보를 세션 스토리지에 저장 (환승역에서 복구용)
+    // 실제 서비스에서는 쿼리 파라미터나 상태값을 통해 동적으로 결정할 수 있음
+    const redirectTarget = sessionStorage.getItem('redirect') || '/';
+    sessionStorage.setItem('redirect', redirectTarget);
+
+    // 2. BFF(Backend For Frontend) 엔드포인트로 이동
+    window.location.href = `/api/auth/${provider}`;
   };
 
   return (

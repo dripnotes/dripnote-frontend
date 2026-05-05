@@ -240,10 +240,10 @@ interface SocialButtonProps {
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `provider` prop에 따라 해당 OAuth2 Authorization 경로로 서버 사이드 리다이렉트를 수행한다
-   - Google: `http://localhost:8080/oauth2/authorization/google`
-   - Naver: `http://localhost:8080/oauth2/authorization/naver`
-   - Kakao: `http://localhost:8080/oauth2/authorization/kakao`
+1. `provider` prop에 따라 해당 BFF Authorization 경로로 리다이렉트를 수행한다
+   - Google: `/api/auth/google`
+   - Naver: `/api/auth/naver`
+   - Kakao: `/api/auth/kakao`
 2. 각 플랫폼의 공식 브랜드 가이드라인에 따른 아이콘, 레이블, 색상을 렌더링한다
 3. 클릭 시 `isLoading`을 `true`로 전환하여 중복 클릭을 방지한다
 4. 호버 시 버튼이 위로 부드럽게 떠오르며(`-translate-y-0.5`) 그림자가 강조된다(`shadow-sm → shadow-md`)
@@ -353,25 +353,57 @@ LoginCallbackPage (app/login/callback/page.tsx) ← 독립 Route
 
 ---
 
-## 6. API 연동 명세
+---
 
-### 6.1 소셜 로그인 엔드포인트 (Authorization)
+## 6. API 연동 명세 (OAuth Flow)
 
-사용자가 각 소셜 버튼을 클릭할 시 다음 경로로 **서버 사이드 리다이렉트**를 시도합니다.
+Baristation은 보안 강화와 유연한 UX 처리를 위해 **BFF(Backend For Frontend)** 및 **2단 리다이렉트** 구조를 채택합니다.
 
-| 소셜 플랫폼 | OAuth2 Authorization Path (Server)                  |
-| :---------- | :-------------------------------------------------- |
-| **Google**  | `http://localhost:8080/oauth2/authorization/google` |
-| **Naver**   | `http://localhost:8080/oauth2/authorization/naver`  |
-| **Kakao**   | `http://localhost:8080/oauth2/authorization/kakao`  |
+### 6.1 전체 로그인 시퀀스
 
-### 6.2 인증 성공 후 콜백 (Response URL)
+1.  **로그인 시작 (Client)**:
+    - 사용자가 소셜 버튼 클릭 시 `sessionStorage`에 현재 URL(`redirect`)을 저장합니다.
+    - 브라우저를 프론트엔드 BFF 주소(`/api/auth/{provider}`)로 이동시킵니다.
+2.  **주소 세탁 및 요청 (BFF - Route Handler)**:
+    - `/api/auth/{provider}` 라우트에서 실제 백엔드로 숨겨진 요청을 보냅니다.
+    - 백엔드로부터 받은 302 응답(`Location` 헤더)을 가로채어 브라우저에게 외부 로그인 창으로 가라고 최종 리다이렉트를 내립니다.
+3.  **외부 플랫폼 로그인 (Google & Backend)**:
+    - 사용자가 로그인을 완료하면 구글이 백엔드로 콜백을 보내고, 백엔드는 **refreshToken**을 **HttpOnly Cookie**로 설정한 후 프론트엔드의 환승역 페이지(`/auth/success`)로 리다이렉트합니다.
+4.  **토큰 교환 및 최종 도착 (Client)**:
+    - `/auth/success` 페이지에 도착하면 클라이언트 JavaScript는 즉시 BFF(`POST /api/auth/refresh`)를 호출합니다.
+    - 이때 브라우저에 의해 자동으로 **refreshToken 쿠키**가 함께 전송됩니다.
+    - BFF는 쿠키에서 토큰을 추출하여 백엔드 명세에 따른 **`Refresh-Token`** 헤더에 담아 Access Token을 요청합니다.
+    - BFF는 백엔드로부터 **Access Token**을 받아 클라이언트에 반환하며, 클라이언트는 이를 저장하고 원래 목적지로 최종 이동합니다.
 
-소셜 인증이 성공하면 서버는 프론트엔드로 다음과 같이 리다이렉트합니다.
+### 6.2 BFF 엔드포인트 명세
 
-- **Redirect URL**: `http://localhost:3000/login/callback?token={JWT}`
-- **처리 순서**:
-  1. `LoginCallbackPage`에서 `token` 쿼리 파라미터 추출
-  2. `authUtils`로 JWT를 `localStorage`에 저장
-  3. 메인 페이지(`/`)로 자동 라우팅
-  4. GNB가 저장된 토큰을 감지하여 인증 아이콘을 동적으로 전환
+사용자는 다음 프론트엔드 엔드포인트를 통해 로그인을 시작하며, 실제 백엔드 주소(`BACKEND_URL`)는 클라이언트에 노출되지 않습니다. 만약 서버 환경변수에 `BACKEND_URL`이 설정되어 있지 않으면 BFF는 즉시 500 에러를 반환하며 요청을 차단합니다.
+
+| 용도            | BFF Path (Frontend)    | Method | Backend Target (Hidden)                          |
+| :-------------- | :--------------------- | :----- | :----------------------------------------------- |
+| **로그인 시작** | `/api/auth/{provider}` | `GET`  | `${BACKEND_URL}/oauth2/authorization/{provider}` |
+| **토큰 재발급** | `/api/auth/refresh`    | `POST` | `${BACKEND_URL}/api/auth/refresh`                |
+
+### 6.3 토큰 재발급 상세 (Refresh Flow)
+
+- **Request (Client -> BFF)**: `POST /api/auth/refresh` (Cookie에 `refreshToken` 포함)
+- **Request (BFF -> Backend)**:
+  - Header: `Refresh-Token: {token}` (Bearer 접두사 없음)
+  - Cookie: 클라이언트의 모든 쿠키 포워딩
+- **Response (Backend -> BFF)**:
+  ```json
+  {
+    "status": "SUCCESS",
+    "message": "토큰 재발급 성공",
+    "data": {
+      "accessToken": "...",
+      "refreshToken": "..."
+    }
+  }
+  ```
+- **Response (BFF -> Client)**: `accessToken` 반환 및 `refreshToken` 쿠키 업데이트 (Set-Cookie)
+
+### 6.3 인증 성공 후 환승역 (Success Landing)
+
+- **Redirect URL**: `/auth/success?token={JWT}`
+- **보안 검증**: `sessionStorage`에서 꺼낸 `target` 주소가 동일 도메인 내부 주소인지 반드시 확인 후 이동합니다.
