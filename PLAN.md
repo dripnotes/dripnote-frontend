@@ -1,42 +1,36 @@
-# Spec Reorganization Plan
+# Common UI Spec Improvement Plan
 
-`specs/` 디렉토리 내의 명세서들을 정리하여 현재 프로젝트 상태와 일치시키고 가독성을 높입니다.
+`specs/common-ui-spec.md`를 고도화하여 프로젝트의 디자인 시스템과 성능 전략을 명확히 정의합니다.
 
-## 1. 작업 개요
+## 1. 작업 목표
 
-- **변경 사유(Context) 제거**: 명세서 도입부나 컴포넌트별로 기록된 변경 이력 섹션을 삭제합니다.
-- **현재 구현 사항 반영**: `FlavorNotes` -> `AromaNotes`와 같이 실제 코드의 컴포넌트 명칭과 파일 구조를 반영합니다.
-- **미반영/미결 사항 제거**: 아직 구현되지 않았거나 결정되지 않은 기획 내용을 삭제합니다.
-- **중복 정리**: 여러 파일에 걸쳐 중복된 명세나 서술을 간소화합니다.
+- **성능 최적화**: 이미지 위주의 서비스 특성을 고려한 FCP/LCP 개선 및 로딩 UX 표준화.
+- **디자인 시스템 정교화**: 시맨틱 컬러, Z-Index 관리, 반응형 타이포그래피 도입.
+- **개발 생산성**: Tailwind CSS 커스텀 테마 활용 및 서버 컴포넌트 우선 원칙 수립.
 
-## 2. 대상 파일 및 수정 계획
+## 2. 상세 작업 내용
 
-### [common-ui-spec.md](file:///Users/ujaehyeon/project/dripnote-frontend/specs/common-ui-spec.md)
+### 2.1 [UPDATE] 디자인 토큰 섹션 (Design Tokens)
 
-- 브랜드 아이덴티티 및 디자인 토큰 서술 간소화.
-- 현재 구현된 공통 UI 패턴만 유지.
+- **시맨틱 컬러 시스템**: `Amber-500` 등의 원시 토큰을 `brand-primary`, `bg-base` 등 의미론적 토큰으로 매핑.
+- **Z-Index 관리**: 전역 레이어(`modal`, `drawer`, `header` 등)의 순서 수치 정의.
+- **반응형 타이포그래피**: 화면 크기에 따라 유동적으로 변화하는 폰트 크기 기준 수립.
+- **Tailwind 연동**: 모든 토큰은 `globals.css`의 `@theme` 블록에 정의하여 CSS-first 방식으로 관리 및 재사용하도록 명시.
 
-### [main-page.md](file:///Users/ujaehyeon/project/dripnote-frontend/specs/main-page.md)
+### 2.2 [NEW] 성능 및 에셋 최적화 (Performance & Asset Optimization)
 
-- `FlavorNotes` 섹션을 실제 코드인 `AromaNotes`로 업데이트.
-- `AromaCard` 컴포넌트 구조 반영.
-- API 연동 명세에서 사용하지 않는 필드나 예시 정리.
+- **이미지 로딩 전략**:
+  - `next/image` 필수 사용 및 LCP 요소 `priority` 속성 부여.
+  - 비동기 로딩 시 `Skeleton` 플레이스홀더 노출 의무화.
+  - 이미지 노출 시 `framer-motion`을 활용한 선형 페이드인(`opacity 0 -> 1`) 효과 적용.
+- **FCP/LCP 개선**: 중요 에셋 프리로딩 및 레이아웃 시프트(CLS) 방지 전략.
 
-### [beans-page.md](file:///Users/ujaehyeon/project/dripnote-frontend/specs/beans-page.md)
+### 2.3 [NEW] 아키텍처 및 구현 원칙 (Implementation Principles)
 
-- 상단 "변경 사유" 섹션 삭제.
-- 필터링 시스템 및 `BeanCard` 명세 최신화.
-
-### [bean-detail-page.md](file:///Users/ujaehyeon/project/dripnote-frontend/specs/bean-detail-page.md)
-
-- "변경 사유" 및 "미결 사항" 섹션 전면 삭제.
-- 히어로 영역 및 정보 테이블 명세를 현재 구현 상태에 맞춰 조정.
-
-### [login-page.md](file:///Users/ujaehyeon/project/dripnote-frontend/specs/login-page.md)
-
-- 소셜 로그인 프로세스 중심의 명세로 슬림화.
+- **Server-first Approach**: 클라이언트 컴포넌트 사용을 최소화하고 인터랙션 단위로 모듈화.
+- **웹 접근성(A11y)**: Focus Ring 스타일링, 시맨틱 태그 활용, ARIA 속성 기본값 준수.
 
 ## 3. 검증 계획
 
-- 모든 명세서 파일에서 "변경 사유", "Context", "미결 사항" 키워드가 제거되었는지 확인.
-- 명세서 내의 파일 경로와 컴포넌트명이 실제 소스 코드와 일치하는지 대조.
+- `specs/common-ui-spec.md` 내용이 프로젝트 전체 컴포넌트 구현의 가이드라인으로 기능하는지 검토.
+- 실제 `tailwind.config.ts` 및 `ui-library` 컴포넌트들이 해당 명세를 준수할 수 있는 구조인지 확인.
