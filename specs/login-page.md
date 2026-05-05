@@ -1,12 +1,12 @@
-# 로그인 페이지 명세서 (Login Page)
+# 로그인 페이지 명세서 (Login Page) - Baristation
 
 ## 1. 페이지 개요
 
-Dripnote 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2030 타겟의 편의성을 고려하여 번거로운 가입 절차를 배제하고 **소셜 로그인 전용** 시스템을 채택합니다.
+Baristation 서비스의 모든 기능을 이용하기 위한 진입점입니다. 2030 타겟의 편의성을 고려하여 번거로운 가입 절차를 배제하고 **소셜 로그인 전용** 시스템을 채택합니다.
 
 **집중된 사용자 경험(Focused Experience)** 원칙에 따라, 로그인 페이지는 인증 이외의 다른 기능이나 내비게이션 요소와의 상호작용을 배제하고 오직 로그인에만 완전히 집중할 수 있도록 디자인합니다.
 
-> **변경 사유 (Context)**: 지능적이고 전문적인 'Internal Coffee Lab' 컨셉을 유지하기 위해, 사용자에게 불필요한 선택지를 배제하고 브랜드 무드에 깊이 몰입하게 하는 UX 전략을 최우선으로 채택했습니다.
+> - **2026-05-05 (리브랜딩)**: 서비스명을 "Dripnote"에서 "Baristation"으로 전면 리브랜딩함. 이에 따른 로고 및 텍스트 갱신.
 
 ---
 
@@ -91,7 +91,7 @@ interface LoginBackgroundProps {
 
 #### 1. Overview (맥락)
 
-- **목적**: 브랜드 로고("Dripnote"), 페이지 슬로건("시작하기"), 메인 페이지 복귀 링크(`← Main`)를 포함하는 로그인 페이지의 상단 UI 영역
+- **목적**: 브랜드 로고("Baristation"), 페이지 슬로건("시작하기"), 메인 페이지 복귀 링크(`← Main`)를 포함하는 로그인 페이지의 상단 UI 영역
 - **위치**: `apps/web/app/login/_components/LoginHeader.tsx`
 - **부모 컴포넌트**: `LoginPage`
 
@@ -117,7 +117,7 @@ interface LoginBackgroundProps {
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. 화면 상단 중앙에 **"Dripnote"** 로고(`Playfair Display`, ExtraBold)를 표시한다
+1. 화면 상단 중앙에 **"Baristation"** 로고(`Playfair Display`, ExtraBold)를 표시한다
 2. 로고 하단(`mb-3` 여백)에 **"시작하기"** 슬로건(`Outfit`, Light, Uppercase, `tracking-[0.2em]`)을 표시한다
 3. 화면 좌측 상단에 메인 페이지(`/`)로 이동하는 **`← Main`** 복귀 링크를 배치한다
    - `ChevronLeft` 아이콘(lucide-react, 16px) + `"Main"` 텍스트를 `flex gap-1`로 수평 정렬한다
@@ -142,7 +142,7 @@ interface LoginBackgroundProps {
 
 #### 7. Definition of Done (검증 기준)
 
-- [ ] (기능) "Dripnote" 로고가 화면 상단 중앙에 `Playfair Display` ExtraBold로 렌더링된다
+- [ ] (기능) "Baristation" 로고가 화면 상단 중앙에 `Playfair Display` ExtraBold로 렌더링된다
 - [ ] (기능) "시작하기" 슬로건이 `Outfit` Light, Uppercase, `tracking-[0.2em]`으로 표시된다
 - [ ] (기능) `← Main` 링크 클릭 시 `/`로 이동한다
 - [ ] (디자인) `ChevronLeft` 아이콘 + "Main" 텍스트가 `flex gap-1`로 수평 정렬된다

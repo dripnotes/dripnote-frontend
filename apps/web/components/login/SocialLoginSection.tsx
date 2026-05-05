@@ -44,7 +44,7 @@ const SocialLoginSection = () => {
         variants={lineVariants}
         className="text-center text-[11px] leading-relaxed text-white/30"
       >
-        Dripnote에 로그인함으로써 이용약관 및 <br /> 개인정보처리방침에 동의하게 됩니다.
+        Baristation에 로그인함으로써 이용약관 및 <br /> 개인정보처리방침에 동의하게 됩니다.
       </motion.p>
     </motion.div>
   );

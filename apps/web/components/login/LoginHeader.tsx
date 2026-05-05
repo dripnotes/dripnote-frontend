@@ -8,7 +8,7 @@ import React from 'react';
 /**
  * LoginHeader - 브랜드 로고, 슬로건, 메인 페이지 복귀 링크
  * - Back Link: ChevronLeft 아이콘 + "Main" 텍스트, 미니멀 스타일
- * - Logo: Playfair Display (Dripnote)
+ * - Logo: Playfair Display (Baristation)
  * - Headline: "시작하기" (Outfit, Light, Uppercase)
  */
 const LoginHeader = () => {
@@ -45,7 +45,7 @@ const LoginHeader = () => {
         <div className="flex flex-col items-center">
           {/* Logo - Playfair Display */}
           <h1 className="font-playfair mb-3 text-5xl font-extrabold tracking-tight text-white drop-shadow-xl lg:text-8xl">
-            Dripnote
+            Baristation
           </h1>
 
           {/* Slogan - Outfit Light */}

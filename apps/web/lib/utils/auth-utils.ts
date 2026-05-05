@@ -2,7 +2,7 @@
  * Auth Utilities - JWT 토큰 저장 및 추출 관리
  */
 
-const AUTH_TOKEN_KEY = 'dripnote-auth-token';
+const AUTH_TOKEN_KEY = 'baristation-auth-token';
 
 export const authUtils = {
   /**

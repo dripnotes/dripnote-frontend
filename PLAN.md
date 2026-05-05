@@ -71,3 +71,11 @@
 - [x] `@next/third-parties` 패키지 설치
 - [x] `apps/web/.env.local`에 `NEXT_PUBLIC_GA_ID` 설정
 - [x] `apps/web/app/layout.tsx`에 `<GoogleAnalytics>` 컴포넌트 연동
+
+### Phase 10: Service Rebranding (Dripnote -> Baristation) 🚀
+
+- [x] Phase 10.1: 명세서(specs/\*.md) 내 서비스명 및 카피라이트 일괄 갱신 ✅
+- [x] Phase 10.2: UI 컴포넌트(Header, Footer, Login 등) 내 브랜드 텍스트 반영 ✅
+- [x] Phase 10.3: 인증 토큰 키 및 내부 유틸리티 명칭 변경 ✅
+- [x] Phase 10.4: Mock Data 및 페이지 메타데이터 최신화 ✅
+- [x] Phase 10.5: README.md 및 전체 문서 브랜드 정합성 검증 ✅

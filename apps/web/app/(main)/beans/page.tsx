@@ -88,7 +88,7 @@ function BeansPageContent() {
                   href="/"
                   className="font-playfair text-2xl font-bold tracking-tighter text-gray-900 md:hidden"
                 >
-                  Dripnote
+                  Baristation
                 </Link>
                 <div className="font-outfit shrink-0 text-xs text-gray-400">
                   {filteredBeans.length}개의 원두

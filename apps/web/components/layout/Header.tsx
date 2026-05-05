@@ -46,10 +46,12 @@ export default function Header() {
   return (
     <header className={`${mobileStyles} ${desktopStyles} transition-colors duration-300`}>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-around px-4 sm:px-6 md:justify-between lg:px-8">
-        
         {/* Logo (Desktop Only) */}
-        <Link href="/" className="hidden md:block font-playfair text-2xl font-bold tracking-tighter">
-          Dripnote
+        <Link
+          href="/"
+          className="font-playfair hidden text-2xl font-bold tracking-tighter md:block"
+        >
+          Baristation
         </Link>
 
         {/* Desktop Navigation */}

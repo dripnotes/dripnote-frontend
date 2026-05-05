@@ -33,7 +33,7 @@ description: >- # [필수] 스킬의 동작과 사용 시점에 대한 설명 (1
   이 스킬은 ~을 수행할 때 사용합니다. 유저가 ~을 언급할 때 트리거하십시오.
 license: MIT # [선택] 라이선스 명시
 metadata: # [선택] 클라이언트 전용 추가 메타데이터
-  author: dripnote-team
+  author: baristation-team
   version: '1.0'
 ---
 ```

@@ -1,8 +1,8 @@
-# 메인 페이지 명세서 (Main Page / Landing)
+# 메인 페이지 명세서 (Main Page / Landing) - Baristation
 
 ## 1. 페이지 개요
 
-Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main Page) 역할을 동시에 수행합니다. 사용자에게 직관적이고 시각적인 커피 경험을 제안하고, 추천 원두와 로스터리 위치 등 핵심 서비스로 빠르게 유도합니다.
+Baristation 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main Page) 역할을 동시에 수행합니다. 사용자에게 직관적이고 시각적인 커피 경험을 제안하고, 추천 원두와 로스터리 위치 등 핵심 서비스로 빠르게 유도합니다.
 
 ---
 
@@ -22,6 +22,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 > - **2026-04-20 (3차 개편)**: 모바일 사용성 강화를 위해 '오늘의 추천 원두' 섹션을 2x2 그리드(4개 노출)로 확장하고, `BeanCard`의 모바일 텍스트 및 간격을 최적화함. (사용자 피드백 반영)
 
 - **2026-04-20 (4차 개편)**: 향미 지표 체계 현대화. **밸런스** 지표 추가, 모든 지표(산미, 단맛, 밸런스, 바디감, 로스팅)의 **5단계 척도** 표준화 반영.
+- **2026-05-05 (리브랜딩)**: 서비스명을 "Dripnote"에서 "Baristation"으로 전면 리브랜딩함. 로고 텍스트 및 푸터 카피라이트 최신화.
 
 ---
 
@@ -67,7 +68,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 #### 5. Functional Requirements (단계별 요구사항)
 
 1. 페이지 최상단에서 배경을 완전 투명으로 유지하다가, 스크롤 발생 시 반투명 Glassmorphism 효과를 적용한다
-2. 좌측에 `Playfair Display` 폰트의 **"Dripnote"** 로고를 배치한다
+2. 좌측에 `Playfair Display` 폰트의 **"Baristation"** 로고를 배치한다
 3. 중앙/우측에 Home, Bean Info, Classes 메뉴를 제공한다
 4. 우측 끝 북마크 아이콘으로 저장 목록 페이지로 이동한다
 5. `localStorage` 토큰 유무를 감지하여 User / LogOut 아이콘을 동적으로 전환한다
@@ -481,7 +482,7 @@ interface RecommendedBeansProps {
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `© 2026 Dripnote. All rights reserved.` 카피라이트 텍스트를 표시한다 (대소문자 혼합, Uppercase 지양)
+1. `© 2026 Baristation. All rights reserved.` 카피라이트 텍스트를 표시한다 (대소문자 혼합, Uppercase 지양)
 2. 로고와 카피라이트를 양 끝에 배치하여 안정감을 제공한다
 
 #### 6. Design Spec (디자인 명세)
@@ -493,7 +494,7 @@ interface RecommendedBeansProps {
 
 #### 7. Definition of Done (검증 기준)
 
-- [ ] (기능) `© 2026 Dripnote. All rights reserved.` 텍스트가 정확히 표시된다
+- [ ] (기능) `© 2026 Baristation. All rights reserved.` 텍스트가 정확히 표시된다
 - [ ] (디자인) 로고(좌)와 카피라이트(우)가 양 끝 배치된다
 - [ ] (디자인) Uppercase 스타일이 적용되지 않은 담백한 라이트 테마 스타일이다
 
