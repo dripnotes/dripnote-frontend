@@ -1,42 +1,4 @@
-# Dripnote (Coffee Service)
-
-> [!NOTE]
-> 이 프로젝트는 AI 에이전트와 인간 개발자가 협력하여 구축하는 프리미엄 홈커피 기록 및 추천 플랫폼입니다.
-
-## 🏛️ AI & Methodology
-
-Dripnote는 OpenAI의 **Harness Engineering** 철학을 바탕으로 AI 에이전트의 자율성과 일관된 품질을 보장합니다.
-
-### Development Cycle
-
-에이전트는 세션 시작부터 최종 커밋까지 다음의 사이클을 준수합니다.
-
-```mermaid
-graph TD
-    %% 1. 세션 시작 (Rule 24)
-    Start((세션 시작)) --> RuleCheck["1. Rule & Plan 숙지<br/>global.md, harness-strategy.md,<br/>PLAN.md 확인"]
-    RuleCheck --> SessionReport["2. 숙지 보고 (Rule 24)<br/>사용자에게 동기화 상태 보고"]
-
-    %% 2. 사용자 지시 및 계획 (Planning Stage)
-    SessionReport --> UserRequest{"3. 사용자 지시 수신"}
-    UserRequest --> Analysis["4. 분석 및 설계 (Stage 1)<br/>common-ui-spec.md 필수 확인<br/>Harness 전략 수립"]
-    Analysis --> PlanUpdate["5. PLAN.md 업데이트<br/>Implementation Plan 작성"]
-
-    %% 3. 승인 및 구현 (Execution Stage)
-    PlanUpdate --> Approval{"6. 사용자 승인 (Stage 2)"}
-    Approval -- 보완 필요 --> Analysis
-    Approval -- 승인 (진행해) --> Implementation["7. 구현 (Stage 3)<br/>Harness 인프라 우선 구축<br/>ui-library & Type Safety 준수"]
-
-    %% 4. 검증 및 수정 (Review Stage)
-    Implementation --> SelfReview["8. 자가 검증 (Stage 4)<br/>Harness 기반 테스트/평가<br/>Lint & Format 확인 및 Self-Correction"]
-    SelfReview --> UserVerification{"9. 최종 확인 (Stage 5)<br/>pnpm dev 시연 및 피드백"}
-    UserVerification -- 폴리싱 필요 --> Implementation
-
-    %% 5. 마무리 (Close Stage)
-    UserVerification -- 확인 완료 --> DocUpdate["10. 문서 최신화 (Stage 6)<br/>Specs 업데이트 - 이유 명시 필수<br/>CHANGELOG & history 상시 갱신"]
-    DocUpdate --> GroupedCommit["11. 작업 단위 커밋 (Stage 7)<br/>한국어 메시지 필수 작성"]
-    GroupedCommit --> End((완료))
-```
+# Baristation (Coffee Service)
 
 ### Core Principles
 

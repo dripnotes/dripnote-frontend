@@ -1,8 +1,8 @@
-# 메인 페이지 명세서 (Main Page / Landing)
+# 메인 페이지 명세서 (Main Page / Landing) - Baristation
 
 ## 1. 페이지 개요
 
-Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main Page) 역할을 동시에 수행합니다. 사용자에게 직관적이고 시각적인 커피 경험을 제안하고, 추천 원두와 로스터리 위치 등 핵심 서비스로 빠르게 유도합니다.
+Baristation 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main Page) 역할을 동시에 수행합니다. 사용자에게 직관적이고 시각적인 커피 경험을 제안하고, 추천 원두와 로스터리 위치 등 핵심 서비스로 빠르게 유도합니다.
 
 ---
 
@@ -12,29 +12,18 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 
 **메인 무드: "Visual-First Landing"** — 공통 명세의 `Internal Coffee Lab` 무드를 적극 활용하여, 텍스트 설명 대신 고해상도 이미지와 공백(White Space)으로 브랜드 가치를 전달합니다. (상세 설명은 최대 한 문장 이내로 제한)
 
-> **변경 사유 (Context)**:
->
-> - **2026-04-19 추천 섹션 고도화**:
->   - (일관성) `RecommendedBeanCard`를 제거하고 원두 탐색 페이지와 동일한 `BeanCard` 컴포넌트로 일원화하여 브랜드 무드의 통일성을 확보함.
->   - (기능) 추천 상품 카드에서도 원두의 향미 프로필(산미, 단맛, 밸런스, 바디, 로스팅)을 호버 시 오버레이로 즉각 확인할 수 있도록 기능을 확장함.
->   - (반응형) 디바이스별 보장되는 카드 노출 개수(모바일 4, 태블릿 3, 데스크톱 4)를 그리드 시스템으로 정밀하게 제어함.
-> - **2026-04-20 (2차 개편)**: 아키텍처 정합성 및 공통화 작업을 위해 `SectionContainer` 도입 및 레이아웃 표준화 반영.
-> - **2026-04-20 (3차 개편)**: 모바일 사용성 강화를 위해 '오늘의 추천 원두' 섹션을 2x2 그리드(4개 노출)로 확장하고, `BeanCard`의 모바일 텍스트 및 간격을 최적화함. (사용자 피드백 반영)
-
-- **2026-04-20 (4차 개편)**: 향미 지표 체계 현대화. **밸런스** 지표 추가, 모든 지표(산미, 단맛, 밸런스, 바디감, 로스팅)의 **5단계 척도** 표준화 반영.
-
 ---
 
 ## 3. 컴포넌트 명세 (Component Specs)
 
 ---
 
-### GlobalNav (GNB)
+### Header
 
 #### 1. Overview (맥락)
 
 - **목적**: 모든 페이지에서 일관된 글로벌 네비게이션을 제공하며, 스크롤에 따라 배경이 변화하고 인증 상태에 따라 우측 아이콘이 동적으로 전환되는 최상단 헤더
-- **위치**: `apps/web/components/layout/GlobalNav.tsx`
+- **위치**: `apps/web/components/layout/Header.tsx`
 - **부모 컴포넌트**: `RootLayout`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -67,7 +56,7 @@ Dripnote 서비스의 메인 진입점(Landing Page)이자 메인 페이지(Main
 #### 5. Functional Requirements (단계별 요구사항)
 
 1. 페이지 최상단에서 배경을 완전 투명으로 유지하다가, 스크롤 발생 시 반투명 Glassmorphism 효과를 적용한다
-2. 좌측에 `Playfair Display` 폰트의 **"Dripnote"** 로고를 배치한다
+2. 좌측에 `Playfair Display` 폰트의 **"Baristation"** 로고를 배치한다
 3. 중앙/우측에 Home, Bean Info, Classes 메뉴를 제공한다
 4. 우측 끝 북마크 아이콘으로 저장 목록 페이지로 이동한다
 5. `localStorage` 토큰 유무를 감지하여 User / LogOut 아이콘을 동적으로 전환한다
@@ -124,8 +113,6 @@ interface HeroSectionProps {
 }
 ```
 
-> **변경 사유 (Context)**: 2026-04-15 구현-스펙 정합성 반영(Rule 29). 초기 스펙은 단순 `string[]`으로 설계했으나, 실제 구현 시 슬라이드마다 `id`, `imageUrl`, `alt` 세 필드가 필요하여 `CarouselSlide` 타입으로 구체화됐습니다. 또한 미제공 시 컴포넌트 내부의 `DEFAULT_SLIDES`로 폴백하는 방식을 채택하여 선택적(`?:`) prop으로 변경됐습니다.
-
 **State**:
 | 상태명 | 타입 | 초기값 | 설명 |
 |--------|------|--------|------|
@@ -168,12 +155,12 @@ interface HeroSectionProps {
 
 ---
 
-### FlavorNotes
+### AromaNotes
 
 #### 1. Overview (맥락)
 
 - **목적**: 향미 카테고리별 이미지 카드를 격자 형태로 배열하여 사용자가 시각적으로 원두 취향을 탐색하도록 유도하는 섹션
-- **위치**: `apps/web/components/main/FlavorNotes.tsx`
+- **위치**: `apps/web/components/main/AromaNotes.tsx`
 - **부모 컴포넌트**: `page.tsx` (메인 엔트리)
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -212,10 +199,8 @@ interface FlavorNotesProps {
 #### 5. Functional Requirements (단계별 요구사항)
 
 1. 8종의 향미(카카오, 복숭아, 아몬드, 자몽, 캐러멜, 스모키 등) 카드를 격자 레이아웃으로 배열한다
-2. 각 `FlavorCard`에 `tasting_name`, `tasting_image_link`, `tasting_link`를 전달한다
+2. 각 `AromaCard`에 `name`, `imageUrl`, `link`를 전달한다
 3. 스크롤 진입 시 카드가 순차적으로 페이드인된다
-
-> **변경 사유 (Context)**: 기존 텍스트 위주 인터페이스에서 이미지 중심의 시각적 탐색(Visual Exploration) 방식으로 전환하여 사용자의 몰입감과 직관성을 높임. 2026-04-13: 사용자가 제공한 Unsplash 원본 이미지 링크로 전면 교체하여 시각적 정합성을 확보함. 일부 항목명 변경(밀크 초콜릿 → 아몬드, 포도 → 자몽) 및 '캐러멜'과 '스모키' 항목 추가하여 총 8종 제공. 레이아웃을 데스크톱 4열, 태블릿 3열, 모바일 2열로 최적화.
 
 #### 6. Design Spec (디자인 명세)
 
@@ -238,13 +223,13 @@ interface FlavorNotesProps {
 
 ---
 
-### FlavorCard
+### AromaCard
 
 #### 1. Overview (맥락)
 
 - **목적**: 단일 향미 카테고리를 정사각형 이미지 카드로 표현하며, 클릭 시 해당 향미 원두 목록으로 라우팅하는 인터랙티브 카드 컴포넌트
-- **위치**: `apps/web/components/main/FlavorCard.tsx`
-- **부모 컴포넌트**: `FlavorNotes`
+- **위치**: `apps/web/components/common/cards/AromaCard.tsx`
+- **부모 컴포넌트**: `AromaNotes`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
 
@@ -256,10 +241,10 @@ interface FlavorNotesProps {
 **Props**:
 
 ```ts
-interface FlavorCardProps {
-  tasting_name: string; // 향미 이름
-  tasting_image_link: string; // 배경 이미지 URL
-  tasting_link: string; // 클릭 시 라우팅 경로
+interface AromaCardProps {
+  name: string; // 향미 이름
+  imageUrl: string; // 배경 이미지 URL
+  link: string; // 클릭 시 라우팅 경로
 }
 ```
 
@@ -291,12 +276,12 @@ interface FlavorCardProps {
   - 대상: 이미지 요소만 (`scale: 1.0 → 1.1`)
   - Duration: `0.3s`, Easing: `easeOut`
 - **Typography**: 향미 이름 — `Outfit`, Bold, `Brand-Cream` 또는 White
-- **Responsive**: 부모 `FlavorNotes`의 그리드 열 수에 따라 크기 자동 조절
+- **Responsive**: 부모 `AromaNotes`의 그리드 열 수에 따라 크기 자동 조절
 
 #### 7. Definition of Done (검증 기준)
 
 - [ ] (기능) 카드가 1:1 비율을 유지하며 렌더링된다
-- [ ] (기능) 클릭 시 `tasting_link`로 라우팅된다
+- [ ] (기능) 클릭 시 `link`로 라우팅된다
 - [ ] (디자인) 카드 하단에 그라데이션 스크림 오버레이가 적용된다
 - [ ] (디자인) 텍스트가 `Outfit` Bold, `Brand-Cream` 색상으로 좌하단에 위치한다
 - [ ] (인터랙션) 호버 시 컨테이너 크기는 유지되고 내부 이미지만 `scale: 1.1`, `0.3s easeOut`으로 확대된다
@@ -401,7 +386,6 @@ interface RecommendedBeansProps {
 
 - **주요 도구**: `react-kakao-maps-sdk` (`useKakaoLoader` 훅), Tailwind CSS v4
 - **기타 제약**: Client Component 필수, 브라우저 Geolocation API 필요
-- **선택 이유**: 네이버 지도 API의 기본 유료화 정책(초기 비용 통제 필요)으로 인해 무료 사용량이 넉넉한 카카오 지도로 채택
 
 #### 3. Data Interface (I/O)
 
@@ -463,8 +447,6 @@ interface RecommendedBeansProps {
 - **주요 도구**: Tailwind CSS v4
 - **스타일링 규칙**: 담백한 라이트 테마 구성, Uppercase/넓은 자간 과도한 디자인 요소 배제
 
-> **변경 사유 (Context)**: 2026-04-08, 모든 페이지의 브랜드 일관성을 위해 카피라이트 문구를 통일함. 이후 과도한 디자인 요소(Uppercase, 넓은 자간)를 제거하고 원래의 담백한 라이트 테마 푸터 스타일을 유지하기로 결정함. (사용자 피드백 반영)
-
 #### 3. Data Interface (I/O)
 
 **Props**: 없음 (정적 콘텐츠)
@@ -481,7 +463,7 @@ interface RecommendedBeansProps {
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `© 2026 Dripnote. All rights reserved.` 카피라이트 텍스트를 표시한다 (대소문자 혼합, Uppercase 지양)
+1. `© {currentYear} Baristation. All rights reserved.` 카피라이트 텍스트를 표시한다 (대소문자 혼합, Uppercase 지양). `currentYear`는 런타임에 동적으로 연산을 수행해야 한다 (`new Date().getFullYear()`).
 2. 로고와 카피라이트를 양 끝에 배치하여 안정감을 제공한다
 
 #### 6. Design Spec (디자인 명세)
@@ -493,7 +475,7 @@ interface RecommendedBeansProps {
 
 #### 7. Definition of Done (검증 기준)
 
-- [ ] (기능) `© 2026 Dripnote. All rights reserved.` 텍스트가 정확히 표시된다
+- [ ] (기능) `© {currentYear} Baristation. All rights reserved.` 텍스트가 런타임 연도에 맞게 정확히 표시된다
 - [ ] (디자인) 로고(좌)와 카피라이트(우)가 양 끝 배치된다
 - [ ] (디자인) Uppercase 스타일이 적용되지 않은 담백한 라이트 테마 스타일이다
 
@@ -506,8 +488,8 @@ RootLayout
   ├── GlobalNav
   └── page.tsx (메인 엔트리)
         ├── HeroSection (Client Component - embla-carousel 캐러셀 및 모션)
-        ├── FlavorNotes (Client Component - 향미 카드 그리드)
-        │     └── FlavorCard × 8
+        ├── AromaNotes (Client Component - 향미 카드 그리드)
+        │     └── AromaCard × 8
         ├── RecommendedBeans (Client Component - 추천 원두 목록)
         │     └── BeanCard × N
         └── RoasteryMapSection (Client Component - useKakaoLoader 비동기 렌더링)
@@ -563,53 +545,37 @@ HTTP/1.1 400
 
 ### Response Body
 
-| Name         | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | null 여부 | 형식 |
-| ------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
-| - statusCode | String | 커스텀한 응답 코드                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | x         |      |
-| - message    | String | 성공 : 빈 문자열<br>실패 : 실패한 이유                                                                                                                                                                                                                                                                                                                                                                                                                                                  | x         |      |
-| - data       | Object | `tastings` (array) : 향미 목록<br>`tasting_name` (string) : 향미 이름<br>`tasting_image_link` (string) : 향미 배경 이미지 URL<br>`tasting_link` (string) : 향미 정렬 링크<br>`beans` (array) : 추천 원두 목록<br>`name` (string) : 추천 원두 이름<br>`aromaImageUrl` (string) : 추천 원두 썸네일 이미지<br>`balance` (number) : 밸런스 지표<br>`sweetness` (number) : 단맛 지표<br>`acidity` (number) : 산미 지표<br>`body` (number) : 바디감 지표<br>`roasting` (number) : 로스팅 지표 | x         |      |
+| Name                 | Type  | Description                                                                                                                             |
+| :------------------- | :---- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| **aromas**           | array | 향미 목록 (`id`, `name`, `imageUrl`, `link`)                                                                                            |
+| **recommendedBeans** | array | 추천 원두 목록 (`id`, `name`, `origin`, `primaryAroma`, `aromaImageUrl`, `link`, `balance`, `sweetness`, `acidity`, `body`, `roasting`) |
 
 ### Success JSON
 
 ```json
 {
-  "statusCode": "200",
-  "message": "OK",
-  "data": {
-    "tastings": [
-      {
-        "tasting_name": "카카오",
-        "tasting_image_link": "https://example.com/images/cacao.jpg",
-        "tasting_link": "/api/beans?tastingId=1"
-      },
-      {
-        "tasting_name": "복숭아",
-        "tasting_image_link": "https://example.com/images/peach.jpg",
-        "tasting_link": "/api/beans?tastingId=2"
-      }
-    ],
-    "beans": [
-      {
-        "name": "콜롬비아 엘 파라이소",
-        "aromaImageUrl": "이미지 링크",
-        "balance": 4,
-        "sweetness": 5,
-        "acidity": 4,
-        "body": 3,
-        "roasting": 2,
-        "link": "/beans/12"
-      },
-      {
-        "name": "케냐 AA 타투 N",
-        "aromaImageUrl": "이미지 링크",
-        "balance": 3,
-        "sweetness": 3,
-        "acidity": 5,
-        "body": 4,
-        "roasting": 3,
-        "link": "/beans/11"
-      }
-    ]
-  }
+  "aromas": [
+    {
+      "id": "cacao",
+      "name": "카카오",
+      "imageUrl": "https://example.com/images/cacao.jpg",
+      "link": "/beans?aromas=cacao"
+    }
+  ],
+  "recommendedBeans": [
+    {
+      "id": 1,
+      "name": "콜롬비아 엘 파라이소",
+      "origin": "콜롬비아",
+      "primaryAroma": "복숭아",
+      "aromaImageUrl": "이미지 링크",
+      "link": "/beans/1",
+      "balance": 4,
+      "sweetness": 5,
+      "acidity": 4,
+      "body": 3,
+      "roasting": 2
+    }
+  ]
 }
 ```

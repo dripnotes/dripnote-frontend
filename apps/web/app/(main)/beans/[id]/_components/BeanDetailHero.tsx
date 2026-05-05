@@ -56,7 +56,7 @@ export function BeanDetailHero({
       {/* Mobile Top Header: Logo + Actions (Matches list page pattern) */}
       <div className="mb-6 flex items-center justify-between md:hidden">
         <Link href="/" className="font-playfair text-2xl font-bold tracking-tighter text-gray-900">
-          Dripnote
+          Baristation
         </Link>
         <div className="flex items-center space-x-2">
           <Button

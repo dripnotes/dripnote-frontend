@@ -8,7 +8,7 @@ import LoginHeader from '@/components/login/LoginHeader';
 import SocialLoginSection from '@/components/login/SocialLoginSection';
 
 /**
- * LoginPage - Dripnote 전용 로그인 페이지
+ * LoginPage - Baristation 전용 로그인 페이지
  * - Focused Layout: 헤더/푸터 없이 온전히 인증에만 집중하는 구성
  * - 'Internal Coffee Lab' 무드 기반 프리미엄 디자인
  * - 메인 복귀 링크는 LoginHeader 컴포넌트 내부에서 관리
@@ -41,7 +41,7 @@ export default function LoginPage() {
       {/* Subtle footer */}
       <footer className="absolute bottom-6 flex w-full items-center justify-center lg:bottom-10">
         <p className="text-[10px] text-white/40">
-          © {new Date().getFullYear()} Dripnote. All rights reserved.
+          © {new Date().getFullYear()} Baristation. All rights reserved.
         </p>
       </footer>
     </main>

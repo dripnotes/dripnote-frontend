@@ -25,12 +25,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!bean) {
     return {
-      title: '원두를 찾을 수 없습니다 | Dripnote',
+      title: '원두를 찾을 수 없습니다 | Baristation',
       description: '존재하지 않는 원두 페이지입니다.',
     };
   }
 
-  const title = `${bean.name} - ${bean.roastery || 'Dripnote'}`;
+  const title = `${bean.name} - ${bean.roastery || 'Baristation'}`;
   const description =
     bean.description || `${bean.origin}에서 온 ${bean.primaryAroma} 향미의 매력적인 원두입니다.`;
 

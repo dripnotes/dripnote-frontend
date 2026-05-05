@@ -169,7 +169,7 @@ export const mockBeansData: BeanInfo[] = [
     link: '/beans/1',
     description:
       '안티오키아의 풍부한 화산재 토양에서 자란 이 원두는 복숭아와 리치의 화사한 산미가 특징입니다.',
-    roastery: 'Dripnote Lab',
+    roastery: 'Baristation Lab',
     processing: 'Washed',
     variety: 'Caturra',
     altitude: '1,850m',
