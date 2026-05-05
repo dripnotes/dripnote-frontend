@@ -158,7 +158,7 @@ export default function PlaygroundPage() {
                 API Playground
               </h1>
               <p className="font-outfit mt-1 text-sm tracking-widest text-gray-500 uppercase">
-                Dripnote internal testing tool
+                Baristation internal testing tool
               </p>
             </div>
           </div>
