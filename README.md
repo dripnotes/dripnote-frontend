@@ -1,12 +1,5 @@
 # Baristation (Coffee Service)
 
-> [!NOTE]
-> 이 프로젝트는 AI 에이전트와 인간 개발자가 협력하여 구축하는 프리미엄 홈커피 기록 및 추천 플랫폼입니다.
-
-## 🏛️ AI & Methodology
-
-Baristation은 OpenAI의 **Harness Engineering** 철학을 바탕으로 AI 에이전트의 자율성과 일관된 품질을 보장합니다.
-
 ### Core Principles
 
 - **Vibe Coding**: 구현 전 `Implementation Plan` 수립 및 승인 필수 (7단계 주기).

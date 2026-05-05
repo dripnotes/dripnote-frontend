@@ -6,8 +6,6 @@ Baristation 서비스의 모든 기능을 이용하기 위한 진입점입니다
 
 **집중된 사용자 경험(Focused Experience)** 원칙에 따라, 로그인 페이지는 인증 이외의 다른 기능이나 내비게이션 요소와의 상호작용을 배제하고 오직 로그인에만 완전히 집중할 수 있도록 디자인합니다.
 
-> - **2026-05-05 (리브랜딩)**: 서비스명을 "Dripnote"에서 "Baristation"으로 전면 리브랜딩함. 이에 따른 로고 및 텍스트 갱신.
-
 ---
 
 ## 2. 디자인 시스템 참조
@@ -27,7 +25,7 @@ Baristation 서비스의 모든 기능을 이용하기 위한 진입점입니다
 #### 1. Overview (맥락)
 
 - **목적**: 로그인 페이지 전체를 감싸는 풀스크린 배경 이미지와 다크 오버레이. 화면의 80% 이상을 차지하며 브랜드 무드를 시각적으로 주도합니다.
-- **위치**: `apps/web/app/login/_components/LoginBackground.tsx`
+- **위치**: `apps/web/components/login/LoginBackground.tsx`
 - **부모 컴포넌트**: `LoginPage`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -64,8 +62,6 @@ interface LoginBackgroundProps {
 3. 이미지 위에 `#1A1614` 기반 선형 그라데이션 오버레이를 적용하여 가독성과 브랜드 무드를 확보한다
 4. Ken Burns 효과(20초 이상 주기, `scale: 1.0 → 1.1` 미세 확대)를 무한 반복하여 정적 배경에 생동감을 부여한다
 
-> **변경 사유 (Context)**: 로그인 페이지 본연의 목적인 '인증'에 100% 집중할 수 있게 하여 전환율을 높이고, 정적인 이미지가 주는 지루함을 탈피하여 완성도 높은 프리미엄 디자인(Ken Burns Effect)을 강조하기 위함입니다.
-
 #### 6. Design Spec (디자인 명세)
 
 - **Layout**: `position: fixed`, `inset: 0`, `z-index: 0`
@@ -92,7 +88,7 @@ interface LoginBackgroundProps {
 #### 1. Overview (맥락)
 
 - **목적**: 브랜드 로고("Baristation"), 페이지 슬로건("시작하기"), 메인 페이지 복귀 링크(`← Main`)를 포함하는 로그인 페이지의 상단 UI 영역
-- **위치**: `apps/web/app/login/_components/LoginHeader.tsx`
+- **위치**: `apps/web/components/login/LoginHeader.tsx`
 - **부모 컴포넌트**: `LoginPage`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -123,8 +119,6 @@ interface LoginBackgroundProps {
    - `ChevronLeft` 아이콘(lucide-react, 16px) + `"Main"` 텍스트를 `flex gap-1`로 수평 정렬한다
    - 테두리와 배경색을 배제한 미니멀 텍스트 전용 스타일을 유지한다
 4. 복귀 링크는 페이지 로드 후 `0.2s` 딜레이로 즉시 등장하여 탈출구(escape hatch)로서의 가용성을 확보한다
-
-> **변경 사유 (Context)**: 2026-04-15 사용자 피드백 반영. 기존 텍스트 전용 "main"(소문자)은 가독성이 낮고 1.2s 딜레이로 너무 늦게 렌더링되는 문제가 있었습니다. `ChevronLeft` 아이콘 추가로 직관적인 "뒤로 가기" 의미를 강화하고, 딜레이를 0.2s로 단축하여 사용자가 인증을 원하지 않을 때 즉시 탈출할 수 있도록 개선했습니다. 미니멀 스타일은 유지하여 Focused Layout 원칙(인증에 집중)을 훼손하지 않습니다.
 
 #### 6. Design Spec (디자인 명세)
 
@@ -157,7 +151,7 @@ interface LoginBackgroundProps {
 #### 1. Overview (맥락)
 
 - **목적**: Google, Naver, Kakao 3개의 소셜 로그인 버튼을 묶어 수직으로 나열하는 컨테이너 컴포넌트
-- **위치**: `apps/web/app/login/_components/SocialLoginSection.tsx`
+- **위치**: `apps/web/components/login/SocialLoginSection.tsx`
 - **부모 컴포넌트**: `LoginPage`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -204,7 +198,7 @@ interface LoginBackgroundProps {
 #### 1. Overview (맥락)
 
 - **목적**: 소셜 플랫폼별 공식 브랜드 가이드라인을 준수한 OAuth 로그인 트리거 버튼 (Google / Naver / Kakao)
-- **위치**: `apps/web/app/login/_components/SocialButton.tsx`
+- **위치**: `apps/web/components/login/SocialButton.tsx`
 - **부모 컴포넌트**: `SocialLoginSection`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -215,8 +209,6 @@ interface LoginBackgroundProps {
   - [Google 브랜드 가이드라인](https://developers.google.com/identity/branding-guidelines?hl=ko)
   - [Naver 로그인 BI 가이드](https://developers.naver.com/docs/login/bi/bi.md)
   - [Kakao 디자인 가이드](https://developers.kakao.com/docs/latest/ko/kakaologin/design-guide) — 텍스트 컬러: `rgba(0, 0, 0, 0.85)` 정확도 준수
-
-> **변경 사유 (Context)**: 각 플랫폼의 공식 검수 통과 및 브랜드 아이덴티티 규칙을 보호하면서도, CSS 변수 맵핑 방식을 도입하여 코드의 단일 진실 공급원(SSOT)을 확보했습니다.
 
 #### 3. Data Interface (I/O)
 
