@@ -2,9 +2,9 @@
 description: [Vibe Coding + Harness Engineering] 고품질 에이전트 협업 개발을 위한 통합 프로토콜
 ---
 
-# Dripnote 개발 프로토콜 (Development Protocol)
+# Baristation 개발 프로토콜 (Development Protocol)
 
-이 문서는 OpenAI의 **하네스 엔지니어링(Harness Engineering)** 철학과 **바이브 코딩(Vibe Coding)** 워크플로우를 결합한 Dripnote 프로젝트의 표준 개발 지침입니다. 에이전트와 인간 개발자는 이 사이클을 준수하여 자율적이고 안정적인 개발 환경을 유지합니다.
+이 문서는 OpenAI의 **하네스 엔지니어링(Harness Engineering)** 철학과 **바이브 코딩(Vibe Coding)** 워크플로우를 결합한 Baristation 프로젝트의 표준 개발 지침입니다. 에이전트와 인간 개발자는 이 사이클을 준수하여 자율적이고 안정적인 개발 환경을 유지합니다.
 
 ---
 

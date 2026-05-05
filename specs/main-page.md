@@ -228,7 +228,7 @@ interface FlavorNotesProps {
 #### 1. Overview (맥락)
 
 - **목적**: 단일 향미 카테고리를 정사각형 이미지 카드로 표현하며, 클릭 시 해당 향미 원두 목록으로 라우팅하는 인터랙티브 카드 컴포넌트
-- **위치**: `apps/web/components/main/AromaCard.tsx`
+- **위치**: `apps/web/components/common/cards/AromaCard.tsx`
 - **부모 컴포넌트**: `AromaNotes`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
@@ -463,7 +463,7 @@ interface RecommendedBeansProps {
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `© 2026 Baristation. All rights reserved.` 카피라이트 텍스트를 표시한다 (대소문자 혼합, Uppercase 지양)
+1. `© {currentYear} Baristation. All rights reserved.` 카피라이트 텍스트를 표시한다 (대소문자 혼합, Uppercase 지양). `currentYear`는 런타임에 동적으로 연산을 수행해야 한다 (`new Date().getFullYear()`).
 2. 로고와 카피라이트를 양 끝에 배치하여 안정감을 제공한다
 
 #### 6. Design Spec (디자인 명세)
@@ -475,7 +475,7 @@ interface RecommendedBeansProps {
 
 #### 7. Definition of Done (검증 기준)
 
-- [ ] (기능) `© 2026 Baristation. All rights reserved.` 텍스트가 정확히 표시된다
+- [ ] (기능) `© {currentYear} Baristation. All rights reserved.` 텍스트가 런타임 연도에 맞게 정확히 표시된다
 - [ ] (디자인) 로고(좌)와 카피라이트(우)가 양 끝 배치된다
 - [ ] (디자인) Uppercase 스타일이 적용되지 않은 담백한 라이트 테마 스타일이다
 
@@ -564,7 +564,7 @@ HTTP/1.1 400
   ],
   "recommendedBeans": [
     {
-      "id": "1",
+      "id": 1,
       "name": "콜롬비아 엘 파라이소",
       "origin": "콜롬비아",
       "primaryAroma": "복숭아",

@@ -96,6 +96,13 @@ export default function PlaygroundPage() {
     const start = Date.now();
     try {
       const res = await fetch(url, { method });
+      const contentType = res.headers.get('content-type');
+
+      if (!contentType || !contentType.includes('application/json')) {
+        const textBody = await res.text();
+        throw new Error(`HTTP ${res.status} ${res.statusText}\n${textBody}`);
+      }
+
       const data = await res.json();
 
       const latency = Date.now() - start;
@@ -260,7 +267,7 @@ export default function PlaygroundPage() {
                   {response && (
                     <div className="hidden items-center gap-2 sm:flex">
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${response.status === 200 ? 'border border-green-500/20 bg-green-500/10 text-green-500' : 'border border-red-500/20 bg-red-500/10 text-red-500'}`}
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${response.status >= 200 && response.status < 300 ? 'border border-green-500/20 bg-green-500/10 text-green-500' : 'border border-red-500/20 bg-red-500/10 text-red-500'}`}
                       >
                         {response.status} {response.statusText}
                       </span>
@@ -308,7 +315,7 @@ export default function PlaygroundPage() {
                     >
                       <AlertCircle className="mt-1 h-5 w-5 shrink-0 text-red-500" />
                       <div>
-                        <h4 className="mb-1 text-sm font-bold tracking-wider text-red-500 text-white uppercase">
+                        <h4 className="mb-1 text-sm font-bold tracking-wider text-red-500 uppercase">
                           Network Error
                         </h4>
                         <p className="text-sm leading-relaxed text-red-400/80">{error}</p>

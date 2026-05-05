@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-import { authUtils } from '@/lib/utils/auth-utils';
+import { authUtils, AUTH_TOKEN_KEY } from '@/lib/utils/auth-utils';
 import { getMockUserInfo, User } from '@/lib/utils/user-mock';
 
 /**
@@ -35,7 +35,7 @@ export function useAuth() {
 
     // 다른 탭에서의 스토리지 변경 감지 (인증 상태 동기화)
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'baristation-auth-token') {
+      if (e.key === AUTH_TOKEN_KEY) {
         checkAuth();
       }
     };
