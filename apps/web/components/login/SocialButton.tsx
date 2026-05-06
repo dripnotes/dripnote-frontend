@@ -121,8 +121,8 @@ export default function SocialButton({ provider }: SocialButtonProps) {
       isSecure ? '; Secure' : ''
     }`;
 
-    // 4. BFF 소셜 로그인 엔드포인트로 이동
-    window.location.href = `/api/auth/${provider}`;
+    // 4. Next.js가 백엔드로 프록시해주는 OAuth2 인증 시작 경로로 이동
+    window.location.href = `/oauth2/authorization/${provider}`;
   };
 
   return (
