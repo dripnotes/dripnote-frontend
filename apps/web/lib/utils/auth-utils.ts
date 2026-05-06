@@ -1,25 +1,32 @@
 /**
  * Auth Utilities - JWT 토큰 저장 및 추출 관리
+ * - Middleware에서 접근 가능하도록 localStorage 대신 Cookie를 사용합니다.
  */
 
 export const AUTH_TOKEN_KEY = 'baristation-auth-token';
 
 export const authUtils = {
   /**
-   * 토큰을 스토리지에 저장합니다.
+   * 토큰을 쿠키에 저장합니다.
    */
   setToken: (token: string) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(AUTH_TOKEN_KEY, token);
+      const isSecure = window.location.protocol === 'https:';
+      // 7일간 유지, SameSite=Lax 설정
+      document.cookie = `${AUTH_TOKEN_KEY}=${token}; path=/; max-age=604800; SameSite=Lax${
+        isSecure ? '; Secure' : ''
+      }`;
     }
   },
 
   /**
-   * 스토리지에서 토큰을 가져옵니다.
+   * 쿠키에서 토큰을 가져옵니다.
    */
   getToken: () => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem(AUTH_TOKEN_KEY);
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${AUTH_TOKEN_KEY}=`);
+      if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
     }
     return null;
   },
@@ -29,7 +36,7 @@ export const authUtils = {
    */
   removeToken: () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
+      document.cookie = `${AUTH_TOKEN_KEY}=; path=/; max-age=-1; SameSite=Lax`;
     }
   },
 
@@ -37,9 +44,6 @@ export const authUtils = {
    * 인증 여부를 확인합니다.
    */
   isAuthenticated: () => {
-    if (typeof window !== 'undefined') {
-      return !!localStorage.getItem(AUTH_TOKEN_KEY);
-    }
-    return false;
+    return !!authUtils.getToken();
   },
 };

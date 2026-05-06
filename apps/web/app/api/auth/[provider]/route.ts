@@ -9,10 +9,20 @@ import { NextRequest, NextResponse } from 'next/server';
  * 3. 백엔드의 302 응답에서 Location 헤더(구글/네이버 로그인 창 주소)를 추출
  * 4. 브라우저에게 해당 주소로 리다이렉트 하라고 응답 (백엔드 주소 은닉)
  */
-export async function GET(request: NextRequest, { params }: { params: { provider: string } }) {
-  const { provider } = params;
-  const backendBaseUrl = process.env.BACKEND_URL || 'http://localhost:8080';
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ provider: string }> },
+) {
+  const { provider } = await params;
+  const backendBaseUrl = process.env.BACKEND_URL;
+
+  if (!backendBaseUrl) {
+    console.error('Missing BACKEND_URL environment variable');
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+  }
+
   const backendUrl = `${backendBaseUrl}/oauth2/authorization/${provider}`;
+  const isSecure = request.nextUrl.protocol === 'https:';
 
   try {
     // 1. 브라우저의 요청 헤더(쿠키 등)를 백엔드로 전달
@@ -36,10 +46,16 @@ export async function GET(request: NextRequest, { params }: { params: { provider
     if (redirectUrl) {
       const res = NextResponse.redirect(redirectUrl);
 
-      // 3. 백엔드에서 설정한 쿠키(JSESSIONID 등)를 브라우저로 전달
-      const setCookie = response.headers.get('set-cookie');
-      if (setCookie) {
-        res.headers.set('set-cookie', setCookie);
+      // 3. 백엔드에서 설정한 쿠키들을 브라우저로 전달
+      // getSetCookie()를 사용하면 여러 개의 Set-Cookie 헤더를 배열로 안전하게 가져올 수 있습니다.
+      const setCookies = response.headers.getSetCookie();
+
+      if (setCookies.length > 0) {
+        setCookies.forEach((cookie) => {
+          // 로컬 http 환경이라면 secure 속성을 강제로 제거 (브라우저 거부 방지)
+          const fixedCookie = isSecure ? cookie : cookie.replace(/Secure;/gi, '');
+          res.headers.append('set-cookie', fixedCookie);
+        });
       }
 
       return res;

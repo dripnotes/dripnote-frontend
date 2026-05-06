@@ -369,11 +369,11 @@ Baristation은 보안 강화와 유연한 UX 처리를 위해 **BFF(Backend For 
     - 백엔드로부터 받은 302 응답(`Location` 헤더)을 가로채어 브라우저에게 외부 로그인 창으로 가라고 최종 리다이렉트를 내립니다.
 3.  **외부 플랫폼 로그인 (Google & Backend)**:
     - 사용자가 로그인을 완료하면 구글이 백엔드로 콜백을 보내고, 백엔드는 **refreshToken**을 **HttpOnly Cookie**로 설정한 후 프론트엔드의 환승역 페이지(`/auth/success`)로 리다이렉트합니다.
-4.  **토큰 교환 및 최종 도착 (Client)**:
-    - `/auth/success` 페이지에 도착하면 클라이언트 JavaScript는 즉시 BFF(`POST /api/auth/refresh`)를 호출합니다.
-    - 이때 브라우저에 의해 자동으로 **refreshToken 쿠키**가 함께 전송됩니다.
-    - BFF는 쿠키에서 토큰을 추출하여 백엔드 명세에 따른 **`Refresh-Token`** 헤더에 담아 Access Token을 요청합니다.
-    - BFF는 백엔드로부터 **Access Token**을 받아 클라이언트에 반환하며, 클라이언트는 이를 저장하고 원래 목적지로 최종 이동합니다.
+4.  **토큰 교환 및 최종 도착 (Middleware)**:
+    - `/auth/success` 경로 요청이 들어오면 `middleware.ts`가 이를 가로챕니다.
+    - 미들웨어는 브라우저 쿠키에 담긴 **refreshToken**을 확인하고, BFF(`POST /api/auth/refresh`)를 호출하여 Access Token을 발급받습니다.
+    - 미들웨어는 새로 발급된 **Access Token**을 쿠키에 저장하고, 사용자를 원래 목적지(`redirect_to` 쿠키에 저장된 경로)로 최종 리다이렉트합니다.
+    - 이 과정에서 클라이언트 사이드 JavaScript의 개입 없이 서버 측에서 모든 인증 처리가 완료됩니다.
 
 ### 6.2 BFF 엔드포인트 명세
 
@@ -405,5 +405,6 @@ Baristation은 보안 강화와 유연한 UX 처리를 위해 **BFF(Backend For 
 
 ### 6.3 인증 성공 후 환승역 (Success Landing)
 
-- **Redirect URL**: `/auth/success?token={JWT}`
-- **보안 검증**: `sessionStorage`에서 꺼낸 `target` 주소가 동일 도메인 내부 주소인지 반드시 확인 후 이동합니다.
+- **Redirect URL**: `/auth/success`
+- **미들웨어 처리**: 해당 경로 요청 시 미들웨어에서 토큰 교환을 수행한 후 최종 목적지로 302 리다이렉트합니다.
+- **보안 검증**: 쿠키에 저장된 `redirect_to` 주소가 동일 도메인 내부 주소인지 확인 후 이동합니다.

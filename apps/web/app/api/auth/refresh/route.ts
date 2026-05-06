@@ -20,25 +20,14 @@ export async function POST(request: NextRequest) {
   const refreshUrl = `${backendBaseUrl}/api/auth/refresh`;
 
   try {
-    const requestHeaders = new Headers();
-
     // 1. 쿠키에서 refreshToken 추출
-    const cookieHeader = request.headers.get('cookie') || '';
-    const cookies = cookieHeader.split(';').reduce(
-      (acc, curr) => {
-        const [key, value] = curr.trim().split('=');
-        acc[key] = value;
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
-
-    const refreshToken = cookies['refreshToken'];
+    const refreshToken = request.cookies.get('refreshToken')?.value;
 
     if (!refreshToken) {
       return NextResponse.json({ error: 'No refresh token found in cookies' }, { status: 401 });
     }
 
+    const requestHeaders = new Headers();
     // 2. 백엔드 명세에 맞춰 헤더 설정 (Bearer 없이 Refresh-Token 키 사용)
     requestHeaders.set('Refresh-Token', refreshToken);
     requestHeaders.set('Content-Type', 'application/json');
@@ -68,11 +57,12 @@ export async function POST(request: NextRequest) {
       // 4. 새로운 refreshToken이 있다면 브라우저 쿠키 업데이트 (HttpOnly)
       // 백엔드가 Set-Cookie를 내려주지 않고 바디로만 준 경우를 위해 처리
       if (json.data.refreshToken) {
+        const isSecure = request.nextUrl.protocol === 'https:';
         res.cookies.set('refreshToken', json.data.refreshToken, {
           path: '/',
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'none',
+          secure: isSecure,
+          sameSite: 'lax',
           maxAge: 2592000, // 30일
         });
       }
