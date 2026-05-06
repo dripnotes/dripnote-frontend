@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, Suspense } from 'react';
+import { useEffect } from 'react';
 
 /**
  * AuthSuccessContent - 인증 성공 후 토큰 처리 및 최종 리다이렉트를 담당하는 컴포넌트
@@ -11,13 +11,29 @@ function AuthSuccessContent() {
 
   // 로직이 middleware.ts로 이전되었습니다.
   // 미들웨어에서 리다이렉트가 발생하므로 이 컴포넌트는 거의 노출되지 않지만,
-  // 브라우저 캐시나 특이 케이스를 위해 정적인 로딩 상태만 유지합니다.
+  // 브라우저 캐시나 특이 케이스를 위해 안전장치만 유지합니다.
   useEffect(() => {
-    // 만약 미들웨어가 작동하지 않았을 경우를 대비한 최소한의 안전장치
-    const timeout = setTimeout(() => {
-      router.replace('/');
+    let isMounted = true;
+    const timeout = setTimeout(async () => {
+      try {
+        // 미들웨어가 작동하지 않았을 경우, 수동으로 토큰 갱신 시도 (핑 테스트)
+        const res = await fetch('/api/auth/refresh', { method: 'POST' });
+        if (!isMounted) return;
+
+        if (res.ok) {
+          router.replace('/');
+        } else {
+          router.replace('/login?error=middleware_skipped');
+        }
+      } catch (e) {
+        if (isMounted) router.replace('/login?error=middleware_skipped');
+      }
     }, 3000);
-    return () => clearTimeout(timeout);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeout);
+    };
   }, [router]);
 
   return (
@@ -46,13 +62,7 @@ function AuthSuccessContent() {
 export default function AuthSuccessPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0f0e0d] p-6 text-white">
-      <Suspense
-        fallback={
-          <p className="font-outfit text-sm font-light tracking-widest uppercase">Loading...</p>
-        }
-      >
-        <AuthSuccessContent />
-      </Suspense>
+      <AuthSuccessContent />
     </div>
   );
 }

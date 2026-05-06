@@ -9,11 +9,19 @@ import { NextRequest, NextResponse } from 'next/server';
  * 3. 백엔드의 302 응답에서 Location 헤더(구글/네이버 로그인 창 주소)를 추출
  * 4. 브라우저에게 해당 주소로 리다이렉트 하라고 응답 (백엔드 주소 은닉)
  */
+const ALLOWED_PROVIDERS = ['google', 'naver', 'kakao'];
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ provider: string }> },
 ) {
   const { provider } = await params;
+
+  // 0. Provider 유효성 검증 (Allowlist)
+  if (!ALLOWED_PROVIDERS.includes(provider)) {
+    return NextResponse.json({ error: 'Invalid auth provider' }, { status: 400 });
+  }
+
   const backendBaseUrl = process.env.BACKEND_URL;
 
   if (!backendBaseUrl) {
@@ -34,10 +42,12 @@ export async function GET(
     const userAgent = request.headers.get('user-agent');
     if (userAgent) requestHeaders.set('user-agent', userAgent);
 
+    // 5초 타임아웃 설정
     const response = await fetch(backendUrl, {
       method: 'GET',
       headers: requestHeaders,
       redirect: 'manual', // 302 응답을 직접 처리하기 위함
+      signal: AbortSignal.timeout(5000),
     });
 
     // 2. 백엔드로부터 받은 리다이렉트 주소 추출
@@ -47,13 +57,15 @@ export async function GET(
       const res = NextResponse.redirect(redirectUrl);
 
       // 3. 백엔드에서 설정한 쿠키들을 브라우저로 전달
-      // getSetCookie()를 사용하면 여러 개의 Set-Cookie 헤더를 배열로 안전하게 가져올 수 있습니다.
       const setCookies = response.headers.getSetCookie();
 
       if (setCookies.length > 0) {
         setCookies.forEach((cookie) => {
           // 로컬 http 환경이라면 secure 속성을 강제로 제거 (브라우저 거부 방지)
-          const fixedCookie = isSecure ? cookie : cookie.replace(/Secure;/gi, '');
+          // 보다 정교한 정규표현식을 사용하여 데이터 손상 방지
+          const fixedCookie = isSecure
+            ? cookie
+            : cookie.replace(/;\s*Secure\b/gi, '').replace(/\bSecure\b\s*;/gi, '');
           res.headers.append('set-cookie', fixedCookie);
         });
       }
@@ -66,6 +78,9 @@ export async function GET(
       { status: 500 },
     );
   } catch (error) {
+    if (error instanceof Error && error.name === 'TimeoutError') {
+      return NextResponse.json({ error: 'Backend request timed out' }, { status: 504 });
+    }
     console.error(`BFF Auth Error (${provider}):`, error);
     return NextResponse.json({ error: 'Internal Server Error in BFF' }, { status: 500 });
   }

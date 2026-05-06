@@ -4,6 +4,8 @@ import { Button } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
 import React from 'react';
 
+import { REDIRECT_COOKIE_KEY, isValidInternalPath } from '@/lib/utils/auth-utils';
+
 export type SocialProvider = 'google' | 'naver' | 'kakao';
 
 interface SocialButtonProps {
@@ -96,11 +98,30 @@ export default function SocialButton({ provider }: SocialButtonProps) {
   const { label, icon, variant } = PROVIDER_MAP[provider];
 
   const handleLogin = () => {
-    // 1. 현재 페이지 혹은 이전 페이지 정보를 쿠키에 저장 (미들웨어에서 복구용)
-    const redirectTarget = new URLSearchParams(window.location.search).get('redirect') || '/';
-    document.cookie = `redirect_to=${redirectTarget}; path=/; max-age=3600; SameSite=Lax`;
+    // 1. 현재 페이지의 redirect 쿼리 파라미터 추출
+    const searchParams = new URLSearchParams(window.location.search);
+    const rawRedirect = searchParams.get('redirect');
 
-    // 2. BFF(Backend For Frontend) 엔드포인트로 이동
+    // 2. 오픈 리다이렉트 방지를 위해 내부 경로 여부 검증 및 정규화
+    let redirectTarget = '/';
+    if (rawRedirect && isValidInternalPath(rawRedirect)) {
+      try {
+        // 경로와 쿼리 스트링만 남기고 정규화 (보안 강화)
+        const url = new URL(rawRedirect, window.location.origin);
+        redirectTarget = url.pathname + url.search;
+      } catch (e) {
+        redirectTarget = '/';
+      }
+    }
+
+    // 3. 목적지를 쿠키에 안전하게 저장 (미들웨어에서 읽어 최종 리다이렉트)
+    const isSecure = window.location.protocol === 'https:';
+    const encodedRedirect = encodeURIComponent(redirectTarget);
+    document.cookie = `${REDIRECT_COOKIE_KEY}=${encodedRedirect}; path=/; max-age=3600; SameSite=Lax${
+      isSecure ? '; Secure' : ''
+    }`;
+
+    // 4. BFF 소셜 로그인 엔드포인트로 이동
     window.location.href = `/api/auth/${provider}`;
   };
 

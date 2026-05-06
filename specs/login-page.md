@@ -269,29 +269,22 @@ interface SocialButtonProps {
 
 ---
 
-### LoginCallbackPage
+### AuthSuccessPage (Success Station)
 
 #### 1. Overview (맥락)
 
-- **목적**: OAuth 인증 성공 후 서버로부터 전달받은 JWT를 URL 쿼리 파라미터에서 추출하여 `localStorage`에 저장하고, 메인 페이지로 자동 라우팅하는 콜백 처리 페이지
-- **위치**: `apps/web/app/login/callback/page.tsx`
-- **부모 컴포넌트**: N/A (독립 Next.js Route)
+- **목적**: OAuth 인증 성공 후 백엔드로부터 전달받은 `refreshToken`을 사용하여 최종적인 `accessToken`을 발급받고 목적지로 리다이렉트하는 환승역 페이지
+- **위치**: `apps/web/app/(protected)/auth/success/page.tsx`
+- **부모 컴포넌트**: N/A (독립 Next.js Route, 미들웨어에 의해 가로채짐)
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
 
-- **주요 도구**: `next/navigation` (`useSearchParams`, `useRouter`), `authUtils`
-- **기타 제약**: Client Component 필수 (`useSearchParams` 사용), 토큰 처리 완료 즉시 리다이렉트
+- **주요 도구**: `next/navigation`, `middleware.ts`, `BFF (/api/auth/refresh)`
+- **기타 제약**: Client Component (안전장치용), 모든 핵심 처리는 서버(Middleware)에서 우선 수행
 
 #### 3. Data Interface (I/O)
 
-**Props** (URL Query Params):
-
-```ts
-// URL: /login/callback?token={JWT}
-interface CallbackSearchParams {
-  token: string; // 서버로부터 전달받은 JWT
-}
-```
+**Props**: 없음 (쿠키에 의존)
 
 **State**:
 | 상태명 | 타입 | 초기값 | 설명 |
@@ -302,30 +295,31 @@ interface CallbackSearchParams {
 
 #### 4. UI States (상태 명세)
 
-| 상태        | 트리거 조건                              | UI 표현                               |
-| ----------- | ---------------------------------------- | ------------------------------------- |
-| **Loading** | 컴포넌트 마운트 직후                     | 로딩 스피너 또는 빈 화면 (순간적)     |
-| **Error**   | `token` 파라미터 없음 또는 유효하지 않음 | 에러 메시지 + 로그인 페이지 이동 링크 |
+| 상태        | 트리거 조건                       | UI 표현                                         |
+| ----------- | --------------------------------- | ----------------------------------------------- |
+| **Loading** | 미들웨어 처리 중                  | 프리미엄 로딩 스피너 ("Finalizing Security...") |
+| **Error**   | 미들웨어 스킵 또는 토큰 교환 실패 | 에러 메시지 + 로그인 페이지 이동 링크           |
 
 #### 5. Functional Requirements (단계별 요구사항)
 
-1. `useSearchParams`로 URL 쿼리의 `token` 파라미터를 추출한다
-2. `authUtils`를 사용하여 추출된 JWT를 `localStorage`에 안전하게 저장한다
-3. 저장 완료 후 `useRouter`로 메인 페이지(`/`)로 자동 라우팅한다
-4. `token` 파라미터가 없거나 유효하지 않으면 에러 상태를 노출하고 로그인 페이지(`/login`)로 유도한다
+1. 사용자가 이 페이지에 접근하면 `middleware.ts`가 요청을 가로채어 토큰 교환을 시도한다.
+2. **미들웨어 성공 시**: `accessToken`을 쿠키에 저장하고 `redirect_to` 경로로 즉시 302 리다이렉트한다.
+3. **미들웨어 스킵/실패 시 (안전장치)**:
+   - `useEffect`에서 `/api/auth/refresh`로 핑 테스트를 수행한다.
+   - 성공 시 메인으로, 실패 시 `/login?error=middleware_skipped`로 리다이렉트한다.
+4. 모든 토큰은 `localStorage`가 아닌 **HttpOnly Cookie** 및 일반 쿠키로 관리한다.
 
 #### 6. Design Spec (디자인 명세)
 
-- **Layout**: 화면 중앙 로딩 인디케이터 (처리 시간이 짧으므로 최소 UI)
-- **Animation**: 없음
-- **Responsive**: N/A
+- **Layout**: 화면 중앙에 "Focused Laboratory" 무드의 애니메이션 스피너 배치
+- **Typography**: `Playfair Display` (제목), `Outfit` (서브텍스트, Uppercase)
 
 #### 7. Definition of Done (검증 기준)
 
-- [ ] (기능) URL의 `token` 파라미터가 `localStorage`에 정상 저장된다
-- [ ] (기능) 저장 완료 후 자동으로 `/`로 라우팅된다
-- [ ] (상태) `token`이 없을 경우 에러 메시지를 노출하고 로그인 페이지로 안내한다
-- [ ] (기능) 메인 페이지 GNB가 저장된 토큰을 감지하여 인증 아이콘을 동적으로 전환한다
+- [ ] (기능) 미들웨어가 해당 경로 접근 시 토큰 교환을 성공적으로 수행한다
+- [ ] (기능) 발급된 `accessToken`이 쿠키(`baristation-auth-token`)에 저장된다
+- [ ] (상태) 실패 시 `/login` 페이지로 적절한 에러 코드와 함께 리다이렉트된다
+- [ ] (보안) 모든 처리가 완료된 후 `redirect_to` 쿠키가 삭제된다
 
 ---
 
@@ -340,7 +334,7 @@ LoginPage (app/login/page.tsx)
         ├── SocialButton (Naver)
         └── SocialButton (Kakao)
 
-LoginCallbackPage (app/login/callback/page.tsx) ← 독립 Route
+AuthSuccessPage (app/(protected)/auth/success/page.tsx) ← 독립 Route (환승역)
 ```
 
 ---
@@ -349,7 +343,7 @@ LoginCallbackPage (app/login/callback/page.tsx) ← 독립 Route
 
 - **소셜 전용 로그인**: 자체 가입 폼 없이 소셜 계정으로만 인증 처리
 - **빠른 응답성**: 버튼 클릭 시 선형(Linear) 속도감으로 인증 단계 진입
-- **인증 토큰 관리**: JWT를 `localStorage`에 저장 후 메인 페이지로 라우팅
+- **인증 토큰 관리**: JWT를 HttpOnly 및 일반 Cookie에 저장하여 보안 및 미들웨어 접근성 확보
 
 ---
 
@@ -403,8 +397,8 @@ Baristation은 보안 강화와 유연한 UX 처리를 위해 **BFF(Backend For 
   ```
 - **Response (BFF -> Client)**: `accessToken` 반환 및 `refreshToken` 쿠키 업데이트 (Set-Cookie)
 
-### 6.3 인증 성공 후 환승역 (Success Landing)
+### 6.4 인증 성공 후 환승역 (Success Landing)
 
 - **Redirect URL**: `/auth/success`
 - **미들웨어 처리**: 해당 경로 요청 시 미들웨어에서 토큰 교환을 수행한 후 최종 목적지로 302 리다이렉트합니다.
-- **보안 검증**: 쿠키에 저장된 `redirect_to` 주소가 동일 도메인 내부 주소인지 확인 후 이동합니다.
+- **보안 검증**: 쿠키에 저장된 `redirect_to` 주소가 동일 도메인 내부 주소(`isValidInternalPath`)인지 확인 후 이동합니다.
