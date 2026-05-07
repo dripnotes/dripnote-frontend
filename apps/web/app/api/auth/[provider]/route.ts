@@ -42,6 +42,31 @@ export async function GET(
     const userAgent = request.headers.get('user-agent');
     if (userAgent) requestHeaders.set('user-agent', userAgent);
 
+    /**
+     * [X-Forwarded 헤더 주입 — Spring Security redirect_uri 오버라이드]
+     *
+     * 배경:
+     * - Spring Security는 redirect-uri에 {baseUrl} 플레이스홀더를 사용
+     * - BFF가 서버-서버로 호출하면 백엔드가 {baseUrl} = dev.dripnote.store 로 판단
+     * - X-Forwarded-Host/Proto 헤더를 주입하면 Spring Security의 ForwardedHeaderFilter가
+     *   {baseUrl}을 프론트엔드 Origin으로 오버라이드함
+     *
+     * 동작 조건:
+     * - 백엔드 Spring Security에 ForwardedHeaderFilter 또는 server.forward-headers-strategy 설정 필요
+     * - application.yml: server.forward-headers-strategy: framework
+     *
+     * 결과:
+     * - redirect_uri = http://localhost:3000/login/oauth2/code/{provider}  (로컬)
+     * - redirect_uri = https://프론트도메인/login/oauth2/code/{provider}  (프로덕션)
+     */
+    const frontendOrigin = request.nextUrl.origin; // e.g. "http://localhost:3000"
+    const frontendUrl = new URL(frontendOrigin);
+
+    requestHeaders.set('X-Forwarded-Host', frontendUrl.host); // "localhost:3000"
+    requestHeaders.set('X-Forwarded-Proto', frontendUrl.protocol.replace(':', '')); // "http"
+    requestHeaders.set('X-Forwarded-Port', frontendUrl.port || (isSecure ? '443' : '80'));
+    requestHeaders.set('X-Forwarded-Prefix', '');
+
     // 5초 타임아웃 설정
     const response = await fetch(backendUrl, {
       method: 'GET',

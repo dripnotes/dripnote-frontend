@@ -1,75 +1,66 @@
 /**
- * Auth Utilities - JWT 토큰 저장 및 추출 관리
- * - Middleware에서 접근 가능하도록 localStorage 대신 Cookie를 사용합니다.
+ * 인증 관련 상수 및 유틸리티
+ *
+ * - 미들웨어(Edge Runtime), 클라이언트 컴포넌트, BFF Route Handler 모두에서 사용 가능
+ * - Node.js 전용 모듈 사용 금지 (Edge Runtime 호환)
  */
 
+/** 브라우저 쿠키에 저장되는 Access Token 키 */
 export const AUTH_TOKEN_KEY = 'baristation-auth-token';
-export const REDIRECT_COOKIE_KEY = 'redirect_to';
+
+/** OAuth 로그인 후 복귀할 경로를 임시 저장하는 쿠키 키 */
+export const REDIRECT_COOKIE_KEY = 'baristation-redirect-to';
 
 /**
- * 보안을 위해 내부 경로인지 확인합니다 (Open Redirect 방지)
- * - '/'로 시작해야 함
- * - '//'로 시작하면 안 됨
- * - 스키마(http:, https:)가 포함되면 안 됨
+ * 오픈 리다이렉트 공격 방지를 위한 내부 경로 검증
+ * - 외부 도메인(http://, https://, //) 시작 경로 거부
+ * - 상대 경로('/')로 시작하는 내부 경로만 허용
  */
-export const isValidInternalPath = (path: string | null): boolean => {
-  if (!path) return false;
-  return path.startsWith('/') && !path.startsWith('//') && !path.includes(':');
-};
+export function isValidInternalPath(path: string): boolean {
+  if (!path || typeof path !== 'string') return false;
+
+  // 외부 URL 패턴 거부
+  if (/^https?:\/\//i.test(path)) return false;
+  if (path.startsWith('//')) return false;
+
+  // 프로토콜 상대 URL 거부
+  if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/i.test(path)) return false;
+
+  // 반드시 '/'로 시작하는 절대 경로만 허용
+  return path.startsWith('/');
+}
 
 /**
- * 공통 쿠키 옵션 생성기
+ * 클라이언트 사이드 인증 유틸
+ * SSR 환경(window 없음)에서 안전하게 동작
  */
-export const getAuthCookieOptions = (isSecure: boolean, maxAgeSeconds: number = 604800) => {
-  return {
-    path: '/',
-    maxAge: maxAgeSeconds,
-    sameSite: 'lax' as const,
-    secure: isSecure,
-  };
-};
-
 export const authUtils = {
   /**
-   * 토큰을 쿠키에 저장합니다.
+   * 쿠키에서 Access Token을 읽어 반환
+   * HttpOnly가 아닌 일반 쿠키이므로 JS에서 접근 가능
    */
-  setToken: (token: string) => {
-    if (typeof window !== 'undefined') {
-      const isSecure = window.location.protocol === 'https:';
-      const options = getAuthCookieOptions(isSecure);
+  getToken(): string | null {
+    if (typeof document === 'undefined') return null;
 
-      const encodedToken = encodeURIComponent(token);
-      let cookieString = `${AUTH_TOKEN_KEY}=${encodedToken}; path=${options.path}; max-age=${options.maxAge}; SameSite=${options.sameSite}`;
-      if (options.secure) cookieString += '; Secure';
+    const match = document.cookie.split('; ').find((row) => row.startsWith(`${AUTH_TOKEN_KEY}=`));
 
-      document.cookie = cookieString;
-    }
+    return match ? decodeURIComponent(match.split('=')[1]) : null;
   },
 
   /**
-   * 쿠키에서 토늘을 정확하게 가져옵니다 (정확한 이름 매칭)
+   * Access Token 쿠키 삭제
+   * 로그아웃 등에서 사용
    */
-  getToken: () => {
-    if (typeof window !== 'undefined') {
-      const match = document.cookie.match(new RegExp('(^| )' + AUTH_TOKEN_KEY + '=([^;]+)'));
-      if (match) return decodeURIComponent(match[2]);
-    }
-    return null;
+  removeToken(): void {
+    if (typeof document === 'undefined') return;
+
+    document.cookie = `${AUTH_TOKEN_KEY}=; path=/; max-age=0; SameSite=Lax`;
   },
 
   /**
-   * 토큰을 제거합니다.
+   * 현재 인증 상태 확인 (토큰 존재 여부)
    */
-  removeToken: () => {
-    if (typeof window !== 'undefined') {
-      document.cookie = `${AUTH_TOKEN_KEY}=; path=/; max-age=-1; SameSite=Lax`;
-    }
-  },
-
-  /**
-   * 인증 여부를 확인합니다.
-   */
-  isAuthenticated: () => {
-    return !!authUtils.getToken();
+  isAuthenticated(): boolean {
+    return !!this.getToken();
   },
 };
