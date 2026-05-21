@@ -6,7 +6,7 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 import { cn } from '../lib/utils';
 
 interface RangeSliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
-  colorPalette?: 'amber' | 'teal' | 'espresso';
+  colorPalette?: 'amber' | 'teal' | 'espresso' | 'sweetness' | 'acidity' | 'body' | 'balance';
 }
 
 const colorStyles = {
@@ -24,6 +24,26 @@ const colorStyles = {
     track: 'bg-stone-200',
     range: 'bg-stone-800',
     thumb: 'border-stone-800 focus-visible:ring-stone-800',
+  },
+  sweetness: {
+    track: 'bg-metric-sweetness/20',
+    range: 'bg-metric-sweetness',
+    thumb: 'border-metric-sweetness focus-visible:ring-metric-sweetness',
+  },
+  acidity: {
+    track: 'bg-metric-acidity/20',
+    range: 'bg-metric-acidity',
+    thumb: 'border-metric-acidity focus-visible:ring-metric-acidity',
+  },
+  body: {
+    track: 'bg-metric-body/20',
+    range: 'bg-metric-body',
+    thumb: 'border-metric-body focus-visible:ring-metric-body',
+  },
+  balance: {
+    track: 'bg-metric-balance/20',
+    range: 'bg-metric-balance',
+    thumb: 'border-metric-balance focus-visible:ring-metric-balance',
   },
 };
 

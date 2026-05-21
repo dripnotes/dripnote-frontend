@@ -48,12 +48,15 @@ export default function FlavorNotes({ flavors }: FlavorNotesProps) {
           else if (idx >= 6) visibilityClass = 'hidden lg:block';
           else if (idx >= 4) visibilityClass = 'hidden sm:block';
 
+          // 키워드(q) 파라미터로 검색
+          const filterLink = `/products?q=${encodeURIComponent(flavor.name)}`;
+
           return (
             <FlavorCard
               key={flavor.id}
               name={flavor.name}
               imageUrl={flavor.imageUrl}
-              link={flavor.link}
+              link={filterLink}
               index={idx}
               className={visibilityClass}
             />

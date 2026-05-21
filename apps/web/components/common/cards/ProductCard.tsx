@@ -73,10 +73,10 @@ export default function ProductCard({
             position="bottom-left"
             className="z-20 transition-all duration-500 ease-out group-focus-within:-translate-y-2 group-focus-within:opacity-0 group-hover:-translate-y-2 group-hover:opacity-0"
           >
-            <p className="font-outfit mb-1 text-[8px] font-medium tracking-[0.2em] text-white/70 uppercase md:mb-2 md:text-[10px]">
+            <p className="font-outfit mb-1 text-[10px] font-medium tracking-[0.2em] text-white/70 uppercase md:mb-1.5 md:text-[12px]">
               {origin}
             </p>
-            <VisualCard.Title className="font-playfair text-lg leading-tight font-bold tracking-tight text-white md:text-2xl">
+            <VisualCard.Title className="font-playfair text-sm leading-tight font-bold tracking-tight break-keep text-white md:text-base">
               {name}
             </VisualCard.Title>
           </VisualCard.Content>
