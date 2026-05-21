@@ -1,11 +1,12 @@
 'use client';
 
-import { RatingScale, type ColorPalette } from '@coffee-service/ui-library';
 import { motion } from 'framer-motion';
-import { Droplets, Flame, Layers, Scale, Sparkles } from 'lucide-react';
+import { Flame, Scale, Sparkles, Droplets, Layers } from 'lucide-react';
+import * as React from 'react';
+import { Pie, PieChart, Label, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 
 import SectionContainer from '@/components/layout/SectionContainer';
-import { cn } from '@/lib/utils';
+import { ChartContainer, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
 interface FlavorProfileProps {
   balance: number | null;
@@ -15,49 +16,34 @@ interface FlavorProfileProps {
   roastingType: string;
 }
 
-function ProfileIndicator({
-  label,
-  value,
-  max = 5,
-  colorPalette = 'amber',
-}: {
-  label: string;
-  value: number | null;
-  max?: number;
-  colorPalette?: ColorPalette;
-}) {
-  const ICONS: Record<string, typeof Droplets> = {
-    산미: Droplets,
-    감미: Sparkles,
-    바디감: Layers,
-    밸런스: Scale,
-  };
-  const Icon = ICONS[label] || Sparkles;
+const chartConfig = {
+  sweetness: {
+    label: '감미',
+    color: '#F59E0B', // amber-400
+  },
+  acidity: {
+    label: '산미',
+    color: '#2DD4BF', // teal-400
+  },
+  body: {
+    label: '바디감',
+    color: '#78350F', // coffee-brown (amber-900)
+  },
+} satisfies ChartConfig;
 
-  return (
-    <div className="flex flex-col space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Icon className="h-3.5 w-3.5 text-gray-400" />
-          <span className="font-outfit text-sm font-semibold tracking-wider text-gray-900 uppercase">
-            {label}
-          </span>
-        </div>
-        <span className="font-outfit text-xs font-medium text-gray-500">
-          {value !== null ? `${value} / ${max}` : 'N/A'}
-        </span>
-      </div>
-      <RatingScale
-        max={max}
-        value={value || 0}
-        readOnly
-        variant="indicator"
-        colorPalette={value !== null ? colorPalette : 'stone'}
-        className={cn('w-full', value === null && 'opacity-30')}
-      />
-    </div>
-  );
-}
+const LEGEND_ITEMS = [
+  { key: 'sweetness', label: '감미', Icon: Sparkles, color: '#F59E0B' },
+  { key: 'acidity', label: '산미', Icon: Droplets, color: '#2DD4BF' },
+  { key: 'body', label: '바디감', Icon: Layers, color: '#78350F' },
+] as const;
+
+const ROAST_MAP: Record<string, string> = {
+  LIGHT: 'Light',
+  LIGHTMEDIUM: 'Light-Medium',
+  MEDIUM: 'Medium',
+  MEDIUMDARK: 'Medium-Dark',
+  DARK: 'Dark',
+};
 
 export function FlavorProfileSection({
   balance,
@@ -66,15 +52,24 @@ export function FlavorProfileSection({
   body,
   roastingType,
 }: FlavorProfileProps) {
-  const ROAST_MAP: Record<string, string> = {
-    LIGHT: 'Light',
-    LIGHTMEDIUM: 'Light-Medium',
-    MEDIUM: 'Medium',
-    MEDIUMDARK: 'Medium-Dark',
-    DARK: 'Dark',
+  const formattedRoast = ROAST_MAP[roastingType] || roastingType || 'N/A';
+
+  const values = {
+    sweetness: sweetness ?? 0,
+    acidity: acidity ?? 0,
+    body: body ?? 0,
   };
 
-  const formattedRoast = ROAST_MAP[roastingType] || roastingType || 'N/A';
+  // 모든 값이 0이면 차트가 비어있으므로 placeholder 슬라이스 사용
+  const total = values.sweetness + values.acidity + values.body;
+  const chartData =
+    total === 0
+      ? [{ name: '데이터 없음', value: 5, fill: '#E5E7EB' }]
+      : [
+          { name: '감미', value: values.sweetness, fill: '#F59E0B' },
+          { name: '산미', value: values.acidity, fill: '#2DD4BF' },
+          { name: '바디감', value: values.body, fill: '#78350F' },
+        ];
 
   return (
     <SectionContainer className="border-t border-gray-100 py-12 md:py-16">
@@ -84,6 +79,7 @@ export function FlavorProfileSection({
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
+        {/* Header */}
         <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="font-playfair text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-gray-900">
@@ -101,17 +97,136 @@ export function FlavorProfileSection({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-16 gap-y-12 md:grid-cols-2 lg:grid-cols-2">
-          <ProfileIndicator label="산미" value={acidity} colorPalette="teal" />
-          <ProfileIndicator label="감미" value={sweetness} colorPalette="amber" />
-          <ProfileIndicator label="바디감" value={body} colorPalette="espresso" />
-          <ProfileIndicator
-            label="밸런스"
-            value={balance}
-            colorPalette={
-              balance === null ? 'stone' : balance <= 2 ? 'amber' : balance === 3 ? 'teal' : 'amber'
-            }
-          />
+        {/* Chart + Legend */}
+        <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16">
+          {/* Donut Chart */}
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto w-full max-w-[260px] shrink-0 md:mx-0"
+          >
+            <ResponsiveContainer width="100%" aspect={1}>
+              <PieChart>
+                <Tooltip
+                  cursor={false}
+                  content={({ active, payload }) =>
+                    total > 0 ? (
+                      <ChartTooltipContent active={active} payload={payload as never} />
+                    ) : null
+                  }
+                />
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius="55%"
+                  outerRadius="80%"
+                  strokeWidth={3}
+                  stroke="white"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                        const cx = viewBox.cx as number;
+                        const cy = viewBox.cy as number;
+                        return (
+                          <text textAnchor="middle" dominantBaseline="middle">
+                            <tspan
+                              x={cx}
+                              y={cy - 10}
+                              className="fill-gray-900"
+                              style={{
+                                fontSize: '1.75rem',
+                                fontWeight: 700,
+                                fontFamily: 'Outfit, sans-serif',
+                              }}
+                            >
+                              {balance !== null ? balance : 'N/A'}
+                            </tspan>
+                            <tspan
+                              x={cx}
+                              y={cy + 16}
+                              style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                fill: '#9CA3AF',
+                                fontFamily: 'Outfit, sans-serif',
+                              }}
+                            >
+                              밸런스
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+
+          {/* Legend */}
+          <div className="flex w-full flex-col gap-5">
+            {LEGEND_ITEMS.map(({ key, label, Icon, color }) => {
+              const rawValue = values[key];
+              return (
+                <div key={key} className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="flex h-7 w-7 items-center justify-center rounded-full"
+                        style={{ backgroundColor: `${color}20` }}
+                      >
+                        <Icon className="h-3.5 w-3.5" style={{ color }} />
+                      </span>
+                      <span className="font-outfit text-sm font-semibold tracking-wider text-gray-800 uppercase">
+                        {label}
+                      </span>
+                    </div>
+                    <span className="font-outfit text-sm font-bold" style={{ color }}>
+                      {rawValue} <span className="text-xs font-normal text-gray-400">/ 5</span>
+                    </span>
+                  </div>
+                  {/* 진행 바 */}
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: color }}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${(rawValue / 5) * 100}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Balance 표기 (범례 하단) */}
+            <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-4">
+              <div className="flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
+                  <Scale className="h-3.5 w-3.5 text-gray-500" />
+                </span>
+                <span className="font-outfit text-sm font-semibold tracking-wider text-gray-800 uppercase">
+                  밸런스
+                </span>
+              </div>
+              <span className="font-outfit text-sm font-bold text-gray-700">
+                {balance !== null ? (
+                  <>
+                    {balance} <span className="text-xs font-normal text-gray-400">/ 5</span>
+                  </>
+                ) : (
+                  <span className="text-gray-400">N/A</span>
+                )}
+              </span>
+            </div>
+          </div>
         </div>
       </motion.div>
     </SectionContainer>
