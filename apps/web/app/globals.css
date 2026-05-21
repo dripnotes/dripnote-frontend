@@ -29,6 +29,19 @@ html {
   --flavor-nutty: #e0caaa;
   --flavor-floral: #f5d5d5;
   --flavor-smoky: #d0cec8;
+
+  /* Metric Colors */
+  --metric-sweetness: #ea580c;
+  --metric-acidity: #eab308;
+  --metric-body: #78350f;
+  --metric-balance: #57534e;
+
+  /* Roasting Stage Colors */
+  --roast-light: #D4A373;
+  --roast-medium-light: #A98467;
+  --roast-medium: #8C5E3C;
+  --roast-medium-dark: #6F4E37;
+  --roast-dark: #3F2305;
 }
 
 @theme {
@@ -61,6 +74,19 @@ html {
   --color-flavor-nutty: var(--flavor-nutty);
   --color-flavor-floral: var(--flavor-floral);
   --color-flavor-smoky: var(--flavor-smoky);
+
+  /* Metric Colors */
+  --color-metric-sweetness: var(--metric-sweetness);
+  --color-metric-acidity: var(--metric-acidity);
+  --color-metric-body: var(--metric-body);
+  --color-metric-balance: var(--metric-balance);
+
+  /* Roasting Stage Colors */
+  --color-roast-light: var(--roast-light);
+  --color-roast-medium-light: var(--roast-medium-light);
+  --color-roast-medium: var(--roast-medium);
+  --color-roast-medium-dark: var(--roast-medium-dark);
+  --color-roast-dark: var(--roast-dark);
 
   /* Spacing System */
   --spacing-bottom-nav: 4rem;

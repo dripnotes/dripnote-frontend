@@ -51,14 +51,14 @@ Baristation 서비스의 원두 정보 탐색(Product Discovery) 페이지입니
 │  GlobalNav           │
 │──────────────────────│
 │  [결과 수] [필터 버튼]│  ← 그리드 상단
-│  ProductCardList        │  ← 기본 뷰
-│  (원두 카드 그리드)   │
+│  ProductCardList     │  ← 기본 뷰
+│  (원두 카드 그리드)    │
 └──────────────────────┘
        ↕ (필터 버튼 클릭 시 Drawer 오버레이)
 ┌──────────────────────┐
-│  [ProductFilterDrawer]  │  ← 하단에서 상단으로 슬라이드
+│  [ProductFilters]    │  ← 하단에서 상단으로 슬라이드
 │  ├─[ 검색 ]          │  ← 드로어 내부 상단
-│  ├─Flavor             │
+│  ├─Flavor            │
 │  └─Flavor            │
 └──────────────────────┘
 ```
@@ -130,182 +130,40 @@ interface ProductSearchBarProps {
 
 ---
 
-### ProductFilterPanel
+### ProductFilters
 
 #### 1. Overview (맥락)
 
-- **목적**: 데스크톱/태블릿에서 좌측 사이드바로 항상 노출되는 커피 프로파일 필터 패널
-- **위치**: `apps/web/components/products/ProductFilterPanel.tsx`
+- **목적**: 데스크톱/태블릿에서는 좌측 사이드바로, 모바일에서는 하단 Drawer로 노출되는 반응형 커피 프로파일 필터 컴포넌트
+- **위치**: `apps/web/components/products/ProductFilters.tsx`
 - **부모 컴포넌트**: `products/page.tsx`
-- **노출 조건**: 뷰포트 너비 ≥ 768px
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
 
-- **주요 도구**: Tailwind CSS v4, `framer-motion`
-- **기타 제약**: 모바일에서는 렌더링하지 않음 (`hidden md:block`)
+- **주요 도구**: Tailwind CSS v4, `framer-motion` (Drawer 슬라이드 등)
+- **기타 제약**: `md:flex`와 `md:hidden` 클래스를 사용하여 하나의 파일에서 데스크톱과 모바일 뷰를 통합 관리합니다.
 
 #### 3. Data Interface (I/O)
 
 **Props**:
 
 ```ts
-interface ProductFilterState {
-  flavorCategory: FlavorType | null; // 선택된 아로마 (단일 선택)
-  flavor: {
-    balance: [number, number]; // 밸런스 범위 [min, max] (0~5)
-    sweetness: [number, number]; // 단맛 범위 [min, max] (0~5)
-    acidity: [number, number]; // 산미 범위 [min, max] (0~5)
-  };
-  body: [number, number]; // 바디감 범위 [min, max] (0~5)
-  roasting: string | null; // 단일 로스팅 Enum 또는 null ('LIGHT' | 'MEDIUMLIGHT' | 'MEDIUM' | 'MEDIUMDARK' | 'DARK')
-}
-
-type FlavorType =
-  | '캐러멜'
-  | '와인'
-  | '초콜릿'
-  | '과일'
-  | '허브'
-  | '맥아'
-  | '견과'
-  | '꽃'
-  | '스모크';
-type RoastingType = 'LIGHT' | 'MEDIUMLIGHT' | 'MEDIUM' | 'MEDIUMDARK' | 'DARK';
-
-interface ProductFilterPanelProps {
+interface ProductFiltersProps {
   filters: ProductFilterState;
   onChange: (filters: ProductFilterState) => void;
   onReset: () => void;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  isMobileOpen: boolean;
+  onMobileClose: () => void;
 }
 ```
 
-**State**: `localFilters: ProductFilterState` (미요청 필터 상태 보유)
+#### 4. Functional Requirements (단계별 요구사항)
 
-**Events / Callbacks**:
-
-- `onChange(filters)`: "적용하기" 버튼 클릭 시 최종 변경 사항을 상위로 전달
-- `onReset()`: 전체 필터 초기화
-
-#### 4. UI States (상태 명세)
-
-| 상태         | 트리거 조건         | UI 표현                                  |
-| ------------ | ------------------- | ---------------------------------------- |
-| **Default**  | 초기 렌더링         | 모든 필터 비활성 상태                    |
-| **Filtered** | 하나 이상 필터 선택 | 선택된 항목 강조 + 상단 초기화 버튼 노출 |
-
-#### 5. Functional Requirements (단계별 요구사항)
-
-1. **Search** 구역: 패널 최상단에 `ProductSearchBar`를 포함하여 이름/원산지 검색 연동
-2. **Flavor (향)** 섹션: 10개 아로마 카테고리를 Chip 형태로 나열, 단일 선택 가능 (중복 클릭 시 토글식 해제)
-3. **맛 및 프로파일** 섹션: **산미·단맛·밸런스·바디감**은 `RangeSlider`를 이용해 범위(Range) 필터링하고, **로스팅**은 프리미엄 원형 버튼을 활용해 단일 단계별 필터링이 가능하게 구현
-4. **RangeSlider & Roasting UI**:
-   - 맛 및 프로파일 슬라이더: 핸들을 조절하여 최소/최대값을 설정하며, 핸들 상단에 현재 값을 나타내는 `Tooltip`을 노출한다.
-   - 로스팅 버튼: 5단계 로스팅 강도(LIGHT, MEDIUMLIGHT, MEDIUM, MEDIUMDARK, DARK)에 매칭되는 감성적인 커피 색상 단추들을 제공하며, 호버 시 툴팁을 제공하고 선택 시 단색 링 외곽선 강조 효과를 부여한다. 중복 클릭 시 선택이 토글식으로 해제(전체)된다.
-5. 모든 필터링 조작은 즉시 반영되지 않고 `localFilters` 상태만 갱신한다
-6. 하단에 스티키(Sticky)하게 자리잡은 "적용하기" 버튼을 클릭할 때 `onChange(localFilters)`를 호출하여 상위 컨텍스트에 반영한다
-7. 하나 이상의 필터가 기본 상태(기본 범위 외 혹은 로스팅 선택 시)를 벗어나면 상단에 "초기화" 버튼이 노출된다
-8. 초기화 버튼 클릭 시 `onReset()`을 호출하여 모든 필터를 해제한다
-
-#### 6. Design Spec (디자인 명세)
-
-- **Layout**: `w-[240px] shrink-0`, 수직 스크롤 가능, 섹션 간 `pb-6 border-b border-gray-100`
-- **Flavor Chip**: `rounded-full px-3 py-1 text-xs`, 선택 시 `bg-amber-500 text-white font-semibold shadow-sm`, 미선택 시 `bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 hover:border-gray-300`
-- **Rating Bar**: 마디별 테두리 적용(`border border-gray-200/50`), 값이 높을수록 진한 색상(`amber-200`~`amber-600`), 미선택 마디는 `bg-gray-50`
-- **Roasting Filter UI**: 5가지 로스팅 단계별 원형 테마 단추 제공 (Light: `#D4A373`, Medium Light: `#A98467`, Medium: `#8C5E3C`, Medium Dark: `#6F4E37`, Dark: `#3F2305`). 활성화 시 white border + amber-500 2px ring 강조. 웹 접근성 표준(`type="button"`, `aria-pressed`) 준수.
-- **Typography**: 섹션 타이틀 `Outfit SemiBold text-xs uppercase tracking-widest text-gray-500`, 바디감 수치 텍스트는 타이틀과 동일 선상 우측 배치
-- **Apply Button**: 패널 최하단에 스티키(`sticky bottom-0`)하게 배치되며 `w-full rounded-xl bg-amber-500 py-3 text-sm font-semibold text-white` 속성 적용
-- **Animation** (`framer-motion`): Chip 선택 시 `scale: 0.95 → 1.0` 0.1s 튕김 효과
-
-#### 7. Definition of Done (검증 기준)
-
-- [ ] (기능) Flavor Chip 단일 선택 및 해제가 정상 동작한다
-- [ ] (기능) Flavor Rating Bar가 1~5 단계 선택을 처리하며 점차 진한 색으로 표기된다
-- [ ] (기능) Body Rating Bar가 1~5 단계 선택을 처리하며 점차 진한 색으로 표기된다
-- [ ] (기능) Roasting 필터가 LIGHT, MEDIUMLIGHT, MEDIUM, MEDIUMDARK, DARK 5단계 버튼 선택을 처리하며 선택한 단일 Enum이 상위로 전송된다
-- [ ] (기능) 초기화 버튼 클릭 시 모든 필터가 해제된다
-- [ ] (기능) "적용하기" 버튼 클릭 시에만 필터 변경 사항이 부모로 전달된다
-- [ ] (디자인) "적용하기" 버튼이 스크롤 시에도 패널 최하단에 스티키하게 고정된다
-- [ ] (반응형) 모바일(`< 768px`)에서 렌더링되지 않는다
-
----
-
-### ProductFilterDrawer
-
-#### 1. Overview (맥락)
-
-- **목적**: 모바일 화면에서 필터 버튼 클릭 시 화면 하단에서 상단으로 슬라이드되어 올라오는 Drawer 형태의 필터 패널
-- **위치**: `apps/web/components/products/ProductFilterDrawer.tsx`
-- **부모 컴포넌트**: `products/page.tsx`
-- **노출 조건**: 뷰포트 너비 < 768px, 필터 버튼 클릭 시
-
-#### 2. Tech Stack & Constraints (기술 및 제약)
-
-- **주요 도구**: `framer-motion`, Tailwind CSS v4
-- **기타 제약**: 하단 "취소하기" 버튼, Drawer 외부 영역 클릭(Backdrop) 또는 아래로 드래그하여 닫힘, 컨텐츠는 `ProductFilterPanel`과 동일한 필터 UI 공유
-
-#### 3. Data Interface (I/O)
-
-**Props**:
-
-```ts
-interface ProductFilterDrawerProps {
-  isOpen: boolean;
-  filters: ProductFilterState; // ProductFilterPanel과 동일 타입
-  onChange: (filters: ProductFilterState) => void;
-  onReset: () => void;
-  onClose: () => void;
-  searchQuery: string;
-  onSearchChange: (value: string) => void;
-}
-```
-
-**State**: `localFilters: ProductFilterState` (적용 전 임시 상태 보유)
-
-**Events / Callbacks**:
-
-- `onClose()`: 닫기 버튼 또는 Backdrop 클릭 시 호출
-
-#### 4. UI States (상태 명세)
-
-| 상태       | 트리거 조건     | UI 표현                              |
-| ---------- | --------------- | ------------------------------------ |
-| **Closed** | `isOpen: false` | 화면 밖 하단 위치 (hidden)           |
-| **Open**   | `isOpen: true`  | 화면 하단에서 슬라이드 업 + Backdrop |
-
-#### 5. Functional Requirements (단계별 요구사항)
-
-1. `isOpen: true` 시 Backdrop(`bg-black/40`)이 화면 전체를 덮으며 Drawer가 아래에서 올라온다
-2. Drawer 내부는 `ProductFilterPanel`과 동일하게 `ProductSearchBar` 및 전체 필터 항목을 포함한다
-3. 아래로 드래그하거나 "취소하기" 버튼을 클릭하여 Drawer를 닫는다
-4. Backdrop 클릭 시 `onClose()`를 호출한다
-5. 모든 필터링 조작은 `localFilters` 상태만 갱신하며, 하단 스티키 "적용하기" 버튼 클릭 시 `onChange(localFilters)` 호출 후 Drawer가 닫힌다.
-6. Drawer가 열린 상태에서 body 스크롤을 잠근다 (`overflow-hidden`)
-
-#### 6. Design Spec (디자인 명세)
-
-- **Layout**: `fixed bottom-0 left-0 right-0`, 화면 전체 높이(`h-full`), `rounded-t-[2.5rem]`, `bg-white`
-- **Drawer Interaction & Animation**:
-  - Open: `y: 100% → 0`, Spring Transition (Damping: 25, Stiffness: 200)
-  - Drag: 핸들바를 이용한 Y축 드래그 지원 (`drag="y"`, `dragControls` 사용)
-  - Physics: `dragConstraints={{ top: 0, bottom: 0 }}`, `dragElastic={{ top: 0, bottom: 1 }}` 적용으로 1:1 추종 및 자동 복위 구현
-  - Dismiss: 드래그 오프셋이 150px 초과 시 `onClose()` 트리거
-- **Handle Bar**: 상단 중앙 `w-12 h-1.5 rounded-full bg-gray-200 mx-auto mt-4`, 드래그 트리거 역할
-- **Layout Structure**:
-  - (Fixed Top) Handle Bar 전용 드래그 영역 (`pt-4 pb-2`)
-  - (Inner Scroll) 필터 콘텐츠 영역 (`flex-1 overflow-y-auto`, `px-6 pb-8`)
-  - (Fixed Bottom) 적용하기 버튼 영역 (`shrink-0`, `py-5 pb-10`)
-- **Responsive**: 모바일(`< 768px`) 전용 UI
-
-#### 7. Definition of Done (검증 기준)
-
-- [ ] (기능) 필터 버튼 클릭 시 Drawer가 하단에서 슬라이드 업으로 열린다
-- [ ] (기능) Backdrop 클릭 또는 취소 버튼 클릭 시 Drawer가 닫힌다
-- [ ] (기능) Drawer 열린 상태에서 배경 스크롤이 비활성화된다
-- [ ] (기능) 스티키 "적용하기" 버튼 클릭 시 필터링이 반영되고 Drawer가 닫힌다
-- [ ] (인터랙션) 열기 `0.35s easeOut`, 닫기 `0.25s easeIn` 애니메이션이 동작한다
-- [ ] (반응형) 데스크톱/태블릿(`≥ 768px`)에서 렌더링되지 않는다
+1. **상태 동기화**: 변경되는 필터는 `localFilters`, 검색어는 `localSearchQuery`로 지연 관리되며, "적용하기"를 누를 때 부모로 반영됩니다.
+2. **반응형 랜더링**: 데스크톱에서는 `aside` 패널로, 모바일에서는 `AnimatePresence`를 활용한 `framer-motion` 모달(Drawer)로 렌더링됩니다. 내부의 구체적인 필터 폼(`FlavorFilter`, `MetricFilter` 등)은 하나로 정의되어 양쪽에 재사용됩니다.
+3. **스타일 시스템 (테마 중앙화)**: `MetricFilter`와 `RoastingFilter` 내부의 색상은 `globals.css` 및 `tailwind.config.ts`에 선언된 `bg-roast-light`, `text-metric-sweetness` 등 시맨틱 테마 클래스를 활용합니다.
 
 ---
 
@@ -460,9 +318,7 @@ interface ProductCardProps {
 
 ```text
 products/page.tsx (메인 엔트리)
-  ├── ProductFilterPanel       ← 필터 사이드바 (Desktop/Tablet)
-  │     └── ProductSearchBar   ← 통합 검색창
-  ├── ProductFilterDrawer      ← 필터 Drawer (Mobile)
+  ├── ProductFilters           ← 필터 통합 컴포넌트 (Desktop Panel / Mobile Drawer)
   │     └── ProductSearchBar   ← 통합 검색창
   └── ProductCardList
         └── ProductCard × N

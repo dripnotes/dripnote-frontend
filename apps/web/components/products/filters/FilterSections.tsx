@@ -60,7 +60,7 @@ interface MetricFilterProps {
   min?: number;
   max?: number;
   step?: number;
-  colorPalette?: 'amber' | 'teal' | 'espresso';
+  colorPalette?: 'amber' | 'teal' | 'espresso' | 'sweetness' | 'acidity' | 'body' | 'balance';
   onChange: (value: [number, number]) => void;
 }
 
@@ -104,35 +104,35 @@ export const ROASTING_STAGES = [
     id: 'LIGHT',
     ko: '라이트',
     en: 'Light',
-    color: '#D4A373',
+    colorClass: 'bg-roast-light',
     tooltip: '라이트 로스팅 (Soft Blonde/Tan)',
   },
   {
     id: 'MEDIUMLIGHT',
     ko: '미디엄 라이트',
     en: 'Medium Light',
-    color: '#A98467',
+    colorClass: 'bg-roast-medium-light',
     tooltip: '미디엄 라이트 (Warm Amber)',
   },
   {
     id: 'MEDIUM',
     ko: '미디엄',
     en: 'Medium',
-    color: '#8C5E3C',
+    colorClass: 'bg-roast-medium',
     tooltip: '미디엄 로스팅 (Classic Brown)',
   },
   {
     id: 'MEDIUMDARK',
     ko: '미디엄 다크',
     en: 'Medium Dark',
-    color: '#6F4E37',
+    colorClass: 'bg-roast-medium-dark',
     tooltip: '미디엄 다크 (Rich Espresso)',
   },
   {
     id: 'DARK',
     ko: '다크',
     en: 'Dark',
-    color: '#3F2305',
+    colorClass: 'bg-roast-dark',
     tooltip: '다크 로스팅 (Deep Dark Chocolate)',
   },
 ] as const;
@@ -164,8 +164,7 @@ export function RoastingFilter({ value, onChange }: RoastingFilterProps) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onChange(active ? null : stage.id)}
-                style={{ backgroundColor: stage.color }}
-                className={`relative flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all ${
+                className={`relative flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all ${stage.colorClass} ${
                   active
                     ? 'scale-105 border-white ring-2 ring-amber-500 ring-offset-2'
                     : 'border-transparent hover:border-gray-300'

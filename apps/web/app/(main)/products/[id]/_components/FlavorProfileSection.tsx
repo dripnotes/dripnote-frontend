@@ -19,22 +19,51 @@ interface FlavorProfileProps {
 const chartConfig = {
   sweetness: {
     label: '감미',
-    color: '#EA580C', // orange-600
+    color: 'var(--metric-sweetness)',
   },
   acidity: {
     label: '산미',
-    color: '#EAB308', // yellow-500
+    color: 'var(--metric-acidity)',
   },
   body: {
     label: '바디감',
-    color: '#78350F', // coffee-brown (amber-900)
+    color: 'var(--metric-body)',
   },
 } satisfies ChartConfig;
 
 const LEGEND_ITEMS = [
-  { key: 'sweetness', label: '감미', Icon: Sparkles, color: '#EA580C' },
-  { key: 'acidity', label: '산미', Icon: Droplets, color: '#EAB308' },
-  { key: 'body', label: '바디감', Icon: Layers, color: '#78350F' },
+  {
+    key: 'sweetness',
+    label: '감미',
+    Icon: Sparkles,
+    colorClass: 'text-metric-sweetness',
+    bgClass: 'bg-metric-sweetness/20',
+    rawColor: 'var(--metric-sweetness)',
+  },
+  {
+    key: 'acidity',
+    label: '산미',
+    Icon: Droplets,
+    colorClass: 'text-metric-acidity',
+    bgClass: 'bg-metric-acidity/20',
+    rawColor: 'var(--metric-acidity)',
+  },
+  {
+    key: 'body',
+    label: '바디감',
+    Icon: Layers,
+    colorClass: 'text-metric-body',
+    bgClass: 'bg-metric-body/20',
+    rawColor: 'var(--metric-body)',
+  },
+  {
+    key: 'balance',
+    label: '밸런스',
+    Icon: Scale,
+    colorClass: 'text-metric-balance',
+    bgClass: 'bg-metric-balance/20',
+    rawColor: 'var(--metric-balance)',
+  },
 ] as const;
 
 const ROAST_MAP: Record<string, string> = {
@@ -58,6 +87,7 @@ export function FlavorProfileSection({
     sweetness: sweetness ?? 0,
     acidity: acidity ?? 0,
     body: body ?? 0,
+    balance: balance ?? 0,
   };
 
   // 모든 값이 0이면 차트가 비어있으므로 placeholder 슬라이스 사용
@@ -66,9 +96,9 @@ export function FlavorProfileSection({
     total === 0
       ? [{ name: '데이터 없음', value: 5, fill: '#E5E7EB' }]
       : [
-          { name: '감미', value: values.sweetness, fill: '#EA580C' },
-          { name: '산미', value: values.acidity, fill: '#EAB308' },
-          { name: '바디감', value: values.body, fill: '#78350F' },
+          { name: '감미', value: values.sweetness, fill: 'var(--metric-sweetness)' },
+          { name: '산미', value: values.acidity, fill: 'var(--metric-acidity)' },
+          { name: '바디감', value: values.body, fill: 'var(--metric-body)' },
         ];
 
   return (
@@ -168,23 +198,22 @@ export function FlavorProfileSection({
 
           {/* Legend */}
           <div className="flex w-full max-w-[480px] flex-col gap-5">
-            {LEGEND_ITEMS.map(({ key, label, Icon, color }) => {
+            {LEGEND_ITEMS.map(({ key, label, Icon, colorClass, bgClass, rawColor }) => {
               const rawValue = values[key];
               return (
                 <div key={key} className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span
-                        className="flex h-7 w-7 items-center justify-center rounded-full"
-                        style={{ backgroundColor: `${color}20` }}
+                        className={`flex h-7 w-7 items-center justify-center rounded-full ${bgClass}`}
                       >
-                        <Icon className="h-3.5 w-3.5" style={{ color }} />
+                        <Icon className={`h-3.5 w-3.5 ${colorClass}`} />
                       </span>
                       <span className="font-outfit text-sm font-semibold tracking-wider text-gray-800 uppercase">
                         {label}
                       </span>
                     </div>
-                    <span className="font-outfit text-sm font-bold" style={{ color }}>
+                    <span className={`font-outfit text-sm font-bold ${colorClass}`}>
                       {rawValue} <span className="text-xs font-normal text-gray-400">/ 5</span>
                     </span>
                   </div>
@@ -192,7 +221,7 @@ export function FlavorProfileSection({
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ backgroundColor: color }}
+                      style={{ backgroundColor: rawColor }}
                       initial={{ width: 0 }}
                       whileInView={{ width: `${(rawValue / 5) * 100}%` }}
                       viewport={{ once: true }}
@@ -202,27 +231,6 @@ export function FlavorProfileSection({
                 </div>
               );
             })}
-
-            {/* Balance 표기 (범례 하단) */}
-            <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-4">
-              <div className="flex items-center gap-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
-                  <Scale className="h-3.5 w-3.5 text-gray-500" />
-                </span>
-                <span className="font-outfit text-sm font-semibold tracking-wider text-gray-800 uppercase">
-                  밸런스
-                </span>
-              </div>
-              <span className="font-outfit text-sm font-bold text-gray-700">
-                {balance !== null ? (
-                  <>
-                    {balance} <span className="text-xs font-normal text-gray-400">/ 5</span>
-                  </>
-                ) : (
-                  <span className="text-gray-400">N/A</span>
-                )}
-              </span>
-            </div>
           </div>
         </div>
       </motion.div>

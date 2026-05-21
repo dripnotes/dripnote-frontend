@@ -9,8 +9,7 @@ import { Suspense, useMemo, useState } from 'react';
 import { searchProductsAction } from '@/actions/products.action';
 import PageContainer from '@/components/layout/PageContainer';
 import ProductCardList from '@/components/products/ProductCardList';
-import ProductFilterDrawer from '@/components/products/ProductFilterDrawer';
-import ProductFilterPanel from '@/components/products/ProductFilterPanel';
+import ProductFilters from '@/components/products/ProductFilters';
 import {
   DEFAULT_FILTERS,
   type ProductFilterState,
@@ -98,13 +97,15 @@ function ProductsPageContent() {
       {/* ── 본문 ── */}
       <div className="mx-auto w-full max-w-7xl px-4 py-8 md:px-8">
         <div className="flex w-full items-start gap-8">
-          {/* 좌측 필터 패널 (Desktop/Tablet) */}
-          <ProductFilterPanel
+          {/* 필터 (Desktop Panel & Mobile Drawer 통합) */}
+          <ProductFilters
             filters={filters}
             onChange={handleFilterChange}
             onReset={handleReset}
             searchQuery={searchQuery}
             onSearchChange={handleSearchChange}
+            isMobileOpen={isDrawerOpen}
+            onMobileClose={() => setIsDrawerOpen(false)}
           />
 
           {/* 우측 카드 목록 */}
@@ -154,17 +155,6 @@ function ProductsPageContent() {
           </div>
         </div>
       </div>
-
-      {/* 모바일 필터 Drawer */}
-      <ProductFilterDrawer
-        isOpen={isDrawerOpen}
-        filters={filters}
-        onChange={handleFilterChange}
-        onReset={handleReset}
-        onClose={() => setIsDrawerOpen(false)}
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-      />
     </PageContainer>
   );
 }
