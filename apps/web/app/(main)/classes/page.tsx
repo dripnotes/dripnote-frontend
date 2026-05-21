@@ -18,7 +18,16 @@ export default function ClassPage() {
     lessonCategory: '전체',
   });
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery({
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    isError,
+    error,
+    refetch,
+  } = useInfiniteQuery({
     queryKey: ['lessons', filters, searchQuery],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await searchLessonsAction({
@@ -72,14 +81,31 @@ export default function ClassPage() {
 
           {/* List Section */}
           <section className="w-full">
-            <ClassCardList
-              lessons={lessons}
-              isLoading={isLoading}
-              hasNext={hasNextPage}
-              onLoadMore={() => fetchNextPage()}
-              isLoadingMore={isFetchingNextPage}
-              onResetFilters={handleResetFilters}
-            />
+            {isError ? (
+              <div className="flex w-full flex-col items-center justify-center py-20 text-center">
+                <h3 className="font-outfit mb-2 text-2xl font-bold text-gray-900">
+                  데이터를 불러오지 못했습니다
+                </h3>
+                <p className="font-inter mb-6 text-gray-500">
+                  {error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'}
+                </p>
+                <button
+                  onClick={() => refetch()}
+                  className="font-outfit rounded-full bg-[#A54729] px-6 py-3 font-bold text-white transition-colors hover:bg-orange-900"
+                >
+                  다시 시도
+                </button>
+              </div>
+            ) : (
+              <ClassCardList
+                lessons={lessons}
+                isLoading={isLoading}
+                hasNext={hasNextPage}
+                onLoadMore={() => fetchNextPage()}
+                isLoadingMore={isFetchingNextPage}
+                onResetFilters={handleResetFilters}
+              />
+            )}
           </section>
         </div>
       </div>

@@ -70,11 +70,15 @@ export function ClassFilterBar({
       <div className="grid w-full shrink-0 grid-cols-3 gap-3 lg:flex lg:w-auto lg:flex-row">
         {/* 1. REGION */}
         <div className="flex flex-1 flex-col gap-2 lg:w-44 lg:flex-none">
-          <label className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase">
+          <label
+            htmlFor="region-select"
+            className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase"
+          >
             지역
           </label>
           <div className="relative">
             <select
+              id="region-select"
               value={localRegion ?? ''}
               onChange={(e) => {
                 const val = e.target.value;
@@ -95,11 +99,15 @@ export function ClassFilterBar({
 
         {/* 2. CATEGORY */}
         <div className="flex flex-1 flex-col gap-2 lg:w-44 lg:flex-none">
-          <label className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase">
+          <label
+            htmlFor="category-select"
+            className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase"
+          >
             카테고리
           </label>
           <div className="relative">
             <select
+              id="category-select"
               value={localCategory}
               onChange={(e) => setLocalCategory(e.target.value as LessonCategoryType)}
               className="h-12 w-full cursor-pointer appearance-none rounded-xl border border-transparent bg-white px-4 pr-10 text-sm font-semibold text-gray-900 outline-none focus:ring-2 focus:ring-[#4A3629]/20"
@@ -116,11 +124,15 @@ export function ClassFilterBar({
 
         {/* 3. DIFFICULTY */}
         <div className="flex flex-1 flex-col gap-2 lg:w-44 lg:flex-none">
-          <label className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase">
+          <label
+            htmlFor="difficulty-select"
+            className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase"
+          >
             난이도
           </label>
           <div className="relative">
             <select
+              id="difficulty-select"
               value={localDifficulty}
               onChange={(e) => setLocalDifficulty(e.target.value as DifficultyType)}
               className="h-12 w-full cursor-pointer appearance-none rounded-xl border border-transparent bg-white px-4 pr-10 text-sm font-semibold text-gray-900 outline-none focus:ring-2 focus:ring-[#4A3629]/20"
@@ -138,12 +150,16 @@ export function ClassFilterBar({
 
       {/* 4. SEARCH */}
       <div className="flex w-full flex-col gap-2 lg:flex-1">
-        <label className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase">
+        <label
+          htmlFor="search-input"
+          className="ml-1 text-[11px] font-bold tracking-wider text-gray-500 uppercase"
+        >
           검색
         </label>
         <div className="relative w-full">
           <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
+            id="search-input"
             type="text"
             value={localSearch}
             onChange={handleSearchChange}

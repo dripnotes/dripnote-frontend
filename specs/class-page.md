@@ -317,12 +317,14 @@ const [filters, setFilters] = useState<ClassFilterState>({
 });
 
 // TanStack Query
+import { searchLessonsAction } from '@/actions/lesson.action'; // 서버 액션을 통해 BFF API 페칭
+
 const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
   queryKey: ['lessons', filters, searchQuery],
   queryFn: ({ pageParam = 0 }) =>
-    fetchLessons({ ...filters, keyword: searchQuery, page: pageParam }),
+    searchLessonsAction({ ...filters, keyword: searchQuery, page: pageParam }),
   getNextPageParam: (lastPage) =>
-    lastPage.data.page.hasNext ? lastPage.data.page.number + 1 : undefined,
+    lastPage.data?.page?.hasNext ? lastPage.data.page.number + 1 : undefined,
 });
 ```
 
@@ -373,4 +375,3 @@ interface LessonSearchResponse {
 - **갤러리 우선**: 이미지가 카드 전체를 차지하며, 텍스트는 최소화하여 시각적 몰입감을 유지
 - **지연 필터/검색 반영**: 옵션을 선택하거나 키워드를 입력한 후 우측 "클래스 검색하기"를 클릭해야만 리프레시 수행
 - **Load More 방식**: UX 맥락 유지를 위해 무한 스크롤 대신 명시적 버튼으로 추가 로드
-- **Mock 지원**: 백엔드 미연동 시 `src/mocks/lessons.ts`의 Mock 데이터로 동작 가능

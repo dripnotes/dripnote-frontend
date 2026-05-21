@@ -33,8 +33,10 @@ export default function ClassDetailPage(props: ClassDetailPageProps) {
     async function loadData() {
       try {
         setIsLoading(true);
+        setError(null);
         const res = await getLessonDetailAction(lessonId);
         if (res.success && res.data) {
+          setError(null);
           setData(res.data);
         } else {
           setError(res.error || '클래스 정보를 불러올 수 없습니다.');
