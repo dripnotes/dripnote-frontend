@@ -11,10 +11,9 @@ import ProductSearchBar from './ProductSearchBar';
 
 interface ProductFiltersProps {
   filters: ProductFilterState;
-  onChange: (filters: ProductFilterState) => void;
+  onApply: (payload: { filters: ProductFilterState; search: string }) => void;
   onReset: () => void;
   searchQuery: string;
-  onSearchChange: (value: string) => void;
   // 모바일 전용
   isMobileOpen: boolean;
   onMobileClose: () => void;
@@ -22,10 +21,9 @@ interface ProductFiltersProps {
 
 export default function ProductFilters({
   filters,
-  onChange,
+  onApply,
   onReset,
   searchQuery,
-  onSearchChange,
   isMobileOpen,
   onMobileClose,
 }: ProductFiltersProps) {
@@ -63,8 +61,7 @@ export default function ProductFilters({
   };
 
   const handleApply = () => {
-    onChange(localFilters);
-    onSearchChange(localSearchQuery);
+    onApply({ filters: localFilters, search: localSearchQuery });
     if (isMobileOpen) onMobileClose();
   };
 

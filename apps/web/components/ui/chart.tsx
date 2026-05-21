@@ -48,7 +48,7 @@ export function ChartContainer({ config, className, children }: ChartContainerPr
 
 interface ChartTooltipContentProps {
   active?: boolean;
-  payload?: Array<{ name: string; value: number; payload: { fill: string } }>;
+  payload?: ReadonlyArray<Partial<{ name: string; value: number; payload: { fill?: string } }>>;
 }
 
 export function ChartTooltipContent({ active, payload }: ChartTooltipContentProps) {
@@ -56,14 +56,14 @@ export function ChartTooltipContent({ active, payload }: ChartTooltipContentProp
 
   return (
     <div className="rounded-xl border border-gray-100 bg-white px-3 py-2 shadow-lg">
-      {payload.map((entry) => (
-        <div key={entry.name} className="flex items-center gap-2 text-sm">
+      {payload.map((entry, index) => (
+        <div key={entry?.name || index} className="flex items-center gap-2 text-sm">
           <span
             className="h-2.5 w-2.5 rounded-full"
-            style={{ backgroundColor: entry.payload.fill }}
+            style={{ backgroundColor: entry?.payload?.fill }}
           />
-          <span className="font-medium text-gray-700">{entry.name}</span>
-          <span className="font-bold text-gray-900">{entry.value} / 5</span>
+          <span className="font-medium text-gray-700">{entry?.name}</span>
+          <span className="font-bold text-gray-900">{entry?.value} / 5</span>
         </div>
       ))}
     </div>

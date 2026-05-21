@@ -141,25 +141,24 @@ interface ProductDetailHeroProps {
 
 **Props**:
 
-````ts
 **Props**:
 
 ```ts
 interface FlavorProfileProps {
-  acidity: number | null; // 산미 (0~5)
-  sweetness: number | null; // 감미 (0~5)
-  balance: number | null; // 밸런스 (0~5)
-  body: number | null; // 바디감 (0~5)
+  acidity: number | null; // 산미 (0~5 숫자로 표현됨, null은 평가되지 않음)
+  sweetness: number | null; // 감미 (0~5 숫자로 표현됨, null은 평가되지 않음)
+  balance: number | null; // 밸런스 (0~5 숫자로 표현됨, null은 평가되지 않음)
+  body: number | null; // 바디감 (0~5 숫자로 표현됨, null은 평가되지 않음)
   roastingType: string; // 로스팅 타입 (예: 'MEDIUMDARK')
 }
-````
+```
 
 #### 3. Functional Requirements (단계별 요구사항)
 
-1. 모든 지표는 `RatingScale` 컴포넌트를 사용하여 **5단계 표준 척도**로 표시한다.
-2. 데이터가 `null`인 경우 "N/A" 문구를 표시하고, `RatingScale`은 투명도를 낮추어 비활성 상태임을 알린다.
+1. 모든 지표의 값은 0~5의 숫자(또는 null)를 가지며, null인 경우 "N/A" 문구를 표시한다.
+2. 향미 지표(감미, 산미, 바디감)는 도넛 차트의 각 파이 슬라이스 비율(value → percentage)로 매핑되어 시각화된다.
 3. 로스팅 단계는 텍스트(예: Roast: Medium-Dark)로 우측 상단 뱃지에 표시한다.
-4. 컬러 팔레트: 산미(`teal`), 감미(`amber`), 바디감(`espresso`), 밸런스(`amber/teal`), 미지정(`stone`).
+4. 컬러 팔레트: 산미(`acidity`), 감미(`sweetness`), 바디감(`body`), 밸런스(`balance`), 미지정(`stone`).
 
 ---
 

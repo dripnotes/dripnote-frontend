@@ -74,14 +74,6 @@ function ProductsPageContent() {
     }
   };
 
-  const handleFilterChange = (newFilters: ProductFilterState) => {
-    updateUrl(newFilters, searchQuery, 0, { replace: true });
-  };
-
-  const handleSearchChange = (newSearch: string) => {
-    updateUrl(filters, newSearch, 0, { replace: true });
-  };
-
   const handleReset = () => {
     updateUrl(DEFAULT_FILTERS, '', 0, { replace: false });
   };
@@ -100,10 +92,11 @@ function ProductsPageContent() {
           {/* 필터 (Desktop Panel & Mobile Drawer 통합) */}
           <ProductFilters
             filters={filters}
-            onChange={handleFilterChange}
-            onReset={handleReset}
             searchQuery={searchQuery}
-            onSearchChange={handleSearchChange}
+            onApply={({ filters: newFilters, search: newSearch }) => {
+              updateUrl(newFilters, newSearch, 0, { replace: true });
+            }}
+            onReset={handleReset}
             isMobileOpen={isDrawerOpen}
             onMobileClose={() => setIsDrawerOpen(false)}
           />

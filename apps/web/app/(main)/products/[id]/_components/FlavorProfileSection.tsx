@@ -170,7 +170,7 @@ export function FlavorProfileSection({
                                 fontFamily: 'Outfit, sans-serif',
                               }}
                             >
-                              {balance !== null ? balance : 'N/A'}
+                              {values.balance}
                             </tspan>
                             <tspan
                               x={cx}

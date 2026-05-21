@@ -75,7 +75,7 @@ Baristation 서비스의 원두 정보 탐색(Product Discovery) 페이지입니
 
 - **목적**: 원두 이름 또는 키워드로 원두 목록을 실시간 필터링하는 검색 입력 컴포넌트
 - **위치**: `apps/web/components/products/ProductSearchBar.tsx`
-- **부모 컴포넌트**: `ProductFilterPanel`, `ProductFilterDrawer`
+- **부모 컴포넌트**: `ProductFilters`
 
 #### 2. Tech Stack & Constraints (기술 및 제약)
 
@@ -90,7 +90,8 @@ Baristation 서비스의 원두 정보 탐색(Product Discovery) 페이지입니
 interface ProductSearchBarProps {
   value: string;
   onChange: (value: string) => void;
-  placeholder?: string; // 기본값: "검색어를 입력하세요"
+  onSubmit: () => void;
+  placeholder?: string; // 기본값: "원두명, 생산지 검색"
 }
 ```
 
@@ -98,7 +99,8 @@ interface ProductSearchBarProps {
 
 **Events / Callbacks**:
 
-- `onChange(value: string)`: Enter 키 입력 또는 초기화 시 상위로 전달 (Commit 시점에만 호출)
+- `onChange(value: string)`: 사용자가 타이핑할 때마다 상위로 상태 전달
+- `onSubmit()`: Enter 키 입력 시 호출되어 필터를 명시적으로 적용 (commit)
 
 #### 4. UI States (상태 명세)
 
@@ -109,8 +111,8 @@ interface ProductSearchBarProps {
 #### 5. Functional Requirements (단계별 요구사항)
 
 1. `Search` 아이콘이 입력창 좌측에 위치한다
-2. 텍스트 입력 후 Enter 키를 눌렀을 때만 `onChange`를 호출한다
-3. 입력값이 있을 때 우측에 Clear(×) 버튼을 노출하며, 클릭 시 즉각 `onChange("")`를 호출한다
+2. 텍스트 입력 후 Enter 키를 눌렀을 때만 `onSubmit`을 호출하여 검색을 실행한다
+3. 입력값이 있을 때 우측에 Clear(×) 버튼을 노출하며, 클릭 시 즉각 `onChange("")`와 `onSubmit()`을 연달아 호출한다
 4. 포커스 시 테두리가 `Brand-Amber #D97706`으로 전환된다
 
 #### 6. Design Spec (디자인 명세)
@@ -162,7 +164,7 @@ interface ProductFiltersProps {
 #### 4. Functional Requirements (단계별 요구사항)
 
 1. **상태 동기화**: 변경되는 필터는 `localFilters`, 검색어는 `localSearchQuery`로 지연 관리되며, "적용하기"를 누를 때 부모로 반영됩니다.
-2. **반응형 랜더링**: 데스크톱에서는 `aside` 패널로, 모바일에서는 `AnimatePresence`를 활용한 `framer-motion` 모달(Drawer)로 렌더링됩니다. 내부의 구체적인 필터 폼(`FlavorFilter`, `MetricFilter` 등)은 하나로 정의되어 양쪽에 재사용됩니다.
+2. **반응형 렌더링**: 데스크톱에서는 `aside` 패널로, 모바일에서는 `AnimatePresence`를 활용한 `framer-motion` 모달(Drawer)로 렌더링됩니다. 내부의 구체적인 필터 폼(`FlavorFilter`, `MetricFilter` 등)은 하나로 정의되어 양쪽에 재사용됩니다.
 3. **스타일 시스템 (테마 중앙화)**: `MetricFilter`와 `RoastingFilter` 내부의 색상은 `globals.css` 및 `tailwind.config.ts`에 선언된 `bg-roast-light`, `text-metric-sweetness` 등 시맨틱 테마 클래스를 활용합니다.
 
 ---
