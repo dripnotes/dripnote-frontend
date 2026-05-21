@@ -19,11 +19,11 @@ interface FlavorProfileProps {
 const chartConfig = {
   sweetness: {
     label: '감미',
-    color: '#F59E0B', // amber-400
+    color: '#EA580C', // orange-600
   },
   acidity: {
     label: '산미',
-    color: '#2DD4BF', // teal-400
+    color: '#EAB308', // yellow-500
   },
   body: {
     label: '바디감',
@@ -32,17 +32,17 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const LEGEND_ITEMS = [
-  { key: 'sweetness', label: '감미', Icon: Sparkles, color: '#F59E0B' },
-  { key: 'acidity', label: '산미', Icon: Droplets, color: '#2DD4BF' },
+  { key: 'sweetness', label: '감미', Icon: Sparkles, color: '#EA580C' },
+  { key: 'acidity', label: '산미', Icon: Droplets, color: '#EAB308' },
   { key: 'body', label: '바디감', Icon: Layers, color: '#78350F' },
 ] as const;
 
 const ROAST_MAP: Record<string, string> = {
-  LIGHT: 'Light',
-  LIGHTMEDIUM: 'Light-Medium',
-  MEDIUM: 'Medium',
-  MEDIUMDARK: 'Medium-Dark',
-  DARK: 'Dark',
+  LIGHT: '라이트',
+  LIGHTMEDIUM: '라이트 미디엄',
+  MEDIUM: '미디엄',
+  MEDIUMDARK: '미디엄 다크',
+  DARK: '다크',
 };
 
 export function FlavorProfileSection({
@@ -66,8 +66,8 @@ export function FlavorProfileSection({
     total === 0
       ? [{ name: '데이터 없음', value: 5, fill: '#E5E7EB' }]
       : [
-          { name: '감미', value: values.sweetness, fill: '#F59E0B' },
-          { name: '산미', value: values.acidity, fill: '#2DD4BF' },
+          { name: '감미', value: values.sweetness, fill: '#EA580C' },
+          { name: '산미', value: values.acidity, fill: '#EAB308' },
           { name: '바디감', value: values.body, fill: '#78350F' },
         ];
 
@@ -89,21 +89,18 @@ export function FlavorProfileSection({
               원두가 가진 고유의 향미 특성
             </p>
           </div>
-          <div className="flex h-fit items-center gap-2 rounded-full bg-stone-100 px-4 py-1.5">
+          <div className="flex w-fit items-center gap-2 rounded-full bg-stone-100 px-4 py-1.5">
             <Flame className="h-4 w-4 text-stone-600" />
-            <span className="font-outfit text-xs font-bold tracking-widest text-stone-800 uppercase">
-              Roast: {formattedRoast}
+            <span className="font-outfit text-xs font-bold tracking-widest text-stone-800">
+              {formattedRoast}
             </span>
           </div>
         </div>
 
         {/* Chart + Legend */}
-        <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16">
+        <div className="flex flex-col items-center gap-10">
           {/* Donut Chart */}
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto w-full max-w-[260px] shrink-0 md:mx-0"
-          >
+          <ChartContainer config={chartConfig} className="mx-auto w-full max-w-[260px] shrink-0">
             <ResponsiveContainer width="100%" aspect={1}>
               <PieChart>
                 <Tooltip
@@ -170,7 +167,7 @@ export function FlavorProfileSection({
           </ChartContainer>
 
           {/* Legend */}
-          <div className="flex w-full flex-col gap-5">
+          <div className="flex w-full max-w-[480px] flex-col gap-5">
             {LEGEND_ITEMS.map(({ key, label, Icon, color }) => {
               const rawValue = values[key];
               return (
