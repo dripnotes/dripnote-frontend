@@ -67,6 +67,7 @@ export interface LessonDetail {
   curriculum: CurriculumItem[];
   price: number;
   lessonCategory: string;
+  difficulty: string;
   remainingSeats?: number;
 }
 

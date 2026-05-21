@@ -92,8 +92,7 @@ export default function ClassDetailPage(props: ClassDetailPageProps) {
                   {data.lessonCategory}
                 </span>
                 <span className="font-outfit rounded-full bg-gray-200 px-3 py-1 text-xs font-bold tracking-wider text-gray-700 uppercase">
-                  난이도는 몰라용
-                  {/* {data.difficulty ?? '알 수 없음'} */}
+                  {data.difficulty}
                 </span>
               </div>
               <h1 className="font-playfair text-3xl leading-tight font-bold text-gray-900 md:text-4xl lg:text-5xl">
