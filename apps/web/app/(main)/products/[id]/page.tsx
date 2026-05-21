@@ -107,9 +107,9 @@ export default async function ProductDetailPage({ params }: Props) {
                 .filter(
                   (item) => item.value !== undefined && item.value !== null && item.value !== '',
                 )
-                .map((item, i) => (
+                .map((item) => (
                   <li
-                    key={i}
+                    key={item.label}
                     className="flex flex-col border-b border-gray-200 pb-4 last:border-0 last:pb-0"
                   >
                     <span className="font-outfit mb-1 text-xs font-semibold tracking-widest text-amber-600 uppercase">

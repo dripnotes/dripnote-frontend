@@ -175,12 +175,12 @@ export function FlavorProfileSection({
                             <tspan
                               x={cx}
                               y={cy + 16}
+                              className="fill-gray-400"
                               style={{
                                 fontSize: '0.7rem',
                                 fontWeight: 600,
                                 letterSpacing: '0.1em',
                                 textTransform: 'uppercase',
-                                fill: '#9CA3AF',
                                 fontFamily: 'Outfit, sans-serif',
                               }}
                             >
