@@ -27,12 +27,15 @@ export function useChart() {
 
 export function ChartContainer({ config, className, children }: ChartContainerProps) {
   // CSS 변수로 색상 주입
-  const style = Object.entries(config).reduce((acc, [key, value]) => {
-    if (value.color) {
-      acc[`--color-${key}` as string] = value.color;
-    }
-    return acc;
-  }, {} as React.CSSProperties);
+  const style = Object.entries(config).reduce(
+    (acc, [key, value]) => {
+      if (value.color) {
+        acc[`--color-${key}`] = value.color;
+      }
+      return acc;
+    },
+    {} as Record<string, string>,
+  ) as React.CSSProperties;
 
   return (
     <ChartContext.Provider value={{ config }}>

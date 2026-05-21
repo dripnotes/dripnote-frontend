@@ -19,22 +19,22 @@ interface FlavorProfileProps {
 const chartConfig = {
   sweetness: {
     label: '감미',
-    color: '#C48F56', // 차분한 카라멜 톤
+    color: '#EA580C', // orange-600
   },
   acidity: {
     label: '산미',
-    color: '#C1A673', // 차분한 옅은 골드/오트 톤
+    color: '#EAB308', // yellow-500
   },
   body: {
     label: '바디감',
-    color: '#6B5446', // 부드러운 모카 브라운
+    color: '#78350F', // coffee-brown (amber-900)
   },
 } satisfies ChartConfig;
 
 const LEGEND_ITEMS = [
-  { key: 'sweetness', label: '감미', Icon: Sparkles, color: '#C48F56' },
-  { key: 'acidity', label: '산미', Icon: Droplets, color: '#C1A673' },
-  { key: 'body', label: '바디감', Icon: Layers, color: '#6B5446' },
+  { key: 'sweetness', label: '감미', Icon: Sparkles, color: '#EA580C' },
+  { key: 'acidity', label: '산미', Icon: Droplets, color: '#EAB308' },
+  { key: 'body', label: '바디감', Icon: Layers, color: '#78350F' },
 ] as const;
 
 const ROAST_MAP: Record<string, string> = {
@@ -66,9 +66,9 @@ export function FlavorProfileSection({
     total === 0
       ? [{ name: '데이터 없음', value: 5, fill: '#E5E7EB' }]
       : [
-          { name: '감미', value: values.sweetness, fill: '#C48F56' },
-          { name: '산미', value: values.acidity, fill: '#C1A673' },
-          { name: '바디감', value: values.body, fill: '#6B5446' },
+          { name: '감미', value: values.sweetness, fill: '#EA580C' },
+          { name: '산미', value: values.acidity, fill: '#EAB308' },
+          { name: '바디감', value: values.body, fill: '#78350F' },
         ];
 
   return (

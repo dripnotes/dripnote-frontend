@@ -28,11 +28,16 @@ export default function ProductFilterDrawer({
   onSearchChange,
 }: ProductFilterDrawerProps) {
   const [localFilters, setLocalFilters] = useState(filters);
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
   const dragControls = useDragControls();
 
   useEffect(() => {
     setLocalFilters(filters);
   }, [filters]);
+
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery);
+  }, [searchQuery]);
 
   // body 스크롤 잠금
   useEffect(() => {
@@ -55,6 +60,7 @@ export default function ProductFilterDrawer({
 
   const handleApply = () => {
     onChange(localFilters);
+    onSearchChange(localSearchQuery);
     onClose();
   };
 
@@ -119,6 +125,7 @@ export default function ProductFilterDrawer({
                     onClick={() => {
                       onReset();
                       setLocalFilters(DEFAULT_FILTERS);
+                      setLocalSearchQuery('');
                     }}
                     className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
                   >
@@ -130,7 +137,11 @@ export default function ProductFilterDrawer({
 
               {/* Search */}
               <div className="mb-4">
-                <ProductSearchBar value={searchQuery} onChange={onSearchChange} />
+                <ProductSearchBar
+                  value={localSearchQuery}
+                  onChange={setLocalSearchQuery}
+                  onSubmit={handleApply}
+                />
               </div>
 
               {/* Flavor */}

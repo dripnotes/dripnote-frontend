@@ -25,10 +25,15 @@ export default function ProductFilterPanel({
   onSearchChange,
 }: ProductFilterPanelProps) {
   const [localFilters, setLocalFilters] = useState(filters);
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
 
   useEffect(() => {
     setLocalFilters(filters);
   }, [filters]);
+
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery);
+  }, [searchQuery]);
 
   const filtered = isFiltered(localFilters);
 
@@ -41,6 +46,7 @@ export default function ProductFilterPanel({
 
   const handleApply = () => {
     onChange(localFilters);
+    onSearchChange(localSearchQuery);
   };
 
   return (
@@ -56,6 +62,7 @@ export default function ProductFilterPanel({
               onClick={() => {
                 onReset();
                 setLocalFilters(DEFAULT_FILTERS);
+                setLocalSearchQuery('');
               }}
               className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700"
             >
@@ -67,7 +74,11 @@ export default function ProductFilterPanel({
 
         {/* Search */}
         <div className="mb-6">
-          <ProductSearchBar value={searchQuery} onChange={onSearchChange} />
+          <ProductSearchBar
+            value={localSearchQuery}
+            onChange={setLocalSearchQuery}
+            onSubmit={handleApply}
+          />
         </div>
 
         {/* Flavor */}
