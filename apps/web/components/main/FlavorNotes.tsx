@@ -7,6 +7,7 @@ import React from 'react';
 import FlavorCard from '@/components/common/cards/FlavorCard';
 import SectionContainer from '@/components/layout/SectionContainer';
 import { FlavorNote } from '@/lib/api/main';
+import { FLAVOR_DEFINITIONS } from '@/lib/api/products';
 
 interface FlavorNotesProps {
   flavors: FlavorNote[];
@@ -48,12 +49,18 @@ export default function FlavorNotes({ flavors }: FlavorNotesProps) {
           else if (idx >= 6) visibilityClass = 'hidden lg:block';
           else if (idx >= 4) visibilityClass = 'hidden sm:block';
 
+          // 매핑: 향미 이름을 통해 FLAVOR_DEFINITIONS에서 영문 ID(FlavorType)를 찾습니다.
+          const matchedFlavorDef = FLAVOR_DEFINITIONS.find((def) => def.ko === flavor.name);
+          const filterLink = matchedFlavorDef
+            ? `/products?flavorCategory=${matchedFlavorDef.id}`
+            : '/products';
+
           return (
             <FlavorCard
               key={flavor.id}
               name={flavor.name}
               imageUrl={flavor.imageUrl}
-              link={flavor.link}
+              link={filterLink}
               index={idx}
               className={visibilityClass}
             />
