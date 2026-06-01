@@ -1,12 +1,14 @@
 'use client';
 
 import { Button } from '@coffee-service/ui-library';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Bookmark, Share, ChevronLeft, ExternalLink, Globe } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { toggleBookmarkAction } from '@/actions/bookmarks.action';
 import SectionContainer from '@/components/layout/SectionContainer';
 import type {
   BeanSummaryDTO,
@@ -37,6 +39,33 @@ export function ProductDetailHero({
 }: ProductDetailHeroProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const queryClient = useQueryClient();
+
+  const { mutate: toggleBookmark } = useMutation({
+    mutationFn: async () => {
+      const res = await toggleBookmarkAction(beanSummary.productId);
+      if (!res.success) throw new Error(res.error);
+      return res;
+    },
+    onMutate: async () => {
+      const previousState = isBookmarked;
+      setIsBookmarked(!previousState);
+      return { previousState };
+    },
+    onError: (err, variables, context) => {
+      if (context) {
+        setIsBookmarked(context.previousState);
+      }
+      console.error('북마크 토글 실패:', err);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
+    },
+  });
+
+  const handleBookmarkClick = () => {
+    toggleBookmark();
+  };
 
   // Filter out any potential null/undefined images
   const allImages = [beanSummary.productImage, ...additionalImages].filter(
@@ -81,7 +110,7 @@ export function ProductDetailHero({
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setIsBookmarked(!isBookmarked)}
+            onClick={handleBookmarkClick}
             aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
             title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
             className="h-10 w-10 border-gray-100 bg-white/90 shadow-sm backdrop-blur-sm transition-colors hover:bg-white"
@@ -259,7 +288,7 @@ export function ProductDetailHero({
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setIsBookmarked(!isBookmarked)}
+                  onClick={handleBookmarkClick}
                   aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
                   title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
                   className={cn(

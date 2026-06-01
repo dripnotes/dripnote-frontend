@@ -64,10 +64,11 @@ export async function toggleBookmarkAction(
 
     const url = `/api/bookmarks/${productId}`;
 
-    // According to the prompt, this is a toggle endpoint or we can just send POST for toggle
-    // Assuming POST for toggle
     const res = await fetchBackend(url, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     if (!res.ok) {
