@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import { AUTH_TOKEN_KEY } from '@/lib/utils/auth';
+
 // ─────────────────────────────────────────────────────────────
 // Private: BFF 설정 (외부 노출 없음)
 // ─────────────────────────────────────────────────────────────
@@ -111,13 +113,13 @@ export function getBackendBaseUrl(): string {
  * 모든 요청에 BFF 필수 헤더를 자동으로 주입합니다.
  *
  * @param endpoint - 백엔드 API 엔드포인트 (예: '/api/v1/user') 또는 절대 URL
- * @param options  - fetch 옵션. Middleware에서 호출 시 `bffRequest`에 요청 객체 전달
+ * @param options  - fetch 옵션. Middleware에서 호출 시 `bffRequest`에 요청 객체 전달. `debugBff`를 true로 설정하면 최종 헤더를 콘솔에 출력합니다.
  */
 export async function fetchBackend(
   endpoint: string,
-  options: RequestInit & { bffRequest?: NextRequest } = {},
+  options: RequestInit & { bffRequest?: NextRequest; debugBff?: boolean } = {},
 ): Promise<Response> {
-  const { bffRequest, ...fetchOptions } = options;
+  const { bffRequest, debugBff, ...fetchOptions } = options;
 
   const dynamicOverrides: { host?: string; proto?: string; port?: string } = {};
   const extraHeaders: Record<string, string> = { Accept: 'application/json' };
@@ -125,8 +127,8 @@ export async function fetchBackend(
   if (!bffRequest) {
     try {
       const { cookies, headers } = await import('next/headers');
-      const cookieList = await cookies();
       const headerList = await headers();
+      const cookieList = await cookies();
 
       // 동적 호스트 및 프로토콜 감지 (Vercel/Next.js Proxy Headers 대응)
       const hostValue = headerList.get('x-forwarded-host') || headerList.get('host');
@@ -143,8 +145,14 @@ export async function fetchBackend(
         dynamicOverrides.proto = protos[protos.length - 1].trim().replace(':', '');
       }
 
-      const cookie = cookieList.toString();
-      if (cookie) extraHeaders['Cookie'] = cookie;
+      const rawCookie = headerList.get('cookie');
+      if (rawCookie) extraHeaders['Cookie'] = rawCookie;
+
+      const accessToken = cookieList.get(AUTH_TOKEN_KEY)?.value;
+      if (accessToken) {
+        extraHeaders['Authorization'] = `Bearer ${accessToken}`;
+      }
+
       const ua = headerList.get('user-agent');
       if (ua) extraHeaders['User-Agent'] = ua;
     } catch {
@@ -152,7 +160,15 @@ export async function fetchBackend(
     }
   } else {
     const cookie = bffRequest.headers.get('cookie');
-    if (cookie) extraHeaders['Cookie'] = cookie;
+    if (cookie) {
+      extraHeaders['Cookie'] = cookie;
+      // Extract AT from raw cookie
+      const match = cookie.match(new RegExp(`${AUTH_TOKEN_KEY}=([^;]+)`));
+      if (match) {
+        // URL Decode the match as it is from a raw cookie string
+        extraHeaders['Authorization'] = `Bearer ${decodeURIComponent(match[1])}`;
+      }
+    }
   }
 
   const bffInfo = getBffInfo(bffRequest, dynamicOverrides);
@@ -170,6 +186,12 @@ export async function fetchBackend(
 
   const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = `${bffInfo.backendUrl}${path}`;
+
+  if (debugBff) {
+    console.log(`\n[fetchBackend] Outgoing Request: ${fetchOptions.method || 'GET'} ${url}`);
+    console.log('[fetchBackend] Outgoing Headers:');
+    console.dir(finalHeaders, { depth: null, colors: true });
+  }
 
   return fetch(url, { ...fetchOptions, headers: finalHeaders });
 }
