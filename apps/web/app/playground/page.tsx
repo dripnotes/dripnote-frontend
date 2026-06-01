@@ -13,10 +13,12 @@ import {
   ChevronRight,
   Globe,
   Settings2,
+  Plus,
+  Minus,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-import { executePlaygroundRequest } from '@/actions/playground.action';
+import { executePlaygroundRequest, KeyValueParam } from '@/actions/playground.action';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -36,7 +38,15 @@ export default function PlaygroundPage() {
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<RequestHistory[]>([]);
   const [copied, setCopied] = useState(false);
-  const [viewMode, setViewMode] = useState<'json' | 'visual'>('json');
+
+  // View Modes
+  const [viewMode, setViewMode] = useState<'json' | 'visual' | 'headers'>('json');
+  const [activeReqTab, setActiveReqTab] = useState<'query' | 'body' | 'headers'>('query');
+
+  // Request Parameters
+  const [queryParams, setQueryParams] = useState<KeyValueParam[]>([{ key: '', value: '' }]);
+  const [bodyParams, setBodyParams] = useState<KeyValueParam[]>([{ key: '', value: '' }]);
+  const [reqHeaders, setReqHeaders] = useState<KeyValueParam[]>([{ key: '', value: '' }]);
 
   // Image detection logic
   const [detectedImages, setDetectedImages] = useState<string[]>([]);
@@ -96,7 +106,11 @@ export default function PlaygroundPage() {
     setResponse(null);
 
     try {
-      const result = await executePlaygroundRequest(url, method);
+      const result = await executePlaygroundRequest(url, method, {
+        queryParams,
+        bodyParams,
+        headers: reqHeaders,
+      });
 
       if (!result.success) {
         throw new Error(result.error);
@@ -109,11 +123,12 @@ export default function PlaygroundPage() {
 
       const images = extractImages(data.body, url);
       setDetectedImages(images);
-      if (images.length > 0) setViewMode('visual');
-      else setViewMode('json');
+
+      // Keep current viewMode if possible, otherwise fallback to json
+      if (viewMode === 'visual' && images.length === 0) setViewMode('json');
 
       const newHistoryItem: RequestHistory = {
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).substring(2, 11),
         url,
         method,
         timestamp: Date.now(),
@@ -127,15 +142,78 @@ export default function PlaygroundPage() {
     }
   };
 
-  const copyToClipboard = () => {
-    if (!response) return;
-    navigator.clipboard.writeText(JSON.stringify(response.body, null, 2));
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const clearHistory = () => {
     saveHistory([]);
+  };
+
+  const updateParam = (
+    type: 'query' | 'body' | 'headers',
+    index: number,
+    field: 'key' | 'value',
+    val: string,
+  ) => {
+    const setter =
+      type === 'query' ? setQueryParams : type === 'body' ? setBodyParams : setReqHeaders;
+    setter((prev) => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], [field]: val };
+      return copy;
+    });
+  };
+
+  const addParam = (type: 'query' | 'body' | 'headers') => {
+    const setter =
+      type === 'query' ? setQueryParams : type === 'body' ? setBodyParams : setReqHeaders;
+    setter((prev) => [...prev, { key: '', value: '' }]);
+  };
+
+  const removeParam = (type: 'query' | 'body' | 'headers', index: number) => {
+    const setter =
+      type === 'query' ? setQueryParams : type === 'body' ? setBodyParams : setReqHeaders;
+    setter((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const renderKeyValueEditor = (type: 'query' | 'body' | 'headers', params: KeyValueParam[]) => {
+    return (
+      <div className="mt-4 flex flex-col gap-2">
+        {params.map((param, idx) => (
+          <div key={idx} className="flex items-center gap-2">
+            <input
+              type="text"
+              value={param.key}
+              onChange={(e) => updateParam(type, idx, 'key', e.target.value)}
+              placeholder="Key"
+              className="flex-1 rounded-xl border border-white/5 bg-black/40 px-3 py-2 text-xs text-white transition-all outline-none placeholder:text-gray-600 focus:border-amber-500/50"
+            />
+            <input
+              type="text"
+              value={param.value}
+              onChange={(e) => updateParam(type, idx, 'value', e.target.value)}
+              placeholder="Value"
+              className="flex-1 rounded-xl border border-white/5 bg-black/40 px-3 py-2 text-xs text-white transition-all outline-none placeholder:text-gray-600 focus:border-amber-500/50"
+            />
+            <button
+              onClick={() => removeParam(type, idx)}
+              className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20"
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() => addParam(type)}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 py-2 text-xs text-gray-500 transition-colors hover:border-amber-500/30 hover:text-amber-500"
+        >
+          <Plus className="h-3 w-3" /> Add Property
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -184,44 +262,76 @@ export default function PlaygroundPage() {
                 <h2 className="font-semibold tracking-tight">Request Configuration</h2>
               </div>
 
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <div className="group relative flex-1">
-                  <div className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 transition-colors group-focus-within:text-amber-500">
-                    <Globe className="h-4 w-4" />
+              <div className="flex flex-col gap-4">
+                {/* URL and Method */}
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <div className="group relative flex-1">
+                    <div className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 transition-colors group-focus-within:text-amber-500">
+                      <Globe className="h-4 w-4" />
+                    </div>
+                    <input
+                      type="text"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="Enter API Endpoint..."
+                      className="w-full rounded-2xl border border-white/5 bg-black/40 py-4 pr-4 pl-11 text-sm text-white transition-all outline-none placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10"
+                    />
                   </div>
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="Enter API Endpoint..."
-                    className="w-full rounded-2xl border border-white/5 bg-black/40 py-4 pr-4 pl-11 text-sm text-white transition-all outline-none placeholder:text-gray-600 focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10"
-                  />
+
+                  <div className="flex gap-2">
+                    <select
+                      value={method}
+                      onChange={(e) => setMethod(e.target.value as HttpMethod)}
+                      className="cursor-pointer appearance-none rounded-2xl border border-white/5 bg-black/40 px-4 py-4 text-xs font-bold tracking-widest uppercase transition-colors outline-none hover:bg-black/60"
+                    >
+                      <option value="GET">GET</option>
+                      <option value="POST">POST</option>
+                      <option value="PUT">PUT</option>
+                      <option value="PATCH">PATCH</option>
+                      <option value="DELETE">DELETE</option>
+                    </select>
+
+                    <button
+                      onClick={handleSend}
+                      disabled={loading}
+                      className="flex items-center gap-3 rounded-2xl bg-amber-500 px-8 py-4 font-bold text-black shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:bg-amber-600 hover:shadow-[0_0_40px_rgba(245,158,11,0.3)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {loading ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                      ) : (
+                        <Send className="h-5 w-5" />
+                      )}
+                      <span>EXECUTE</span>
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <select
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value as HttpMethod)}
-                    className="cursor-pointer appearance-none rounded-2xl border border-white/5 bg-black/40 px-4 py-4 text-xs font-bold tracking-widest uppercase transition-colors outline-none hover:bg-black/60"
-                  >
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="DELETE">DELETE</option>
-                  </select>
+                {/* Parameters Tabs */}
+                <div className="mt-4 border-t border-white/5 pt-4">
+                  <div className="flex gap-4 border-b border-white/5 pb-2">
+                    <button
+                      onClick={() => setActiveReqTab('query')}
+                      className={`text-xs font-bold tracking-widest uppercase transition-colors ${activeReqTab === 'query' ? 'text-amber-500' : 'text-gray-500 hover:text-gray-300'}`}
+                    >
+                      Query Params
+                    </button>
+                    <button
+                      onClick={() => setActiveReqTab('body')}
+                      className={`text-xs font-bold tracking-widest uppercase transition-colors ${activeReqTab === 'body' ? 'text-amber-500' : 'text-gray-500 hover:text-gray-300'}`}
+                    >
+                      Body
+                    </button>
+                    <button
+                      onClick={() => setActiveReqTab('headers')}
+                      className={`text-xs font-bold tracking-widest uppercase transition-colors ${activeReqTab === 'headers' ? 'text-amber-500' : 'text-gray-500 hover:text-gray-300'}`}
+                    >
+                      Headers
+                    </button>
+                  </div>
 
-                  <button
-                    onClick={handleSend}
-                    disabled={loading}
-                    className="flex items-center gap-3 rounded-2xl bg-amber-500 px-8 py-4 font-bold text-black shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all hover:bg-amber-600 hover:shadow-[0_0_40px_rgba(245,158,11,0.3)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {loading ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <Send className="h-5 w-5" />
-                    )}
-                    <span>EXECUTE</span>
-                  </button>
+                  {activeReqTab === 'query' && renderKeyValueEditor('query', queryParams)}
+                  {activeReqTab === 'body' && renderKeyValueEditor('body', bodyParams)}
+                  {activeReqTab === 'headers' && renderKeyValueEditor('headers', reqHeaders)}
                 </div>
               </div>
             </motion.div>
@@ -233,14 +343,20 @@ export default function PlaygroundPage() {
               transition={{ delay: 0.1 }}
               className="flex min-h-[500px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl"
             >
-              <div className="flex min-h-[56px] items-center justify-between border-b border-white/5 bg-white/[0.02] px-6 py-2">
+              <div className="flex min-h-[56px] flex-wrap items-center justify-between gap-4 border-b border-white/5 bg-white/[0.02] px-6 py-2">
                 <div className="flex items-center gap-6">
-                  <div className="flex rounded-xl border border-white/5 bg-black/40 p-1">
+                  <div className="flex flex-wrap rounded-xl border border-white/5 bg-black/40 p-1">
                     <button
                       onClick={() => setViewMode('json')}
                       className={`rounded-lg px-4 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-all ${viewMode === 'json' ? 'bg-amber-500 text-black shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
                     >
-                      JSON
+                      Body
+                    </button>
+                    <button
+                      onClick={() => setViewMode('headers')}
+                      className={`rounded-lg px-4 py-1.5 text-[10px] font-bold tracking-widest uppercase transition-all ${viewMode === 'headers' ? 'bg-amber-500 text-black shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
+                    >
+                      Headers
                     </button>
                     <button
                       onClick={() => setViewMode('visual')}
@@ -269,9 +385,17 @@ export default function PlaygroundPage() {
                   )}
                 </div>
 
-                {response && viewMode === 'json' && (
+                {response && viewMode !== 'visual' && (
                   <button
-                    onClick={copyToClipboard}
+                    onClick={() =>
+                      copyToClipboard(
+                        JSON.stringify(
+                          viewMode === 'headers' ? response.headers : response.body,
+                          null,
+                          2,
+                        ),
+                      )
+                    }
                     className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-gray-500 uppercase transition-colors hover:text-white"
                   >
                     {copied ? (
@@ -279,7 +403,7 @@ export default function PlaygroundPage() {
                     ) : (
                       <Copy className="h-3 w-3" />
                     )}
-                    {copied ? 'Copied' : 'Copy JSON'}
+                    {copied ? 'Copied' : 'Copy'}
                   </button>
                 )}
               </div>
@@ -330,6 +454,18 @@ export default function PlaygroundPage() {
                           {JSON.stringify(response.body, null, 2)}
                         </pre>
                       </motion.div>
+                    ) : viewMode === 'headers' ? (
+                      <motion.div
+                        key="headers"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 10 }}
+                        className="text-blue-200/80"
+                      >
+                        <pre className="leading-relaxed whitespace-pre-wrap">
+                          {JSON.stringify(response.headers, null, 2)}
+                        </pre>
+                      </motion.div>
                     ) : (
                       <motion.div
                         key="visual"
@@ -360,7 +496,7 @@ export default function PlaygroundPage() {
                                 />
                                 <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 opacity-0 transition-opacity group-hover:opacity-100">
                                   <button
-                                    onClick={() => navigator.clipboard.writeText(img)}
+                                    onClick={() => copyToClipboard(img)}
                                     className="flex items-center justify-center gap-2 rounded-lg bg-white/10 py-2 text-[10px] font-bold text-white backdrop-blur-md transition-colors hover:bg-white/20"
                                   >
                                     <Copy className="h-3 w-3" />
