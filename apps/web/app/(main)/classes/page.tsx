@@ -1,0 +1,114 @@
+'use client';
+
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+
+import { searchLessonsAction } from '@/actions/lesson.action';
+import { ClassCardList } from '@/components/class/ClassCardList';
+import { ClassFilterBar, ClassFilterState } from '@/components/class/ClassFilterBar';
+import PageContainer from '@/components/layout/PageContainer';
+
+const availableRegions = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기'];
+
+export default function ClassPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<ClassFilterState>({
+    region: null,
+    difficulty: '전체',
+    lessonCategory: '전체',
+  });
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    isError,
+    error,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ['lessons', filters, searchQuery],
+    queryFn: async ({ pageParam = 0 }) => {
+      const result = await searchLessonsAction({
+        region: filters.region,
+        difficulty: filters.difficulty === '전체' ? undefined : filters.difficulty,
+        category: filters.lessonCategory === '전체' ? undefined : filters.lessonCategory,
+        keyword: searchQuery || undefined,
+        page: pageParam,
+      });
+      if (!result.success || !result.data) {
+        throw new Error(result.error || 'Failed to fetch lessons');
+      }
+      return result.data;
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage?.page?.hasNext ? lastPage.page.number + 1 : undefined,
+    initialPageParam: 0,
+  });
+
+  const lessons = data?.pages.flatMap((page) => page?.content ?? []) ?? [];
+
+  const handleResetFilters = () => {
+    setFilters({ region: null, difficulty: '전체', lessonCategory: '전체' });
+    setSearchQuery('');
+  };
+
+  return (
+    <PageContainer>
+      <div className="flex w-full flex-1 flex-col">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 md:px-8 md:py-12">
+          {/* Header Section */}
+          <section className="flex flex-col gap-3">
+            <h1 className="font-playfair text-4xl font-bold text-gray-900 md:text-5xl">
+              Find Your Coffee Class
+            </h1>
+            <p className="font-inter text-base text-gray-500">
+              다양한 커피 클래스에서 나만의 취향을 발견해보세요.
+            </p>
+          </section>
+
+          {/* Filter & Search Section */}
+          <section className="sticky top-0 z-40 -mx-4 bg-white/95 px-4 py-4 backdrop-blur-sm md:top-16 md:mx-0 md:px-0">
+            <ClassFilterBar
+              filters={filters}
+              onChangeFilters={setFilters}
+              searchQuery={searchQuery}
+              onChangeSearch={setSearchQuery}
+              availableRegions={availableRegions}
+            />
+          </section>
+
+          {/* List Section */}
+          <section className="w-full">
+            {isError ? (
+              <div className="flex w-full flex-col items-center justify-center py-20 text-center">
+                <h3 className="font-outfit mb-2 text-2xl font-bold text-gray-900">
+                  데이터를 불러오지 못했습니다
+                </h3>
+                <p className="font-inter mb-6 text-gray-500">
+                  {error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'}
+                </p>
+                <button
+                  onClick={() => refetch()}
+                  className="font-outfit rounded-full bg-[#A54729] px-6 py-3 font-bold text-white transition-colors hover:bg-orange-900"
+                >
+                  다시 시도
+                </button>
+              </div>
+            ) : (
+              <ClassCardList
+                lessons={lessons}
+                isLoading={isLoading}
+                hasNext={hasNextPage}
+                onLoadMore={() => fetchNextPage()}
+                isLoadingMore={isFetchingNextPage}
+                onResetFilters={handleResetFilters}
+              />
+            )}
+          </section>
+        </div>
+      </div>
+    </PageContainer>
+  );
+}

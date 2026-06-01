@@ -121,46 +121,11 @@ interface ProductDetailHeroProps {
 
 ---
 
-### ProductInfoTable
-
-#### 1. Overview (맥락)
+### ProductInfo Section (Inlined)
 
 - **목적**: 원두의 기원, 카테고리, 블렌딩 여부, 가공 방식, 재배 높이 및 상세 이야기를 담은 첫 진입 정보 패널.
-- **위치**: `apps/web/app/(main)/products/[id]/_components/ProductInfoTable.tsx`
-- **부모 컴포넌트**: `ProductDetailPage`
-
-#### 2. Tech Stack & Constraints (기술 및 제약)
-
-- **스타일링 규칙**: 컨테이너의 가독성을 위해 흰색이 아닌 약간의 대비를 갖는 `Secondary-Surface` 계통(또는 `bg-gray-50`)의 박스를 사용.
-
-#### 3. Data Interface (I/O)
-
-**Props**:
-
-```ts
-interface ProductInfoTableProps {
-  beanSummary: BeanSummaryDTO; // 원산지, 지역, 가공 방식 포함
-  description: string; // 상세 설명 (스토리)
-}
-```
-
-#### 4. UI States (상태 명세)
-
-| 상태            | 트리거 조건                                     | UI 표현                               |
-| --------------- | ----------------------------------------------- | ------------------------------------- |
-| **Default**     | 입력된 정보(Value)가 존재하는 항목              | 정상 리스트(`li`) 컴포넌트 렌더링     |
-| **Empty Value** | 특정 속성(예: processing)이 Null이거나 비어있음 | 해당 속성을 렌더링하지 않고 필터링 함 |
-
-#### 5. Functional Requirements (단계별 요구사항)
-
-1. "Bean Details" 섹션 상단에 상세 설명을 배치하여 원두의 스토리를 전달한다. (`whitespace-pre-wrap` 적용)
-2. 하단에 **국가(Origin), 지역(Region), 가공 방식(Process)** 항목을 세로 리스트 형태로 렌더링한다. (Desktop 기준 우측 패널)
-3. 내용이 없는 데이터(Undefined, Null, 빈 문자열)는 테이블 리스트에서 동적으로 제거한다.
-
-#### 6. Definition of Done (검증 기준)
-
-- [ ] (기능) 데이터가 없는(`undefined`) Prop 필드는 화면 상 목록 구조에서 나타나지 않는다.
-- [ ] (기능) `blend` prop 유무에 따라 카테고리가 Single Origin 인지 Blend 인지 정확히 표기된다.
+- **위치**: `apps/web/app/(main)/products/[id]/page.tsx` 내부 직접 렌더링
+- `ProductInfoTable` 컴포넌트는 불필요한 파일 파편화를 막기 위해 페이지 내부로 병합(Inline)되었습니다.
 
 ---
 
@@ -176,25 +141,24 @@ interface ProductInfoTableProps {
 
 **Props**:
 
-````ts
 **Props**:
 
 ```ts
 interface FlavorProfileProps {
-  acidity: number | null; // 산미 (1~5)
-  sweetness: number | null; // 감미 (1~5)
-  balance: number | null; // 밸런스 (1~5)
-  body: number | null; // 바디감 (1~5)
+  acidity: number | null; // 산미 (0~5 숫자로 표현됨, null은 평가되지 않음)
+  sweetness: number | null; // 감미 (0~5 숫자로 표현됨, null은 평가되지 않음)
+  balance: number | null; // 밸런스 (0~5 숫자로 표현됨, null은 평가되지 않음)
+  body: number | null; // 바디감 (0~5 숫자로 표현됨, null은 평가되지 않음)
   roastingType: string; // 로스팅 타입 (예: 'MEDIUMDARK')
 }
-````
+```
 
 #### 3. Functional Requirements (단계별 요구사항)
 
-1. 모든 지표는 `RatingScale` 컴포넌트를 사용하여 **5단계 표준 척도**로 표시한다.
-2. 데이터가 `null`인 경우 "N/A" 문구를 표시하고, `RatingScale`은 투명도를 낮추어 비활성 상태임을 알린다.
+1. 모든 지표의 값은 0~5의 숫자(또는 null)를 가지며, null인 경우 "N/A" 문구를 표시한다.
+2. 향미 지표(감미, 산미, 바디감)는 도넛 차트의 각 파이 슬라이스 비율(value → percentage)로 매핑되어 시각화된다.
 3. 로스팅 단계는 텍스트(예: Roast: Medium-Dark)로 우측 상단 뱃지에 표시한다.
-4. 컬러 팔레트: 산미(`teal`), 감미(`amber`), 바디감(`espresso`), 밸런스(`amber/teal`), 미지정(`stone`).
+4. 컬러 팔레트: 산미(`acidity`), 감미(`sweetness`), 바디감(`body`), 밸런스(`balance`), 미지정(`stone`).
 
 ---
 
@@ -205,7 +169,7 @@ interface FlavorProfileProps {
 ```text
 products/[id]/page.tsx (Detail Entry)  [ 래퍼 : <PageContainer> ]
   ├── ProductDetailHero        ← 상단 비주얼, 북마크, 구매 연결(ExternalLink)
-  ├── ProductInfoTable         ← 설명 서술 및 기본 정보 제공(카테고리 등)
+  ├── (Inlined Info Section)   ← 설명 서술 및 기본 정보 제공(카테고리 등)
   ├── FlavorProfileSection  ← 맛 정보 분석 지표(차트화)
   └── RecommendedProducts      ← 페이지 하단의 "비슷한 맛의 원두 추천" 영역
 ```
